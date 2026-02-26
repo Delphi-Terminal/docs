@@ -86,6 +86,7 @@
     }
   },
   "api": {
+    "openapi": "openapi.json",
     "playground": {
       "display": "interactive"
     },
