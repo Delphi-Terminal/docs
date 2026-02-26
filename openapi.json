@@ -73,8 +73,12 @@
       "description": "Real-time WebSocket streaming for Polymarket data. Subscribe to price updates using condition_id or orderbook updates using market_id."
     },
     {
-      "name": "Data Export",
-      "description": "Bulk data export endpoints for downloading historical and live data in Parquet or JSONL format via presigned S3 URLs. Requires a Max or Admin plan. Datasets include Kalshi RFQs and MVE trades."
+      "name": "Pfun WebSocket",
+      "description": "Real-time WebSocket streaming for Pfun market data."
+    },
+    {
+      "name": "Limitless WebSocket",
+      "description": "Real-time WebSocket streaming for Limitless market data."
     }
   ],
   "paths": {
@@ -2771,7 +2775,7 @@
     "/api/v1/data/{dataset}": {
       "get": {
         "tags": [
-          "Data Export"
+          "KLSI"
         ],
         "summary": "Download Dataset by Date",
         "description": "Download RFQ or MVE trades data for a specific date as presigned S3 URLs. Returns a finalized daily Parquet file if the day is complete, or live hourly JSONL parts if the day is still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Presigned S3 download URLs (valid for 5 minutes)\n- Automatic detection of finalized vs live data\n- Full daily Parquet file for completed days\n- Hourly JSONL parts for the current day\n\n## Use cases\n\n- Bulk download historical data for backtesting\n- Build local analytics pipelines\n- Feed data into Pandas, Polars, or DuckDB\n- Stream today's data hour-by-hour for near-real-time analytics\n\n## Datasets\n\n- rfqs: Kalshi Request for Quote events (same schema as the /klsi/{id}/rfq endpoint)\n- mve_trades: Kalshi Multi-Value Event parlay trades (same schema as the /klsi/{id}/mve_trades endpoint)\n\n## Example\n\n- Request: `GET /api/v1/data/rfqs?date=2026-02-25`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -2843,7 +2847,7 @@
     "/api/v1/data/{dataset}/latest": {
       "get": {
         "tags": [
-          "Data Export"
+          "KLSI"
         ],
         "summary": "Download Latest Dataset (Today)",
         "description": "Convenience endpoint that returns today's data (UTC). Equivalent to calling the date endpoint with today's date. Returns live hourly JSONL parts since the day is typically still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Today's data as presigned S3 download URLs\n- Hourly JSONL parts accumulated so far today\n- Optional hour filter to get a specific hour's data\n\n## Use cases\n\n- Quick access to today's data without specifying a date\n- Monitor today's RFQ or MVE activity in near-real-time\n- Feed into streaming analytics pipelines\n\n## Example\n\n- Request: `GET /api/v1/data/rfqs/latest`\n- Header: `X-API-Key: YOUR_API_KEY`",
