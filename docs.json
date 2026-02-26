@@ -5,7 +5,7 @@
     "default": "dark",
     "strict": true
   },
-  "name": "Delphi Terminal",
+  "name": "Delphi Terminal API",
   "colors": {
     "primary": "#4F46E5",
     "light": "#818CF8",
