@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Delphi Terminal API",
-    "description": "Welcome to Delphi Terminal API\n\nThe Delphi Terminal API provides unified access to prediction market data from **Kalshi (KLSI)** and **Polymarket (POLY)** exchanges.\n\nQuick Start:\n\n1. **Get a test API key** - Click on `POST /api/v1/test-key` below and hit 'Try it'\n2. **Copy your key** - Save the `api_key` from the response\n3. **Authorize** - Click 'Authorize' in the sidebar and paste your key\n4. **Start exploring** - Try any endpoint!\n\nWhat You Can Build:\n\n- **Trading Bots**: Access real-time orderbook data and trade history\n- **Market Analytics**: Analyze market movements, spreads, and liquidity\n- **Research Tools**: Search and filter across thousands of prediction markets\n- **Price Feeds**: Get live pricing data for any market\n\n---\n\nAuthentication:\n\nAll API requests require an API key passed in the `X-API-Key` header:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/markets\nHeader: X-API-Key: dphi_live_your_key_here\n\nGetting an API Key:\n\n| Type | Duration | Rate Limit | How to Get |\n|------|----------|------------|------------|\n| Test Key | 10 minutes | 60 req/min | `POST /api/v1/test-key` |\n| Production Key | Permanent | 300 req/min | Contact us |\n\n---\n\nRate Limits:\n\nRequests are rate-limited per API key:\n\n- **Test keys**: 60 requests per minute\n- **Production keys**: 300 requests per minute\n\nWhen you exceed the limit, you'll receive a `429 Too Many Requests` response. Wait and retry.\n\n---\n\nError Codes:\n\n| Code | Meaning |\n|------|---------------|\n| 400 | Bad Request - Invalid parameters |\n| 401 | Unauthorized - Missing or invalid API key |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Server Error - Something went wrong |\n\nAll errors return JSON with an `error` field:\n\n{\"error\": \"invalid api key format\"}\n\n---\n\nSupport:\n\nFor production API keys or support, visit [delphiterminal.co](https://delphiterminal.co).",
+    "description": "Welcome to Delphi Terminal API\n\nThe Delphi Terminal API provides unified access to prediction market data from **Kalshi (KLSI)** and **Polymarket (POLY)** exchanges.\n\nQuick Start:\n\n1. **Get a test API key** - Click on `POST /api/v1/test-key` below and hit 'Try it'\n2. **Copy your key** - Save the `api_key` from the response\n3. **Authorize** - Click 'Authorize' in the sidebar and paste your key\n4. **Start exploring** - Try any endpoint!\n\nWhat You Can Build:\n\n- **Trading Bots**: Access real-time orderbook data and trade history\n- **Market Analytics**: Analyze market movements, spreads, and liquidity\n- **Research Tools**: Search and filter across thousands of prediction markets\n- **Price Feeds**: Get live pricing data for any market\n\n---\n\nAuthentication:\n\nAll API requests require an API key passed in the `X-API-Key` header:\n\nExample request: GET `/api/v1/klsi/markets`\nHeader: X-API-Key: dphi_live_your_key_here\n\nGetting an API Key:\n\n| Type | Duration | Rate Limit | How to Get |\n|------|----------|------------|------------|\n| Test Key | 10 minutes | 60 req/min | `POST /api/v1/test-key` |\n| Production Key | Permanent | 300 req/min | Contact us |\n\n---\n\nRate Limits:\n\nRequests are rate-limited per API key:\n\n- **Test keys**: 60 requests per minute\n- **Production keys**: 300 requests per minute\n\nWhen you exceed the limit, you'll receive a `429 Too Many Requests` response. Wait and retry.\n\n---\n\nError Codes:\n\n| Code | Meaning |\n|------|---------------|\n| 400 | Bad Request - Invalid parameters |\n| 401 | Unauthorized - Missing or invalid API key |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Server Error - Something went wrong |\n\nAll errors return JSON with an `error` field:\n\n{\"error\": \"invalid api key format\"}\n\n---\n\nSupport:\n\nFor production API keys or support, visit [delphiterminal.co](delphiterminal.co).",
     "version": "1.0.0",
     "contact": {
       "name": "Delphi Terminal",
@@ -121,7 +121,7 @@
           "Health"
         ],
         "summary": "Health Check",
-        "description": "Verify that the API is running and responsive. This endpoint does not require authentication and can be used for monitoring and uptime checks.\n\n**Use cases:**\n- Monitor API availability\n- Load balancer health checks\n- Verify connectivity before making authenticated requests",
+        "description": "Verify that the API is running and responsive. This endpoint does not require authentication and can be used for monitoring and uptime checks.\n\n## Use cases\n- Monitor API availability\n- Load balancer health checks\n- Verify connectivity before making authenticated requests",
         "security": [],
         "responses": {
           "200": {
@@ -157,7 +157,7 @@
           "Auth"
         ],
         "summary": "Sign up",
-        "description": "Create a new user account",
+        "description": "Create a new user account\n\n## Example\n\n- Request: `POST /api/v1/auth/signup`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "requestBody": {
           "required": true,
@@ -199,7 +199,7 @@
           "Auth"
         ],
         "summary": "Login",
-        "description": "Authenticate and receive a session token",
+        "description": "Authenticate and receive a session token\n\n## Example\n\n- Request: `POST /api/v1/auth/login`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "requestBody": {
           "required": true,
@@ -239,7 +239,7 @@
           "Auth"
         ],
         "summary": "Get current user",
-        "description": "Get authenticated user info",
+        "description": "Get authenticated user info\n\n## Example\n\n- Request: `GET /api/v1/auth/me`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "responses": {
           "200": {
@@ -261,7 +261,7 @@
           "Auth"
         ],
         "summary": "Logout",
-        "description": "Invalidate the current session",
+        "description": "Invalidate the current session\n\n## Example\n\n- Request: `POST /api/v1/auth/logout`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "responses": {
           "200": {
@@ -289,7 +289,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Market Details",
-        "description": "Retrieve comprehensive details about a specific Kalshi market by its unique identifier.\n\n**What you get:**\n- Market title and description\n- Trading rules and resolution criteria\n- Current status (open/closed)\n- Close time and settlement information\n- Category and event association\n\n**Use cases:**\n- Display market information in trading interfaces\n- Validate market exists before placing orders\n- Get resolution rules for analysis\n\n**Note:** The `klsi_id` follows Kalshi's ticker format (e.g., `KXBTC-26FEB01` for Bitcoin price markets).",
+        "description": "Retrieve comprehensive details about a specific Kalshi market by its unique identifier.\n\n## What you get\n- Market title and description\n- Trading rules and resolution criteria\n- Current status (open/closed)\n- Close time and settlement information\n- Category and event association\n\n## Use cases\n- Display market information in trading interfaces\n- Validate market exists before placing orders\n- Get resolution rules for analysis\n\n## Note The `klsi_id` follows Kalshi's ticker format (e.g., `KXBTC-26FEB01` for Bitcoin price markets).\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -318,7 +318,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Market Rules",
-        "description": "Retrieve the resolution rules for a specific Kalshi market. Rules define exactly how and when a market will settle.\n\n**What you get:**\n- Complete resolution criteria\n- Data sources used for settlement\n- Edge case handling\n\n**Use cases:**\n- Understand how outcomes are determined\n- Build automated settlement tracking\n- Display rules in market detail pages",
+        "description": "Retrieve the resolution rules for a specific Kalshi market. Rules define exactly how and when a market will settle.\n\n## What you get\n- Complete resolution criteria\n- Data sources used for settlement\n- Edge case handling\n\n## Use cases\n- Understand how outcomes are determined\n- Build automated settlement tracking\n- Display rules in market detail pages\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/rules`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -355,7 +355,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI orderbook",
-        "description": "Retrieve orderbook snapshots for a Kalshi market. The orderbook shows all open buy and sell orders at different price levels.\n\nUnderstanding the Response:\n\n- **bid_side**: Array of **101 values** representing buy order quantities at price levels from $0.00 to $1.00 in increments of $0.01 (1 cent). Index 0 = $0.00, index 1 = $0.01, ..., index 100 = $1.00.\n- **ask_side**: Array of **101 values** representing sell order quantities at the same price levels.\n- **snapshot_time**: When this orderbook snapshot was captured\n\nUse Cases:\n\n- Calculate best bid/ask prices and spreads\n- Analyze market depth and liquidity\n- Build real-time trading visualizations\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/KXBTC-26FEB01/orderbook?limit=100\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve orderbook snapshots for a Kalshi market. The orderbook shows all open buy and sell orders at different price levels.\n\nUnderstanding the Response:\n\n- **bid_side**: Array of **101 values** representing buy order quantities at price levels from $0.00 to $1.00 in increments of $0.01 (1 cent). Index 0 = $0.00, index 1 = $0.01, ..., index 100 = $1.00.\n- **ask_side**: Array of **101 values** representing sell order quantities at the same price levels.\n- **snapshot_time**: When this orderbook snapshot was captured\n\nUse Cases:\n\n- Calculate best bid/ask prices and spreads\n- Analyze market depth and liquidity\n- Build real-time trading visualizations\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXBTC-26FEB01/orderbook?limit=100`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -390,7 +390,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Trade History",
-        "description": "Retrieve historical trade executions for a Kalshi market. Each trade includes price, quantity, and whether it was a buy or sell.\n\n**What you get:**\n- Trade timestamp and unique ID\n- Execution price (yes_price and no_price)\n- Trade count (number of contracts)\n- Taker side (buy/sell)\n\n**Use cases:**\n- Analyze trading patterns and volume\n- Calculate VWAP (Volume Weighted Average Price)\n- Build price charts and candlesticks\n- Detect unusual trading activity\n\n**Note:** Trade history is ordered by time, newest first.",
+        "description": "Retrieve historical trade executions for a Kalshi market. Each trade includes price, quantity, and whether it was a buy or sell.\n\n## What you get\n- Trade timestamp and unique ID\n- Execution price (yes_price and no_price)\n- Trade count (number of contracts)\n- Taker side (buy/sell)\n\n## Use cases\n- Analyze trading patterns and volume\n- Calculate VWAP (Volume Weighted Average Price)\n- Build price charts and candlesticks\n- Detect unusual trading activity\n\n## Note Trade history is ordered by time, newest first.\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/tradehistory`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -419,7 +419,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Orderbook Analytics",
-        "description": "Retrieve pre-computed analytics derived from orderbook snapshots. This provides processed metrics that save you from computing them yourself.\n\n**What you get:**\n- Time-series orderbook metrics\n- Aggregated depth and liquidity data\n- Spread and imbalance indicators\n\n**Use cases:**\n- Track liquidity changes over time\n- Identify optimal entry/exit points\n- Build market quality dashboards",
+        "description": "Retrieve pre-computed analytics derived from orderbook snapshots. This provides processed metrics that save you from computing them yourself.\n\n## What you get\n- Time-series orderbook metrics\n- Aggregated depth and liquidity data\n- Spread and imbalance indicators\n\n## Use cases\n- Track liquidity changes over time\n- Identify optimal entry/exit points\n- Build market quality dashboards\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/orderbook_analytics?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -451,7 +451,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Best Bid/Ask Series",
-        "description": "Retrieve a time-series of best bid and best ask prices for a market. This is the most efficient way to get price history without processing full orderbooks.\n\n**What you get:**\n- Best bid price over time\n- Best ask price over time\n- Mid-price calculations\n- Spread history\n\n**Use cases:**\n- Build price charts\n- Calculate historical spreads\n- Analyze price movements\n- Backtest trading strategies",
+        "description": "Retrieve a time-series of best bid and best ask prices for a market. This is the most efficient way to get price history without processing full orderbooks.\n\n## What you get\n- Best bid price over time\n- Best ask price over time\n- Mid-price calculations\n- Spread history\n\n## Use cases\n- Build price charts\n- Calculate historical spreads\n- Analyze price movements\n- Backtest trading strategies\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/orderbook_analytics/best_quotes?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -483,7 +483,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Event",
-        "description": "Retrieve event details for a Kalshi event. Events group related markets together (e.g., all Bitcoin price markets for a specific date).\n\n**What you get:**\n- Event title and category\n- Associated market identifiers\n- Strike date information\n- Cross-exchange mapping (if available on Polymarket)\n\n**Use cases:**\n- Navigate between related markets\n- Build event-based views\n- Compare across exchanges",
+        "description": "Retrieve event details for a Kalshi event. Events group related markets together (e.g., all Bitcoin price markets for a specific date).\n\n## What you get\n- Event title and category\n- Associated market identifiers\n- Strike date information\n- Cross-exchange mapping (if available on Polymarket)\n\n## Use cases\n- Navigate between related markets\n- Build event-based views\n- Compare across exchanges\n\n## Example\n\n- Request: `GET /api/v1/klsi/event/KXBTC-25NOV2717`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/event_id"
@@ -512,7 +512,7 @@
           "KLSI"
         ],
         "summary": "Get All Markets in KLSI Event",
-        "description": "Retrieve all individual markets within a Kalshi event. For example, a Bitcoin price event may contain multiple strike price markets.\n\n**What you get:**\n- Array of all markets in the event\n- Full market details for each\n- Status and pricing info\n\n**Use cases:**\n- Display all strike prices for an event\n- Build multi-market trading views\n- Analyze the full market structure",
+        "description": "Retrieve all individual markets within a Kalshi event. For example, a Bitcoin price event may contain multiple strike price markets.\n\n## What you get\n- Array of all markets in the event\n- Full market details for each\n- Status and pricing info\n\n## Use cases\n- Display all strike prices for an event\n- Build multi-market trading views\n- Analyze the full market structure\n\n## Example\n\n- Request: `GET /api/v1/klsi/event/KXBTC-25NOV2717/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/event_id"
@@ -541,7 +541,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI 1-Second OHLCV Candles",
-        "description": "Retrieve 1-second OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n**What you get:**\n- OHLCV price data aggregated into 1-second buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n**Use cases:**\n- High-frequency analysis\n- Tick-level trading strategies\n- Microstructure research\n\n**Note:** Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.",
+        "description": "Retrieve 1-second OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-second buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- High-frequency analysis\n- Tick-level trading strategies\n- Microstructure research\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1s?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -591,7 +591,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI 1-Minute OHLCV Candles",
-        "description": "Retrieve 1-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n**What you get:**\n- OHLCV price data aggregated into 1-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n**Use cases:**\n- Intraday trading analysis\n- Short-term price movements\n- Scalping strategies\n\n**Note:** Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.",
+        "description": "Retrieve 1-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Intraday trading analysis\n- Short-term price movements\n- Scalping strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -641,7 +641,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI 5-Minute OHLCV Candles",
-        "description": "Retrieve 5-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n**What you get:**\n- OHLCV price data aggregated into 5-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n**Use cases:**\n- Short-term trading analysis\n- Intraday patterns\n- Technical indicators\n\n**Note:** Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.",
+        "description": "Retrieve 5-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 5-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Short-term trading analysis\n- Intraday patterns\n- Technical indicators\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_5m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -691,7 +691,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI 10-Minute OHLCV Candles",
-        "description": "Retrieve 10-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n**What you get:**\n- OHLCV price data aggregated into 10-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n**Use cases:**\n- Medium-term trading analysis\n- Pattern recognition\n- Volume analysis\n\n**Note:** Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.",
+        "description": "Retrieve 10-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 10-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Medium-term trading analysis\n- Pattern recognition\n- Volume analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_10m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -741,7 +741,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI 1-Hour OHLCV Candles",
-        "description": "Retrieve 1-hour OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n**What you get:**\n- OHLCV price data aggregated into 1-hour buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n**Use cases:**\n- Swing trading analysis\n- Daily pattern recognition\n- Longer-term technical analysis\n\n**Note:** Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.",
+        "description": "Retrieve 1-hour OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-hour buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Swing trading analysis\n- Daily pattern recognition\n- Longer-term technical analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1h?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -791,7 +791,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI 1-Day OHLCV Candles",
-        "description": "Retrieve 1-day OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n**What you get:**\n- OHLCV price data aggregated into daily buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each day\n- Open interest at close of each day\n- Tick count per day\n\n**Use cases:**\n- Long-term trend analysis\n- Historical price research\n- Position trading strategies\n\n**Note:** Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.",
+        "description": "Retrieve 1-day OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into daily buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each day\n- Open interest at close of each day\n- Tick count per day\n\n## Use cases\n- Long-term trend analysis\n- Historical price research\n- Position trading strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1d?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -841,7 +841,7 @@
           "KLSI"
         ],
         "summary": "Get RFQ by ID",
-        "description": "Retrieve all Request for Quote (RFQ) events for a given RFQ UUID. Returns the full lifecycle of an RFQ (created, quoted, deleted, etc.).\n\n**What you get:**\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n**Use cases:**\n- Track the lifecycle of a specific RFQ\n- Analyze RFQ creation and deletion patterns\n- Monitor institutional quoting activity\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/rfq/822dcdee-e5c1-47da-9ddf-15287fb37c44\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve all Request for Quote (RFQ) events for a given RFQ UUID. Returns the full lifecycle of an RFQ (created, quoted, deleted, etc.).\n\n## What you get\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- Track the lifecycle of a specific RFQ\n- Analyze RFQ creation and deletion patterns\n- Monitor institutional quoting activity\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/822dcdee-e5c1-47da-9ddf-15287fb37c44`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/rfq_id"
@@ -876,7 +876,7 @@
           "KLSI"
         ],
         "summary": "Get RFQs by Market",
-        "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n**What you get:**\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n**Use cases:**\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n## What you get\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -918,7 +918,7 @@
           "KLSI"
         ],
         "summary": "Get MVE Trades (Parlays)",
-        "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n**What you get:**\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n**Use cases:**\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n## What you get\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n## Use cases\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -957,7 +957,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Top of Book",
-        "description": "Retrieve top-of-book best bid/ask data for a Kalshi market, including the top 5 price levels on each side.\n\n**What you get:**\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Venue market ID\n- Timestamps\n\n**Use cases:**\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/AMAZONFTC-29DEC31/top_of_book\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve top-of-book best bid/ask data for a Kalshi market, including the top 5 price levels on each side.\n\n## What you get\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Venue market ID\n- Timestamps\n\n## Use cases\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\n## Example\n\n- Request: `GET /api/v1/klsi/AMAZONFTC-29DEC31/top_of_book`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -999,7 +999,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Raw Orderbook Deltas",
-        "description": "Retrieve raw orderbook delta data for a Kalshi market. Each row represents a single orderbook change event with the price level, size delta, and side.\n\n**What you get:**\n- Price level and size delta for each change\n- Bid/ask side indicator\n- Server and ingest timestamps for precise event ordering\n- Venue and exchange identifiers\n\n**Use cases:**\n- Reconstruct full orderbook history tick-by-tick\n- Analyze order flow and liquidity dynamics\n- Build high-frequency trading signals\n- Study market microstructure\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/AMAZONFTC-29DEC31/raw_deltas?limit=10\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve raw orderbook delta data for a Kalshi market. Each row represents a single orderbook change event with the price level, size delta, and side.\n\n## What you get\n- Price level and size delta for each change\n- Bid/ask side indicator\n- Server and ingest timestamps for precise event ordering\n- Venue and exchange identifiers\n\n## Use cases\n- Reconstruct full orderbook history tick-by-tick\n- Analyze order flow and liquidity dynamics\n- Build high-frequency trading signals\n- Study market microstructure\n\n## Example\n\n- Request: `GET /api/v1/klsi/AMAZONFTC-29DEC31/raw_deltas?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "klsi_id",
@@ -1041,7 +1041,7 @@
           "KLSI"
         ],
         "summary": "Get RFQs by Date",
-        "description": "Retrieve all Request for Quote (RFQ) events for a specific date. Returns every RFQ that was created on that day across all markets.\n\n**What you get:**\n- All RFQ lifecycle events for the given date\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details\n\n**Use cases:**\n- Analyze daily RFQ volume\n- Monitor institutional quoting activity over time\n- Track block trade demand by day\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/rfq/date/2026-02-13\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve all Request for Quote (RFQ) events for a specific date. Returns every RFQ that was created on that day across all markets.\n\n## What you get\n- All RFQ lifecycle events for the given date\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details\n\n## Use cases\n- Analyze daily RFQ volume\n- Monitor institutional quoting activity over time\n- Track block trade demand by day\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/date/2026-02-13`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/date"
@@ -1076,7 +1076,7 @@
           "KLSI"
         ],
         "summary": "List all KLSI markets",
-        "description": "Retrieve a paginated list of all Kalshi markets, ordered by close time (newest first).\n\nPagination:\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **klsi_id**: Unique Kalshi market identifier\n- **title**: Human-readable market title\n- **close_time**: When the market closes for trading\n- **closed**: Whether the market has already closed\n- **rules**: Resolution criteria",
+        "description": "Retrieve a paginated list of all Kalshi markets, ordered by close time (newest first).\n\n## Pagination\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **klsi_id**: Unique Kalshi market identifier\n- **title**: Human-readable market title\n- **close_time**: When the market closes for trading\n- **closed**: Whether the market has already closed\n- **rules**: Resolution criteria\n\n## Example\n\n- Request: `GET /api/v1/klsi/markets?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "limit",
@@ -1138,7 +1138,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Markets by Category",
-        "description": "Retrieve all Kalshi markets for a specific category.\n\n**Available categories:**\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more\n\n**Use cases:**\n- Build category-filtered market views\n- Display markets by topic\n- Power category navigation",
+        "description": "Retrieve all Kalshi markets for a specific category.\n\n## Available categories\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more\n\n## Use cases\n- Build category-filtered market views\n- Display markets by topic\n- Power category navigation\n\n## Example\n\n- Request: `GET /api/v1/klsi/markets/category/Crypto?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "category",
@@ -1212,7 +1212,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Markets by Multiple Categories",
-        "description": "Retrieve all Kalshi markets for multiple categories at once.\n\n**Example:**\nExample request: GET https://api.delphiterminal.co/api/v1/klsi/markets/categories?categories=Crypto,Sports\nHeader: X-API-Key: YOUR_API_KEY\n\n**Use cases:**\n- Build multi-category market views\n- Cross-category analysis\n- Custom category groupings",
+        "description": "Retrieve all Kalshi markets for multiple categories at once.\n\n## Example\n\n- Request: `GET /api/v1/klsi/markets/categories?categories=Crypto,Sports`\n- Header: `X-API-Key: YOUR_API_KEY`\n\n## Use cases\n- Build multi-category market views\n- Cross-category analysis\n- Custom category groupings",
         "parameters": [
           {
             "name": "categories",
@@ -1289,7 +1289,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Market Details",
-        "description": "Retrieve comprehensive details about a specific Polymarket market.\n\n**What you get:**\n- Market title and description\n- Resolution rules\n- Current status (active/resolved)\n- End date and settlement info\n- Condition ID (needed for orderbook/trades)\n- Category and event association\n\n**Use cases:**\n- Display market information\n- Get condition_id for orderbook queries\n- Check resolution criteria\n\n**Note:** Polymarket uses `poly_id` for market lookup, but orderbook/trade endpoints require the `condition_id` (hex string starting with `0x`).",
+        "description": "Retrieve comprehensive details about a specific Polymarket market.\n\n## What you get\n- Market title and description\n- Resolution rules\n- Current status (active/resolved)\n- End date and settlement info\n- Condition ID (needed for orderbook/trades)\n- Category and event association\n\n## Use cases\n- Display market information\n- Get condition_id for orderbook queries\n- Check resolution criteria\n\n## Note Polymarket uses `poly_id` for market lookup, but orderbook/trade endpoints require the `condition_id` (hex string starting with `0x`).\n\n## Example\n\n- Request: `GET /api/v1/poly/1275563/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/poly_id"
@@ -1318,7 +1318,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Resolution Rules",
-        "description": "Retrieve the resolution rules for a Polymarket market. Rules define how the market will be settled.\n\n**What you get:**\n- Full resolution criteria text\n- Data sources and settlement conditions\n\n**Use cases:**\n- Understand how outcomes are determined\n- Display rules in market interfaces\n- Assess market risk",
+        "description": "Retrieve the resolution rules for a Polymarket market. Rules define how the market will be settled.\n\n## What you get\n- Full resolution criteria text\n- Data sources and settlement conditions\n\n## Use cases\n- Understand how outcomes are determined\n- Display rules in market interfaces\n- Assess market risk\n\n## Example\n\n- Request: `GET /api/v1/poly/1275563/rules`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/poly_id"
@@ -1352,7 +1352,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Top of Book",
-        "description": "Retrieve top-of-book best bid/ask data for a Polymarket market, including the top 5 price levels on each side.\n\n**What you get:**\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Token ID and market ID\n- Timestamps\n\n**Use cases:**\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics",
+        "description": "Retrieve top-of-book best bid/ask data for a Polymarket market, including the top 5 price levels on each side.\n\n## What you get\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Token ID and market ID\n- Timestamps\n\n## Use cases\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\n## Example\n\n- Request: `GET /api/v1/poly/0x0430a1879133a6416efe8c2076190336b8665abf9b67c45dadfc312ab7b413e6/top_of_book?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "poly_id",
@@ -1394,7 +1394,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Raw Orderbook Deltas",
-        "description": "Retrieve raw orderbook delta data for a Polymarket market. Each row represents either a single orderbook change event (delta) or a full orderbook snapshot, identified by the `payload_type` field.\n\n**What you get:**\n- For deltas: price, size delta, and side of the change\n- For snapshots: full bid and ask price/size arrays\n- Outcome label resolved from the token ID\n- Server and ingest timestamps\n\n**Use cases:**\n- Reconstruct full orderbook history tick-by-tick\n- Analyze order flow and liquidity dynamics\n- Build high-frequency trading signals\n- Study market microstructure\n\nExample:\n\nExample request: GET https://api.delphiterminal.co/api/v1/poly/0xb09a659b55f0eab385d75ef14d180e9a6b2f02290a427504e38bf803e35d25d6/raw_deltas?limit=10\nHeader: X-API-Key: YOUR_API_KEY",
+        "description": "Retrieve raw orderbook delta data for a Polymarket market. Each row represents either a single orderbook change event (delta) or a full orderbook snapshot, identified by the `payload_type` field.\n\n## What you get\n- For deltas: price, size delta, and side of the change\n- For snapshots: full bid and ask price/size arrays\n- Outcome label resolved from the token ID\n- Server and ingest timestamps\n\n## Use cases\n- Reconstruct full orderbook history tick-by-tick\n- Analyze order flow and liquidity dynamics\n- Build high-frequency trading signals\n- Study market microstructure\n\n## Example\n\n- Request: `GET /api/v1/poly/0xb09a659b55f0eab385d75ef14d180e9a6b2f02290a427504e38bf803e35d25d6/raw_deltas?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "poly_id",
@@ -1436,7 +1436,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Orderbook",
-        "description": "Retrieve historical orderbook snapshots for a Polymarket market. Each snapshot shows the full order depth at a point in time.\n\n**What you get:**\n- **token_id**: The token identifier for this orderbook side\n- **outcome**: The outcome label for this token (e.g., \"Yes\", \"No\", or a named outcome like \"EDward Gaming\")\n- **bid_side**: Array of **1001 values** representing buy order quantities at price levels from $0.000 to $1.000 in increments of $0.001 (0.1 cents). Index 0 = $0.000, index 1 = $0.001, ..., index 1000 = $1.000.\n- **ask_side**: Array of **1001 values** representing sell order quantities at the same price levels.\n- Snapshot timestamps\n- Market identifier\n\n**Important:** This endpoint requires the `condition_id` (hex string starting with `0x`), NOT the standard `poly_id`. Get the condition_id from the market details endpoint first.\n\n**Use cases:**\n- Analyze historical liquidity\n- Build depth charts\n- Calculate spreads over time\n- Backtest trading strategies",
+        "description": "Retrieve historical orderbook snapshots for a Polymarket market. Each snapshot shows the full order depth at a point in time.\n\n## What you get\n- **token_id**: The token identifier for this orderbook side\n- **outcome**: The outcome label for this token (e.g., \"Yes\", \"No\", or a named outcome like \"EDward Gaming\")\n- **bid_side**: Array of **1001 values** representing buy order quantities at price levels from $0.000 to $1.000 in increments of $0.001 (0.1 cents). Index 0 = $0.000, index 1 = $0.001, ..., index 1000 = $1.000.\n- **ask_side**: Array of **1001 values** representing sell order quantities at the same price levels.\n- Snapshot timestamps\n- Market identifier\n\n## Important This endpoint requires the `condition_id` (hex string starting with `0x`), NOT the standard `poly_id`. Get the condition_id from the market details endpoint first.\n\n## Use cases\n- Analyze historical liquidity\n- Build depth charts\n- Calculate spreads over time\n- Backtest trading strategies\n\n## Example\n\n- Request: `GET /api/v1/poly/0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/condition_id"
@@ -1475,7 +1475,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Trade History",
-        "description": "Retrieve historical trades for a Polymarket market. Each trade includes execution details.\n\n**What you get:**\n- Trade price and size\n- Token ID (identifies YES/NO outcome)\n- **outcome**: The outcome label for this token (e.g., \"Yes\", \"No\", or a named outcome like \"EDward Gaming\")\n- Side (buy/sell)\n- Timestamp\n\n**Important:** This endpoint requires the `condition_id` (hex string starting with `0x`), NOT the standard `poly_id`.\n\n**Use cases:**\n- Analyze trading volume\n- Track price movements\n- Calculate VWAP\n- Build candlestick charts",
+        "description": "Retrieve historical trades for a Polymarket market. Each trade includes execution details.\n\n## What you get\n- Trade price and size\n- Token ID (identifies YES/NO outcome)\n- **outcome**: The outcome label for this token (e.g., \"Yes\", \"No\", or a named outcome like \"EDward Gaming\")\n- Side (buy/sell)\n- Timestamp\n\n## Important This endpoint requires the `condition_id` (hex string starting with `0x`), NOT the standard `poly_id`.\n\n## Use cases\n- Analyze trading volume\n- Track price movements\n- Calculate VWAP\n- Build candlestick charts\n\n## Example\n\n- Request: `GET /api/v1/poly/0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/condition_id"
@@ -1514,7 +1514,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Price History",
-        "description": "Retrieve price history for a Polymarket market. Each record shows the price at a point in time derived from trades.\n\n**What you get:**\n- Exchange identifier\n- Condition ID (market identifier)\n- **token_id**: The token identifier for this price point\n- **outcome**: The outcome label for this token (e.g., \"Yes\", \"No\", or a named outcome like \"EDward Gaming\")\n- Price (as decimal, e.g., 0.992 = 99.2%)\n- Timestamp\n\n**Important:** This endpoint requires the `condition_id` (hex string starting with `0x`), NOT the standard `poly_id`.\n\n**Use cases:**\n- Build price charts\n- Analyze price movements over time\n- Track market sentiment\n- Backtest trading strategies",
+        "description": "Retrieve price history for a Polymarket market. Each record shows the price at a point in time derived from trades.\n\n## What you get\n- Exchange identifier\n- Condition ID (market identifier)\n- **token_id**: The token identifier for this price point\n- **outcome**: The outcome label for this token (e.g., \"Yes\", \"No\", or a named outcome like \"EDward Gaming\")\n- Price (as decimal, e.g., 0.992 = 99.2%)\n- Timestamp\n\n## Important This endpoint requires the `condition_id` (hex string starting with `0x`), NOT the standard `poly_id`.\n\n## Use cases\n- Build price charts\n- Analyze price movements over time\n- Track market sentiment\n- Backtest trading strategies\n\n## Example\n\n- Request: `GET /api/v1/poly/0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/condition_id"
@@ -1556,7 +1556,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Event",
-        "description": "Retrieve event details for a Polymarket event. Events group related markets together.\n\n**What you get:**\n- Event title and category\n- Associated market identifiers\n- Cross-exchange mapping (Kalshi ID if available)\n\n**Use cases:**\n- Navigate related markets\n- Compare prices across exchanges\n- Build event-centric views",
+        "description": "Retrieve event details for a Polymarket event. Events group related markets together.\n\n## What you get\n- Event title and category\n- Associated market identifiers\n- Cross-exchange mapping (Kalshi ID if available)\n\n## Use cases\n- Navigate related markets\n- Compare prices across exchanges\n- Build event-centric views\n\n## Example\n\n- Request: `GET /api/v1/poly/1275563/event`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/poly_id"
@@ -1585,7 +1585,7 @@
           "Polymarket"
         ],
         "summary": "Get All Markets in Polymarket Event",
-        "description": "Retrieve all individual markets within a Polymarket event.\n\n**What you get:**\n- Array of all markets in the event\n- Full market details including condition_id\n- Status and end dates\n\n**Use cases:**\n- Display all outcomes for an event\n- Build multi-market views\n- Get condition_ids for orderbook queries",
+        "description": "Retrieve all individual markets within a Polymarket event.\n\n## What you get\n- Array of all markets in the event\n- Full market details including condition_id\n- Status and end dates\n\n## Use cases\n- Display all outcomes for an event\n- Build multi-market views\n- Get condition_ids for orderbook queries\n\n## Example\n\n- Request: `GET /api/v1/poly/event/KXBTC-25NOV2717/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/event_id"
@@ -1614,7 +1614,7 @@
           "Polymarket"
         ],
         "summary": "List All Polymarket Markets",
-        "description": "Retrieve a paginated list of all Polymarket markets, ordered by end date (newest first).\n\n**What you get:**\n- Market details including condition_id\n- Title, rules, and status\n- Pagination metadata\n\n**Use cases:**\n- Browse all available markets\n- Build market discovery features\n- Sync market data to your database\n\n**Pagination:** Use `limit` and `offset` parameters to page through results.",
+        "description": "Retrieve a paginated list of all Polymarket markets, ordered by end date (newest first).\n\n## What you get\n- Market details including condition_id\n- Title, rules, and status\n- Pagination metadata\n\n## Use cases\n- Browse all available markets\n- Build market discovery features\n- Sync market data to your database\n\n## Pagination Use `limit` and `offset` parameters to page through results.\n\n## Example\n\n- Request: `GET /api/v1/poly/markets?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "limit",
@@ -1676,7 +1676,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Markets by Category",
-        "description": "Retrieve all Polymarket markets for a specific category.\n\n**Available categories:**\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more\n\n**Use cases:**\n- Build category-filtered market views\n- Display markets by topic\n- Power category navigation",
+        "description": "Retrieve all Polymarket markets for a specific category.\n\n## Available categories\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more\n\n## Use cases\n- Build category-filtered market views\n- Display markets by topic\n- Power category navigation\n\n## Example\n\n- Request: `GET /api/v1/poly/markets/category/Crypto?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "category",
@@ -1750,7 +1750,7 @@
           "Polymarket"
         ],
         "summary": "Get Polymarket Markets by Multiple Categories",
-        "description": "Retrieve all Polymarket markets for multiple categories at once.\n\n**Example:**\nExample request: GET https://api.delphiterminal.co/api/v1/poly/markets/categories?categories=Crypto,Sports\nHeader: X-API-Key: YOUR_API_KEY\n\n**Use cases:**\n- Build multi-category market views\n- Cross-category analysis\n- Custom category groupings",
+        "description": "Retrieve all Polymarket markets for multiple categories at once.\n\n## Example\n\n- Request: `GET /api/v1/poly/markets/categories?categories=Crypto,Sports`\n- Header: `X-API-Key: YOUR_API_KEY`\n\n## Use cases\n- Build multi-category market views\n- Cross-category analysis\n- Custom category groupings",
         "parameters": [
           {
             "name": "categories",
@@ -1827,7 +1827,7 @@
           "Limitless"
         ],
         "summary": "Get Limitless Top of Book",
-        "description": "Retrieve top-of-book best bid/ask data for a Limitless market, including the top 5 price levels on each side.\n\n**What you get:**\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Token ID and market ID\n- Timestamps\n\n**Use cases:**\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics",
+        "description": "Retrieve top-of-book best bid/ask data for a Limitless market, including the top 5 price levels on each side.\n\n## What you get\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Token ID and market ID\n- Timestamps\n\n## Use cases\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\n## Example\n\n- Request: `GET /api/v1/limitless/dollarbch-above-dollar56557-on-feb-18-1700-utc-1771347602997/top_of_book?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -1869,7 +1869,7 @@
           "Limitless"
         ],
         "summary": "Get Limitless Orderbook",
-        "description": "Retrieve orderbook data for a Limitless market. Each row shows bid and ask arrays at a point in time.\n\n**What you get:**\n- Bid and ask price level arrays\n- Token ID and market ID\n- Last update timestamp\n\n**Use cases:**\n- Analyze current and historical liquidity\n- Build depth charts\n- Calculate spreads\n\n**Note:** The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.",
+        "description": "Retrieve orderbook data for a Limitless market. Each row shows bid and ask arrays at a point in time.\n\n## What you get\n- Bid and ask price level arrays\n- Token ID and market ID\n- Last update timestamp\n\n## Use cases\n- Analyze current and historical liquidity\n- Build depth charts\n- Calculate spreads\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/limitless/dollarbtc-above-dollar7294324-on-feb-5-0300-utc-1770256941356/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -1919,7 +1919,7 @@
           "Limitless"
         ],
         "summary": "Get Limitless Exchange Prices",
-        "description": "Retrieve price history data for a Limitless market. Each row shows price, bid/ask, volume, and open interest at a point in time.\n\n**What you get:**\n- Current price\n- Yes bid and ask prices\n- Trading volume\n- Open interest\n- Timestamps\n\n**Use cases:**\n- Build price charts\n- Track volume trends\n- Monitor open interest changes\n- Calculate price volatility\n\n**Note:** The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.",
+        "description": "Retrieve price history data for a Limitless market. Each row shows price, bid/ask, volume, and open interest at a point in time.\n\n## What you get\n- Current price\n- Yes bid and ask prices\n- Trading volume\n- Open interest\n- Timestamps\n\n## Use cases\n- Build price charts\n- Track volume trends\n- Monitor open interest changes\n- Calculate price volatility\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/limitless/dollarbtc-above-dollar7294324-on-feb-5-0300-utc-1770256941356/exchange_prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -1969,7 +1969,7 @@
           "Limitless"
         ],
         "summary": "Get Limitless Trade History",
-        "description": "Retrieve historical trades for a Limitless market. Each trade includes execution details.\n\n**What you get:**\n- Yes and No prices\n- Trade count\n- Taker side (buy/sell)\n- Timestamp\n\n**Use cases:**\n- Analyze trading volume\n- Track price movements\n- Calculate VWAP\n- Build candlestick charts",
+        "description": "Retrieve historical trades for a Limitless market. Each trade includes execution details.\n\n## What you get\n- Yes and No prices\n- Trade count\n- Taker side (buy/sell)\n- Timestamp\n\n## Use cases\n- Analyze trading volume\n- Track price movements\n- Calculate VWAP\n- Build candlestick charts\n\n## Example\n\n- Request: `GET /api/v1/limitless/dollarbtc-above-dollar7294324-on-feb-5-0300-utc-1770256941356/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2018,7 +2018,7 @@
           "Limitless"
         ],
         "summary": "Get Limitless Market Details",
-        "description": "Retrieve detailed market information for a Limitless market.\n\n**What you get:**\n- Market title\n- Rules (resolution criteria)\n- Category\n- Closed status and timestamp\n\n**Use cases:**\n- Display market information to users\n- Check if a market is closed\n- Understand resolution rules",
+        "description": "Retrieve detailed market information for a Limitless market.\n\n## What you get\n- Market title\n- Rules (resolution criteria)\n- Category\n- Closed status and timestamp\n\n## Use cases\n- Display market information to users\n- Check if a market is closed\n- Understand resolution rules\n\n## Example\n\n- Request: `GET /api/v1/limitless/dollarbtc-above-dollar7294324-on-feb-5-0300-utc-1770256941356/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2054,7 +2054,7 @@
           "Limitless"
         ],
         "summary": "List All Limitless Markets",
-        "description": "Retrieve a paginated list of all Limitless markets.\n\nPagination:\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **limitless_id**: Unique Limitless market identifier\n- **title**: Human-readable market title\n- **rules**: Resolution criteria\n- **closed**: Whether the market has closed\n- **category**: Market category",
+        "description": "Retrieve a paginated list of all Limitless markets.\n\n## Pagination\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **limitless_id**: Unique Limitless market identifier\n- **title**: Human-readable market title\n- **rules**: Resolution criteria\n- **closed**: Whether the market has closed\n- **category**: Market category\n\n## Example\n\n- Request: `GET /api/v1/limitless/markets?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "limit",
@@ -2118,7 +2118,7 @@
           "Pfun"
         ],
         "summary": "Get Pfun Exchange Prices",
-        "description": "Retrieve price history data for a Pfun market. Each row shows price and bid/ask at a point in time.\n\n**What you get:**\n- Current price\n- Yes bid and ask prices\n- Timestamps\n\n**Use cases:**\n- Build price charts\n- Track price movements\n- Calculate spreads over time\n\n**Note:** The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.",
+        "description": "Retrieve price history data for a Pfun market. Each row shows price and bid/ask at a point in time.\n\n## What you get\n- Current price\n- Yes bid and ask prices\n- Timestamps\n\n## Use cases\n- Build price charts\n- Track price movements\n- Calculate spreads over time\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/exchange_prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2168,7 +2168,7 @@
           "Pfun"
         ],
         "summary": "Get Pfun Market Details",
-        "description": "Retrieve detailed information about a specific Pfun market.\n\n**What you get:**\n- Market title, question, and rules\n- Event and category info\n- Strike price and expiration\n- Contract IDs (yes/no)\n- Payout details\n\n**Use cases:**\n- Display market information\n- Get contract IDs for trading\n- Understand market rules",
+        "description": "Retrieve detailed information about a specific Pfun market.\n\n## What you get\n- Market title, question, and rules\n- Event and category info\n- Strike price and expiration\n- Contract IDs (yes/no)\n- Payout details\n\n## Use cases\n- Display market information\n- Get contract IDs for trading\n- Understand market rules\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2204,7 +2204,7 @@
           "Pfun"
         ],
         "summary": "List All Pfun Markets",
-        "description": "Retrieve a paginated list of all Pfun markets.\n\nPagination:\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **market_id**: Unique Pfun market identifier\n- **market_title**: Human-readable market title\n- **question**: Market question\n- **category**: Market category\n- **rules**: Resolution criteria\n- **strike/expiration**: Strike price and expiration info\n- **conid_yes/conid_no**: Contract IDs",
+        "description": "Retrieve a paginated list of all Pfun markets.\n\n## Pagination\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **market_id**: Unique Pfun market identifier\n- **market_title**: Human-readable market title\n- **question**: Market question\n- **category**: Market category\n- **rules**: Resolution criteria\n- **strike/expiration**: Strike price and expiration info\n- **conid_yes/conid_no**: Contract IDs\n\n## Example\n\n- Request: `GET /api/v1/pfun/markets?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "limit",
@@ -2268,7 +2268,7 @@
           "Pfun"
         ],
         "summary": "Get Pfun Trade History",
-        "description": "Retrieve trade history data for a Pfun market. Each row shows trade execution details.\n\n**What you get:**\n- Yes and No prices\n- Trade count\n- Taker side (buy/sell)\n- Timestamps\n\n**Use cases:**\n- Analyze trading activity\n- Build trade feeds\n- Calculate VWAP\n- Track market sentiment\n\n**Note:** The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.",
+        "description": "Retrieve trade history data for a Pfun market. Each row shows trade execution details.\n\n## What you get\n- Yes and No prices\n- Trade count\n- Taker side (buy/sell)\n- Timestamps\n\n## Use cases\n- Analyze trading activity\n- Build trade feeds\n- Calculate VWAP\n- Track market sentiment\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2318,7 +2318,7 @@
           "Pfun"
         ],
         "summary": "Get Pfun Top of Book",
-        "description": "Retrieve top-of-book best bid/ask data for a Pfun market, including the top 5 price levels on each side.\n\n**What you get:**\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Venue market ID\n- Timestamps\n\n**Use cases:**\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics",
+        "description": "Retrieve top-of-book best bid/ask data for a Pfun market, including the top 5 price levels on each side.\n\n## What you get\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Venue market ID\n- Timestamps\n\n## Use cases\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\n## Example\n\n- Request: `GET /api/v1/pfun/9060/top_of_book?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2360,7 +2360,7 @@
           "Pfun"
         ],
         "summary": "Get Pfun Orderbook",
-        "description": "Retrieve orderbook data for a Pfun market. Each row shows the full orderbook state at a point in time.\n\n**What you get:**\n- Best yes/no prices and sizes\n- Full yes_side and no_side arrays (price levels)\n- Venue market ID\n- Server timestamp\n\n**Use cases:**\n- Analyze liquidity\n- Build depth charts\n- Calculate spreads\n- Track orderbook changes over time",
+        "description": "Retrieve orderbook data for a Pfun market. Each row shows the full orderbook state at a point in time.\n\n## What you get\n- Best yes/no prices and sizes\n- Full yes_side and no_side arrays (price levels)\n- Venue market ID\n- Server timestamp\n\n## Use cases\n- Analyze liquidity\n- Build depth charts\n- Calculate spreads\n- Track orderbook changes over time\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2409,7 +2409,7 @@
           "Events"
         ],
         "summary": "Get Event by ID",
-        "description": "Retrieve details for a specific event by its unique identifier.\n\n**What you get:**\n- Event title and category/subcategory\n- Exchange-specific IDs (klsi_id, poly_id)\n- Strike date and timing info\n- Cross-exchange availability\n\n**Use cases:**\n- Look up event metadata\n- Get exchange-specific IDs for market queries\n- Check if event is available on both exchanges",
+        "description": "Retrieve details for a specific event by its unique identifier.\n\n## What you get\n- Event title and category/subcategory\n- Exchange-specific IDs (klsi_id, poly_id)\n- Strike date and timing info\n- Cross-exchange availability\n\n## Use cases\n- Look up event metadata\n- Get exchange-specific IDs for market queries\n- Check if event is available on both exchanges\n\n## Example\n\n- Request: `GET /api/v1/events/KXBTC-25NOV2717`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/event_id"
@@ -2438,7 +2438,7 @@
           "Events"
         ],
         "summary": "Get Events by Category",
-        "description": "Retrieve all events in a specific category across all exchanges.\n\n**Available categories:**\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more (see parameter enum)\n\n**Use cases:**\n- Build category-based navigation\n- Display markets by topic\n- Power category pages",
+        "description": "Retrieve all events in a specific category across all exchanges.\n\n## Available categories\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more (see parameter enum)\n\n## Use cases\n- Build category-based navigation\n- Display markets by topic\n- Power category pages\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/category"
@@ -2467,7 +2467,7 @@
           "Events"
         ],
         "summary": "Get Kalshi Events by Category",
-        "description": "Retrieve events available on Kalshi for a specific category. Only returns events that have a `klsi_id` (are tradeable on Kalshi).\n\n**Use cases:**\n- Show Kalshi-specific markets\n- Filter for US-regulated markets only\n- Build Kalshi-focused interfaces",
+        "description": "Retrieve events available on Kalshi for a specific category. Only returns events that have a `klsi_id` (are tradeable on Kalshi).\n\n## Use cases\n- Show Kalshi-specific markets\n- Filter for US-regulated markets only\n- Build Kalshi-focused interfaces\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto/klsi`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/category"
@@ -2496,7 +2496,7 @@
           "Events"
         ],
         "summary": "Get Polymarket Events by Category",
-        "description": "Retrieve events available on Polymarket for a specific category. Only returns events that have a `poly_id` (are tradeable on Polymarket).\n\n**Use cases:**\n- Show Polymarket-specific markets\n- Filter for crypto-native markets\n- Build Polymarket-focused interfaces",
+        "description": "Retrieve events available on Polymarket for a specific category. Only returns events that have a `poly_id` (are tradeable on Polymarket).\n\n## Use cases\n- Show Polymarket-specific markets\n- Filter for crypto-native markets\n- Build Polymarket-focused interfaces\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto/poly`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/category"
@@ -2525,7 +2525,7 @@
           "Search"
         ],
         "summary": "Search All Markets",
-        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database — not just a cached subset — so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\nExample request: GET https://api.delphiterminal.co/api/v1/events/search?q=bitcoin&category=Crypto\nHeader: X-API-Key: YOUR_API_KEY\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.",
+        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database — not just a cached subset — so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "q",
@@ -2571,7 +2571,7 @@
           "Search"
         ],
         "summary": "Autocomplete Suggestions",
-        "description": "Get autocomplete suggestions for a partial search query. Use this to build search-as-you-type interfaces.\n\n**What you get:**\n- Array of suggested search terms\n- Ranked by relevance and popularity\n\n**Use cases:**\n- Power search box autocomplete\n- Help users discover markets\n- Reduce typing errors",
+        "description": "Get autocomplete suggestions for a partial search query. Use this to build search-as-you-type interfaces.\n\n## What you get\n- Array of suggested search terms\n- Ranked by relevance and popularity\n\n## Use cases\n- Power search box autocomplete\n- Help users discover markets\n- Reduce typing errors\n\n## Example\n\n- Request: `GET /api/v1/search/suggest?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "q",
@@ -2607,7 +2607,7 @@
           "KLSI"
         ],
         "summary": "Get KLSI Price History",
-        "description": "Retrieve historical price data for a Kalshi market.\n\n**What you get:**\n- Price time series with timestamps\n- Yes/No bid and ask prices\n- Trading volume\n- Open interest\n\n**Use cases:**\n- Build price charts\n- Analyze historical trends\n- Track market sentiment over time",
+        "description": "Retrieve historical price data for a Kalshi market.\n\n## What you get\n- Price time series with timestamps\n- Yes/No bid and ask prices\n- Trading volume\n- Open interest\n\n## Use cases\n- Build price charts\n- Analyze historical trends\n- Track market sentiment over time\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/klsi_id"
@@ -2646,7 +2646,7 @@
           "Advanced Analytics"
         ],
         "summary": "Get Orderbook Analytics",
-        "description": "Retrieve pre-computed orderbook analytics for any market. These metrics are derived from orderbook snapshots.\n\n**What you get:**\n- Time-series orderbook metrics\n- Aggregated depth and liquidity data\n- Spread and imbalance indicators\n\n**Use cases:**\n- Track liquidity changes over time\n- Identify optimal entry/exit points\n- Build market quality dashboards",
+        "description": "Retrieve pre-computed orderbook analytics for any market. These metrics are derived from orderbook snapshots.\n\n## What you get\n- Time-series orderbook metrics\n- Aggregated depth and liquidity data\n- Spread and imbalance indicators\n\n## Use cases\n- Track liquidity changes over time\n- Identify optimal entry/exit points\n- Build market quality dashboards\n\n## Example\n\n- Request: `GET /api/v1/markets/example-market-id/orderbook_analytics?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/market_id"
@@ -2678,7 +2678,7 @@
           "Advanced Analytics"
         ],
         "summary": "Get Best Bid/Ask Time Series",
-        "description": "Retrieve a time-series of best bid and best ask prices for a market. This is the most efficient way to get price history.\n\n**What you get:**\n- Best bid price over time\n- Best ask price over time\n- Timestamps for each data point\n\n**Use cases:**\n- Build price charts\n- Calculate historical spreads\n- Analyze price movements\n- Backtest trading strategies",
+        "description": "Retrieve a time-series of best bid and best ask prices for a market. This is the most efficient way to get price history.\n\n## What you get\n- Best bid price over time\n- Best ask price over time\n- Timestamps for each data point\n\n## Use cases\n- Build price charts\n- Calculate historical spreads\n- Analyze price movements\n- Backtest trading strategies\n\n## Example\n\n- Request: `GET /api/v1/markets/example-market-id/orderbook_analytics/best_quotes?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "$ref": "#/components/parameters/market_id"
@@ -2710,7 +2710,7 @@
           "Kalshi WebSocket"
         ],
         "summary": "Kalshi Real-Time WebSocket",
-        "description": "Connect to the Kalshi WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/kalshi\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Kalshi markets using their `klsi_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"klsi_ids\": [\"KXBTCD-25FEB14-B55000\", \"KXETHD-25FEB14-B3100\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| klsi_ids | array | Yes | Array of Kalshi market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"klsi_ids\": [\"KXBTCD-25FEB14-B55000\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"price\": 0.65,\n  \"yes_bid\": 0.64,\n  \"yes_ask\": 0.66,\n  \"volume\": 15000,\n  \"open_interest\": 8500,\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"bid_side\": [0, 0, 0, ..., 150, 200, 100],\n  \"ask_side\": [100, 150, 200, ..., 0, 0, 0],\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"id\": \"trade123\",\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"exchange\": \"klsi\",\n  \"yes_price\": 0.65,\n  \"no_price\": 0.35,\n  \"count\": 10,\n  \"taker_side\": \"buy\",\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/kalshi\n\nws.onopen = () => {\n  console.log('Connected to Kalshi WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    klsi_ids: ['KXBTCD-25FEB14-B55000'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  console.log('Received:', data);\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 512 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `klsi_id` (Kalshi market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)",
+        "description": "Connect to the Kalshi WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/kalshi\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Kalshi markets using their `klsi_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"klsi_ids\": [\"KXBTCD-25FEB14-B55000\", \"KXETHD-25FEB14-B3100\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| klsi_ids | array | Yes | Array of Kalshi market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"klsi_ids\": [\"KXBTCD-25FEB14-B55000\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"price\": 0.65,\n  \"yes_bid\": 0.64,\n  \"yes_ask\": 0.66,\n  \"volume\": 15000,\n  \"open_interest\": 8500,\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"bid_side\": [0, 0, 0, ..., 150, 200, 100],\n  \"ask_side\": [100, 150, 200, ..., 0, 0, 0],\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"id\": \"trade123\",\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"exchange\": \"klsi\",\n  \"yes_price\": 0.65,\n  \"no_price\": 0.35,\n  \"count\": 10,\n  \"taker_side\": \"buy\",\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/kalshi\n\nws.onopen = () => {\n  console.log('Connected to Kalshi WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    klsi_ids: ['KXBTCD-25FEB14-B55000'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  console.log('Received:', data);\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 512 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `klsi_id` (Kalshi market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n\n## Example\n\n- Request: `GET /ws/kalshi`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "responses": {
           "101": {
@@ -2725,7 +2725,7 @@
           "Polymarket WebSocket"
         ],
         "summary": "Polymarket Real-Time WebSocket",
-        "description": "Connect to the Polymarket WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/poly\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Polymarket data using their `condition_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"condition_ids\": [\"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| condition_ids | array | Yes | Array of Polymarket condition identifiers (hex strings starting with 0x) |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"condition_ids\": [\"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"poly\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"price\": 0.992,\n    \"last_update\": \"2026-02-04T15:30:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"snapshot_time\": \"2026-02-04T15:30:00Z\",\n    \"exchange\": \"poly\",\n    \"market_id\": \"0x1234abcd5678efgh\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"bid_side\": [0.55, 0.54, 0.53, 0.52, 0.51],\n    \"ask_side\": [0.56, 0.57, 0.58, 0.59, 0.60],\n    \"original_last_update\": \"2026-02-04T15:29:59Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"poly\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"token_id\": \"0x123...\",\n    \"market_id\": \"0xabc...\",\n    \"price\": 0.65,\n    \"size\": 100.5,\n    \"side\": \"buy\",\n    \"last_update\": \"2026-02-04T15:30:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/poly\n\nws.onopen = () => {\n  console.log('Connected to Polymarket WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    condition_ids: ['0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 512 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `condition_id` (Polymarket condition identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n- Orderbook updates are high-frequency - consider filtering client-side if needed",
+        "description": "Connect to the Polymarket WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/poly\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Polymarket data using their `condition_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"condition_ids\": [\"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| condition_ids | array | Yes | Array of Polymarket condition identifiers (hex strings starting with 0x) |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"condition_ids\": [\"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"poly\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"price\": 0.992,\n    \"last_update\": \"2026-02-04T15:30:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"snapshot_time\": \"2026-02-04T15:30:00Z\",\n    \"exchange\": \"poly\",\n    \"market_id\": \"0x1234abcd5678efgh\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"bid_side\": [0.55, 0.54, 0.53, 0.52, 0.51],\n    \"ask_side\": [0.56, 0.57, 0.58, 0.59, 0.60],\n    \"original_last_update\": \"2026-02-04T15:29:59Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"poly\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"token_id\": \"0x123...\",\n    \"market_id\": \"0xabc...\",\n    \"price\": 0.65,\n    \"size\": 100.5,\n    \"side\": \"buy\",\n    \"last_update\": \"2026-02-04T15:30:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/poly\n\nws.onopen = () => {\n  console.log('Connected to Polymarket WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    condition_ids: ['0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 512 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `condition_id` (Polymarket condition identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n- Orderbook updates are high-frequency - consider filtering client-side if needed\n\n## Example\n\n- Request: `GET /ws/poly`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "responses": {
           "101": {
@@ -2740,7 +2740,7 @@
           "Pfun WebSocket"
         ],
         "summary": "Pfun Real-Time WebSocket",
-        "description": "Connect to the Pfun WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/pfun\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Pfun data using their `market_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"market_ids\": [\"market123\", \"market456\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| market_ids | array | Yes | Array of Pfun market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"market_ids\": [\"market123\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"price\": 0.65,\n    \"yes_bid\": 0.64,\n    \"yes_ask\": 0.66,\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"venue_market_id\": \"venue123\",\n    \"best_yes_price\": 65,\n    \"best_yes_size\": 100,\n    \"best_no_price\": 35,\n    \"best_no_size\": 50,\n    \"yes_side\": [100, 200, 300],\n    \"no_side\": [50, 100, 150],\n    \"server_time\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"yes_price\": 0.65,\n    \"no_price\": 0.35,\n    \"count\": 10,\n    \"taker_side\": \"buy\",\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/pfun\n\nws.onopen = () => {\n  console.log('Connected to Pfun WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    market_ids: ['market123'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 16 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `market_id` (Pfun market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)",
+        "description": "Connect to the Pfun WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/pfun\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Pfun data using their `market_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"market_ids\": [\"market123\", \"market456\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| market_ids | array | Yes | Array of Pfun market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"market_ids\": [\"market123\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"price\": 0.65,\n    \"yes_bid\": 0.64,\n    \"yes_ask\": 0.66,\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"venue_market_id\": \"venue123\",\n    \"best_yes_price\": 65,\n    \"best_yes_size\": 100,\n    \"best_no_price\": 35,\n    \"best_no_size\": 50,\n    \"yes_side\": [100, 200, 300],\n    \"no_side\": [50, 100, 150],\n    \"server_time\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"yes_price\": 0.65,\n    \"no_price\": 0.35,\n    \"count\": 10,\n    \"taker_side\": \"buy\",\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/pfun\n\nws.onopen = () => {\n  console.log('Connected to Pfun WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    market_ids: ['market123'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 16 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `market_id` (Pfun market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n\n## Example\n\n- Request: `GET /ws/pfun`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "responses": {
           "101": {
@@ -2755,7 +2755,7 @@
           "Limitless WebSocket"
         ],
         "summary": "Limitless Real-Time WebSocket",
-        "description": "Connect to the Limitless WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/limitless\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Limitless data using their `market_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"market_ids\": [\"market123\", \"market456\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| market_ids | array | Yes | Array of Limitless market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"market_ids\": [\"market123\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"market_id\": \"market123\",\n    \"price\": 0.65,\n    \"yes_bid\": 0.64,\n    \"yes_ask\": 0.66,\n    \"volume\": 15000,\n    \"open_interest\": 8500,\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"token_id\": \"token123\",\n    \"market_id\": \"market123\",\n    \"bid_side\": [0.55, 0.54, 0.53, 0.52, 0.51],\n    \"ask_side\": [0.56, 0.57, 0.58, 0.59, 0.60],\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"market_id\": \"market123\",\n    \"yes_price\": 0.65,\n    \"no_price\": 0.35,\n    \"count\": 10,\n    \"taker_side\": \"buy\",\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/limitless\n\nws.onopen = () => {\n  console.log('Connected to Limitless WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    market_ids: ['market123'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 16 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `market_id` (Limitless market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)",
+        "description": "Connect to the Limitless WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/limitless\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Limitless data using their `market_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"market_ids\": [\"market123\", \"market456\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| market_ids | array | Yes | Array of Limitless market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"market_ids\": [\"market123\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"market_id\": \"market123\",\n    \"price\": 0.65,\n    \"yes_bid\": 0.64,\n    \"yes_ask\": 0.66,\n    \"volume\": 15000,\n    \"open_interest\": 8500,\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"token_id\": \"token123\",\n    \"market_id\": \"market123\",\n    \"bid_side\": [0.55, 0.54, 0.53, 0.52, 0.51],\n    \"ask_side\": [0.56, 0.57, 0.58, 0.59, 0.60],\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"market_id\": \"market123\",\n    \"yes_price\": 0.65,\n    \"no_price\": 0.35,\n    \"count\": 10,\n    \"taker_side\": \"buy\",\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/limitless\n\nws.onopen = () => {\n  console.log('Connected to Limitless WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    market_ids: ['market123'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 16 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `market_id` (Limitless market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n\n## Example\n\n- Request: `GET /ws/limitless`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "security": [],
         "responses": {
           "101": {
