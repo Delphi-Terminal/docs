@@ -2779,6 +2779,7 @@
         ],
         "summary": "Download Dataset by Date",
         "description": "Download RFQ or MVE trades data for a specific date as presigned S3 URLs. Returns a finalized daily Parquet file if the day is complete, or live hourly JSONL parts if the day is still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Presigned S3 download URLs (valid for 5 minutes)\n- Automatic detection of finalized vs live data\n- Full daily Parquet file for completed days\n- Hourly JSONL parts for the current day\n\n## Use cases\n\n- Bulk download historical data for backtesting\n- Build local analytics pipelines\n- Feed data into Pandas, Polars, or DuckDB\n- Stream today's data hour-by-hour for near-real-time analytics\n\n## Datasets\n\n- rfqs: Kalshi Request for Quote events (same schema as the /klsi/{id}/rfq endpoint)\n- mve_trades: Kalshi Multi-Value Event parlay trades (same schema as the /klsi/{id}/mve_trades endpoint)\n\nFor full runnable examples, see /data-extraction.",
+        "description": "Download RFQ or MVE trades data for a specific date as presigned S3 URLs. Returns a finalized daily Parquet file if the day is complete, or live hourly JSONL parts if the day is still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Presigned S3 download URLs (valid for 5 minutes)\n- Automatic detection of finalized vs live data\n- Full daily Parquet file for completed days\n- Hourly JSONL parts for the current day\n\n## Use cases\n\n- Bulk download historical data for backtesting\n- Build local analytics pipelines\n- Feed data into Pandas, Polars, or DuckDB\n- Stream today's data hour-by-hour for near-real-time analytics\n\n## Datasets\n\n- rfq: Kalshi Request for Quote events (same schema as the /klsi/{id}/rfq endpoint)\n- mve_trades: Kalshi Multi-Value Event parlay trades (same schema as the /klsi/{id}/mve_trades endpoint)\n\nFor full runnable examples, see /data-extraction.",
         "parameters": [
           {
             "name": "dataset",
@@ -2787,12 +2788,12 @@
             "schema": {
               "type": "string",
               "enum": [
-                "rfqs",
+                "rfq",
                 "mve_trades"
               ]
             },
             "description": "Dataset to download",
-            "example": "rfqs"
+            "example": "rfq"
           },
           {
             "name": "date",
@@ -2851,6 +2852,7 @@
         ],
         "summary": "Download Latest Dataset (Today)",
         "description": "Convenience endpoint that returns today's data (UTC). Equivalent to calling the date endpoint with today's date. Returns live hourly JSONL parts since the day is typically still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Today's data as presigned S3 download URLs\n- Hourly JSONL parts accumulated so far today\n- Optional hour filter to get a specific hour's data\n\n## Use cases\n\n- Quick access to today's data without specifying a date\n- Monitor today's RFQ or MVE activity in near-real-time\n- Feed into streaming analytics pipelines\n\nFor full runnable examples, see /data-extraction.",
+        "description": "Convenience endpoint that returns today's data (UTC). Equivalent to calling the date endpoint with today's date. Returns live hourly JSONL parts since the day is typically still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Today's data as presigned S3 download URLs\n- Hourly JSONL parts accumulated so far today\n- Optional hour filter to get a specific hour's data\n\n## Use cases\n\n- Quick access to today's data without specifying a date\n- Monitor today's RFQ or MVE activity in near-real-time\n- Feed into streaming analytics pipelines\n\nFor full runnable examples, see /data-extraction.",
         "parameters": [
           {
             "name": "dataset",
@@ -2859,12 +2861,12 @@
             "schema": {
               "type": "string",
               "enum": [
-                "rfqs",
+                "rfq",
                 "mve_trades"
               ]
             },
             "description": "Dataset to download",
-            "example": "rfqs"
+            "example": "rfq"
           },
           {
             "name": "hour",
@@ -4547,8 +4549,8 @@
         "properties": {
           "dataset": {
             "type": "string",
-            "description": "Dataset name (rfqs or mve_trades)",
-            "example": "rfqs"
+            "description": "Dataset name (rfq or mve_trades)",
+            "example": "rfq"
           },
           "date": {
             "type": "string",
@@ -4593,7 +4595,7 @@
           "key": {
             "type": "string",
             "description": "S3 object key",
-            "example": "parquet_exports/rfqs/dt=2026-02-25/daily.parquet"
+            "example": "parquet_exports/rfq/dt=2026-02-25/daily.parquet"
           },
           "url": {
             "type": "string",
