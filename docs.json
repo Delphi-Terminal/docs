@@ -29,6 +29,20 @@
               "quickstart",
               "authentication"
             ]
+          },
+          {
+            "group": "Data",
+            "pages": [
+              "data-extraction"
+            ]
+          },
+          {
+            "group": "Examples",
+            "pages": [
+              "klsi-examples",
+              "polymarket-examples",
+              "websocket-examples"
+            ]
           }
         ]
       },

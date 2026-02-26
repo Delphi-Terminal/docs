@@ -1,0 +1,52 @@
+---
+title: "WebSocket examples"
+description: "Subscribe to real-time market streams across exchanges"
+---
+
+Use these examples to connect and subscribe to WebSocket streams.
+
+## Kalshi WebSocket (JavaScript)
+
+```javascript
+const ws = new WebSocket("wss://api.delphiterminal.co/ws/kalshi");
+
+ws.onopen = () => {
+  ws.send(
+    JSON.stringify({
+      action: "subscribe",
+      klsi_ids: ["AMAZONFTC-29DEC31"],
+      message_types: ["prices", "orderbook", "trades"],
+    })
+  );
+};
+
+ws.onmessage = (event) => {
+  const msg = JSON.parse(event.data);
+  console.log(msg);
+};
+```
+
+## Polymarket WebSocket (JavaScript)
+
+```javascript
+const ws = new WebSocket("wss://api.delphiterminal.co/ws/poly");
+
+ws.onopen = () => {
+  ws.send(
+    JSON.stringify({
+      action: "subscribe",
+      condition_ids: [
+        "0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707",
+      ],
+      message_types: ["prices", "orderbook", "trades"],
+    })
+  );
+};
+```
+
+## Pfun and Limitless
+
+Use the same payload shape with `market_ids` against:
+
+- `wss://api.delphiterminal.co/ws/pfun`
+- `wss://api.delphiterminal.co/ws/limitless`
