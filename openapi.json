@@ -83,6 +83,30 @@
     {
       "name": "Clusters",
       "description": "Cross-exchange market matching. Markets asking the same question across Kalshi, Polymarket, Limitless, and PFun are grouped into clusters. Use these endpoints to discover equivalent markets for arbitrage, hedging, and cross-exchange analytics."
+    },
+    {
+      "name": "Opinion Labs",
+      "description": "Access Opinion Labs prediction market data including market details, orderbooks, price history, and trade history."
+    },
+    {
+      "name": "Gemini",
+      "description": "Access Gemini prediction market data including market details, orderbooks, price history, and trade history."
+    },
+    {
+      "name": "Manifold",
+      "description": "Access Manifold prediction market data including market details, orderbooks, price history, and trade history."
+    },
+    {
+      "name": "ForecastEx",
+      "description": "Access ForecastEx prediction market data including market details and trade history."
+    },
+    {
+      "name": "PredictIt",
+      "description": "Access PredictIt prediction market data including market details and price history."
+    },
+    {
+      "name": "Delphi",
+      "description": "Cross-exchange market matching via Delphi IDs. Look up cluster metadata and find equivalent markets across all supported exchanges."
     }
   ],
   "paths": {
@@ -2909,6 +2933,1119 @@
         ]
       }
     },
+    "/api/v1/opinion/{market_id}/market": {
+      "get": {
+        "tags": [
+          "Opinion Labs"
+        ],
+        "summary": "Get Opinion Labs Market Details",
+        "description": "Retrieve full market details for a specific Opinion Labs market by market ID.\n\n## Use cases\n\n- Look up market metadata (title, category, status, resolution)\n- Check if a market is closed or still active\n- Get market rules and event type\n\n## Example\n\n- Request: `GET /api/v1/opinion/10014/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opinion Labs market ID",
+            "example": "10014"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Market details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpinionLabsMarketDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/opinion/markets": {
+      "get": {
+        "tags": [
+          "Opinion Labs"
+        ],
+        "summary": "List All Opinion Labs Markets",
+        "description": "Retrieve a paginated list of all Opinion Labs markets sorted by most recently updated.\n\n## Use cases\n\n- Browse all available Opinion Labs markets\n- Build a market directory or screener\n- Discover new markets\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/opinion/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of markets to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Number of markets to skip for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of markets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OpinionLabsMarketDetails"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "offset": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/opinion/{market_id}/orderbook": {
+      "get": {
+        "tags": [
+          "Opinion Labs"
+        ],
+        "summary": "Get Opinion Labs Orderbook",
+        "description": "Retrieve orderbook snapshots for a specific Opinion Labs market. Returns yes_side and no_side arrays representing the full depth of the orderbook at each snapshot.\n\n## Use cases\n\n- Visualize orderbook depth over time\n- Analyze liquidity and spread\n- Build order flow models\n\n## Example\n\n- Request: `GET /api/v1/opinion/10014/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opinion Labs market ID",
+            "example": "10014"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of snapshots to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of orderbook snapshots",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpnmOrderbookSnapshot"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/opinion/{market_id}/prices": {
+      "get": {
+        "tags": [
+          "Opinion Labs"
+        ],
+        "summary": "Get Opinion Labs Price History",
+        "description": "Retrieve price and ticker history for a specific Opinion Labs market. Includes yes bid/ask, volume, and open interest.\n\n## Use cases\n\n- Chart price history over time\n- Monitor bid/ask spread dynamics\n- Track volume and open interest trends\n\n## Example\n\n- Request: `GET /api/v1/opinion/10014/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opinion Labs market ID",
+            "example": "10014"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of ticker records to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of ticker records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpnmTicker"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/opinion/{market_id}/tradehistory": {
+      "get": {
+        "tags": [
+          "Opinion Labs"
+        ],
+        "summary": "Get Opinion Labs Trade History",
+        "description": "Retrieve trade history for a specific Opinion Labs market. Each record includes yes/no prices, trade count, and taker side.\n\n## Use cases\n\n- Analyze trade flow and volume\n- Build trading signals from historical trades\n- Study market microstructure\n\n## Example\n\n- Request: `GET /api/v1/opinion/10014/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opinion Labs market ID",
+            "example": "10014"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of trades to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of trade records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpnmTrade"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/gemini/{market_id}/market": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "Get Gemini Market Details",
+        "description": "Retrieve full market details for a specific Gemini market by market ID.\n\n## Use cases\n\n- Look up contract metadata (status, resolution, terms)\n- Check if a market has resolved and which side won\n- Access raw JSON data from the exchange\n\n## Example\n\n- Request: `GET /api/v1/gemini/GEMI-BTC15M2603170230-HI75245D64/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Gemini market ID",
+            "example": "GEMI-BTC15M2603170230-HI75245D64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Market details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeminiMarketDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/gemini/markets": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "List All Gemini Markets",
+        "description": "Retrieve a paginated list of all Gemini markets sorted by most recently retrieved.\n\n## Use cases\n\n- Browse all available Gemini markets\n- Build a market directory or screener\n- Discover new contracts\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/gemini/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of markets to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Number of markets to skip for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of markets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/GeminiMarketDetails"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "offset": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/gemini/{market_id}/orderbook": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "Get Gemini Orderbook",
+        "description": "Retrieve orderbook snapshots for a specific Gemini market. Returns yes_side and no_side arrays representing the full depth of the orderbook at each snapshot.\n\n## Use cases\n\n- Visualize orderbook depth over time\n- Analyze liquidity and spread\n- Build order flow models\n\n## Example\n\n- Request: `GET /api/v1/gemini/GEMI-BTC15M2603170230-HI75245D64/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Gemini market ID",
+            "example": "GEMI-BTC15M2603170230-HI75245D64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of snapshots to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of orderbook snapshots",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GemiOrderbookSnapshot"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/gemini/{market_id}/prices": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "Get Gemini Price History",
+        "description": "Retrieve price and ticker history for a specific Gemini market. Includes best bid/ask, OHLC data, volume metrics, and update source.\n\n## Use cases\n\n- Chart price history over time\n- Monitor bid/ask spread dynamics\n- Analyze OHLC candle data\n\n## Example\n\n- Request: `GET /api/v1/gemini/GEMI-BTC15M2603170230-HI75245D64/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Gemini market ID",
+            "example": "GEMI-BTC15M2603170230-HI75245D64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of ticker records to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of ticker records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GemiTicker"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/gemini/{market_id}/tradehistory": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "Get Gemini Trade History",
+        "description": "Retrieve trade history for a specific Gemini market. Each record includes price, quantity, maker/taker flag, and trade ID.\n\n## Use cases\n\n- Analyze trade flow and volume\n- Build trading signals from historical trades\n- Study market microstructure and maker/taker ratios\n\n## Example\n\n- Request: `GET /api/v1/gemini/GEMI-BTC15M2603170230-HI75245D64/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Gemini market ID",
+            "example": "GEMI-BTC15M2603170230-HI75245D64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of trades to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of trade records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GemiTrade"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manifold/{market_id}/market": {
+      "get": {
+        "tags": [
+          "Manifold"
+        ],
+        "summary": "Get Manifold Market Details",
+        "description": "Retrieve full market details for a specific Manifold market by market ID.\n\n## Use cases\n\n- Look up market question and slug\n- Check market status\n- Get market metadata\n\n## Example\n\n- Request: `GET /api/v1/manifold/0AqEut9qzZ/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Manifold market ID",
+            "example": "0AqEut9qzZ"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Market details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManifoldMarketDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manifold/markets": {
+      "get": {
+        "tags": [
+          "Manifold"
+        ],
+        "summary": "List All Manifold Markets",
+        "description": "Retrieve a paginated list of all Manifold markets sorted by most recently updated.\n\n## Use cases\n\n- Browse all available Manifold markets\n- Build a market directory or screener\n- Discover new prediction markets\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/manifold/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of markets to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Number of markets to skip for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of markets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ManifoldMarketDetails"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "offset": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manifold/{market_id}/orderbook": {
+      "get": {
+        "tags": [
+          "Manifold"
+        ],
+        "summary": "Get Manifold Orderbook",
+        "description": "Retrieve orderbook snapshots for a specific Manifold market. Returns yes and no arrays representing depth at each snapshot.\n\n## Use cases\n\n- Visualize orderbook depth over time\n- Analyze liquidity\n- Build order flow models\n\n## Example\n\n- Request: `GET /api/v1/manifold/0AqEut9qzZ/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Manifold market ID",
+            "example": "0AqEut9qzZ"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of snapshots to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of orderbook snapshots",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManiOrderbook"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manifold/{market_id}/prices": {
+      "get": {
+        "tags": [
+          "Manifold"
+        ],
+        "summary": "Get Manifold Price History",
+        "description": "Retrieve price and ticker history for a specific Manifold market. Includes probability, 24h volume, and liquidity.\n\n## Use cases\n\n- Chart probability over time\n- Monitor volume and liquidity trends\n- Build trading signals\n\n## Example\n\n- Request: `GET /api/v1/manifold/0AqEut9qzZ/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Manifold market ID",
+            "example": "0AqEut9qzZ"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of ticker records to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of ticker records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManiTicker"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manifold/{market_id}/tradehistory": {
+      "get": {
+        "tags": [
+          "Manifold"
+        ],
+        "summary": "Get Manifold Trade History",
+        "description": "Retrieve trade history for a specific Manifold market. Each record includes outcome, side, amount, shares, price, and bet ID.\n\n## Use cases\n\n- Analyze trade flow and betting patterns\n- Build trading signals from historical bets\n- Study market microstructure\n\n## Example\n\n- Request: `GET /api/v1/manifold/0AqEut9qzZ/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Manifold market ID",
+            "example": "0AqEut9qzZ"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of trades to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of trade records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManiTrade"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/fex/{market_id}/market": {
+      "get": {
+        "tags": ["ForecastEx"],
+        "summary": "Get ForecastEx Market Details",
+        "description": "Retrieve full market details for a specific ForecastEx market by market ID.\n\n## Use cases\n\n- Look up market metadata (title, category, status, expiration)\n- Check contract specifications and threshold\n- Get ticker prefix and spec URL\n\n## Example\n\n- Request: `GET /api/v1/fex/ACD_1226_429.0/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ForecastEx market ID",
+            "example": "ACD_1226_429.0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Market details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FexMarketDetails" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/fex/markets": {
+      "get": {
+        "tags": ["ForecastEx"],
+        "summary": "List All ForecastEx Markets",
+        "description": "Retrieve a paginated list of all ForecastEx markets sorted by most recently updated.\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/fex/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Maximum number of markets to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0 },
+            "description": "Number of markets to skip for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of markets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "markets": { "type": "array", "items": { "$ref": "#/components/schemas/FexMarketDetails" } },
+                    "count": { "type": "integer" },
+                    "limit": { "type": "integer" },
+                    "offset": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/fex/{market_id}/tradehistory": {
+      "get": {
+        "tags": ["ForecastEx"],
+        "summary": "Get ForecastEx Trade History",
+        "description": "Retrieve trade history for a specific ForecastEx market. Each record includes yes/no prices, trade count, and taker side.\n\n## Use cases\n\n- Analyze trade flow and volume\n- Build trading signals from historical trades\n- Study market microstructure\n\n## Example\n\n- Request: `GET /api/v1/fex/ACD_1226_429.0/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ForecastEx market ID",
+            "example": "ACD_1226_429.0"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Maximum number of trades to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of trade records",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/FexTrade" } }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/predictit/{market_id}/market": {
+      "get": {
+        "tags": ["PredictIt"],
+        "summary": "Get PredictIt Market Details",
+        "description": "Retrieve full market details for a specific PredictIt market by market ID.\n\n## Use cases\n\n- Look up contract and market metadata\n- Check market status and last trade price\n- Access raw JSON data from the exchange\n\n## Example\n\n- Request: `GET /api/v1/predictit/34088/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "PredictIt market ID",
+            "example": "34088"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Market details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PredictItMarketDetails" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/predictit/markets": {
+      "get": {
+        "tags": ["PredictIt"],
+        "summary": "List All PredictIt Markets",
+        "description": "Retrieve a paginated list of all PredictIt markets sorted by most recently retrieved.\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/predictit/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Maximum number of markets to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0 },
+            "description": "Number of markets to skip for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of markets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "markets": { "type": "array", "items": { "$ref": "#/components/schemas/PredictItMarketDetails" } },
+                    "count": { "type": "integer" },
+                    "limit": { "type": "integer" },
+                    "offset": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/predictit/{market_id}/prices": {
+      "get": {
+        "tags": ["PredictIt"],
+        "summary": "Get PredictIt Price History",
+        "description": "Retrieve price and ticker history for a specific PredictIt market. Includes best bid/ask with quantities and last price.\n\n## Use cases\n\n- Chart price history over time\n- Monitor bid/ask spread dynamics\n- Track market activity\n\n## Example\n\n- Request: `GET /api/v1/predictit/34088/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "PredictIt market ID",
+            "example": "34088"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Maximum number of ticker records to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of ticker records",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PrdiTicker" } }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/delphi/{delphi_id}/cluster": {
+      "get": {
+        "tags": ["Delphi"],
+        "summary": "Get Market Cluster Info",
+        "description": "Retrieve cluster metadata for a given Delphi ID. Returns the cluster title, canonical reference, size (number of matched markets), and last update time.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Look up what question a cluster of markets represents\n- Check how many exchanges carry the same market\n- Get canonical reference for a matched market group\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "delphi_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Delphi ID for cross-exchange market matching",
+            "example": "delphi_0016d5d59aae"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster metadata",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MarketCluster" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
+    "/api/v1/delphi/{delphi_id}/markets": {
+      "get": {
+        "tags": ["Delphi"],
+        "summary": "Get Matched Markets Across Exchanges",
+        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Pfun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "delphi_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Delphi ID for cross-exchange market matching",
+            "example": "delphi_0016d5d59aae"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matched markets grouped by exchange",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "delphi_id": {
+                      "type": "string",
+                      "description": "The queried Delphi ID"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of matched markets across all exchanges"
+                    },
+                    "kalshi": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "description": "Matched Kalshi markets"
+                    },
+                    "polymarket": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "description": "Matched Polymarket markets"
+                    },
+                    "limitless": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "description": "Matched Limitless markets"
+                    },
+                    "pfun": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "description": "Matched Pfun markets"
+                    },
+                    "opinion": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "description": "Matched Opinion Labs markets"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        },
+        "security": [{ "ApiKeyAuth": [] }]
+      }
+    },
     "/api/v1/clusters/{cluster_id}": {
       "get": {
         "tags": [
@@ -3921,6 +5058,10 @@
             "type": "string",
             "nullable": true,
             "description": "Cross-exchange cluster ID. Use /clusters/{cluster_id} to see all matched markets."
+          },
+          "delphi_id": {
+            "type": "string",
+            "description": "Delphi ID used for cross-exchange market matching"
           }
         }
       },
@@ -4184,6 +5325,10 @@
             "type": "string",
             "nullable": true,
             "description": "Cross-exchange cluster ID. Use /clusters/{cluster_id} to see all matched markets."
+          },
+          "delphi_id": {
+            "type": "string",
+            "description": "Delphi ID used for cross-exchange market matching"
           }
         }
       },
@@ -4822,6 +5967,663 @@
             "type": "string",
             "format": "date-time",
             "description": "Last modified timestamp"
+          }
+        }
+      },
+      "OpinionLabsMarketDetails": {
+        "type": "object",
+        "description": "Market details for an Opinion Labs market.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Unique market identifier"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "event_type": {
+            "type": "string",
+            "description": "Type of event"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current market status"
+          },
+          "title": {
+            "type": "string",
+            "description": "Market title / question"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          },
+          "inserted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the market was first ingested"
+          },
+          "category": {
+            "type": "string",
+            "description": "Market category"
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "Whether the market is closed"
+          },
+          "closed_time": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Unix timestamp when market closed"
+          },
+          "resolution": {
+            "type": "string",
+            "description": "Market resolution status"
+          },
+          "rules": {
+            "type": "string",
+            "description": "Market rules text"
+          },
+          "delphi_id": {
+            "type": "string",
+            "description": "Delphi ID used for cross-exchange market matching"
+          }
+        }
+      },
+      "OpnmOrderbookSnapshot": {
+        "type": "object",
+        "description": "An orderbook snapshot for an Opinion Labs market.",
+        "properties": {
+          "snapshot_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the snapshot"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "yes_side": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Yes side depth levels"
+          },
+          "no_side": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "No side depth levels"
+          },
+          "original_last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Original last update timestamp from the exchange"
+          }
+        }
+      },
+      "OpnmTicker": {
+        "type": "object",
+        "description": "A price/ticker record for an Opinion Labs market.",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "description": "Current price"
+          },
+          "yes_bid": {
+            "type": "number",
+            "format": "double",
+            "description": "Best yes bid price"
+          },
+          "yes_ask": {
+            "type": "number",
+            "format": "double",
+            "description": "Best yes ask price"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "Trading volume"
+          },
+          "open_interest": {
+            "type": "integer",
+            "description": "Open interest"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          },
+          "ingest_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Ingest timestamp"
+          }
+        }
+      },
+      "OpnmTrade": {
+        "type": "object",
+        "description": "A trade record for an Opinion Labs market.",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "yes_price": {
+            "type": "number",
+            "format": "double",
+            "description": "Yes price at time of trade"
+          },
+          "no_price": {
+            "type": "number",
+            "format": "double",
+            "description": "No price at time of trade"
+          },
+          "count": {
+            "type": "number",
+            "format": "double",
+            "description": "Trade count"
+          },
+          "taker_side": {
+            "type": "string",
+            "description": "Side the taker was on (buy/sell)"
+          },
+          "last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Trade timestamp"
+          },
+          "ingest_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Ingest timestamp"
+          }
+        }
+      },
+      "GeminiMarketDetails": {
+        "type": "object",
+        "description": "Market details for a Gemini prediction market contract.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Unique market identifier"
+          },
+          "venue_market_id": {
+            "type": "string",
+            "description": "Market ID on the Gemini venue"
+          },
+          "event_ticker": {
+            "type": "string",
+            "description": "Event ticker symbol"
+          },
+          "contract_ticker": {
+            "type": "string",
+            "description": "Contract ticker symbol"
+          },
+          "contract_id": {
+            "type": "string",
+            "description": "Contract identifier"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current market status"
+          },
+          "resolved_at": {
+            "type": "string",
+            "description": "When the market was resolved"
+          },
+          "resolution_side": {
+            "type": "string",
+            "description": "Which side won (yes/no)"
+          },
+          "terms_and_conditions_url": {
+            "type": "string",
+            "description": "URL to the market's terms and conditions"
+          },
+          "raw_json": {
+            "type": "string",
+            "description": "Raw JSON data from the exchange"
+          },
+          "retrieved_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the data was retrieved from the exchange"
+          }
+        }
+      },
+      "GemiOrderbookSnapshot": {
+        "type": "object",
+        "description": "An orderbook snapshot for a Gemini market.",
+        "properties": {
+          "snapshot_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the snapshot"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "yes_side": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Yes side depth levels"
+          },
+          "no_side": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "No side depth levels"
+          },
+          "original_last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Original last update timestamp from the exchange"
+          }
+        }
+      },
+      "GemiTicker": {
+        "type": "object",
+        "description": "A price/ticker record for a Gemini market.",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "venue_market_id": {
+            "type": "string",
+            "description": "Market ID on the Gemini venue"
+          },
+          "best_bid": {
+            "type": "number",
+            "format": "double",
+            "description": "Best bid price"
+          },
+          "best_bid_qty": {
+            "type": "number",
+            "format": "double",
+            "description": "Best bid quantity"
+          },
+          "best_ask": {
+            "type": "number",
+            "format": "double",
+            "description": "Best ask price"
+          },
+          "best_ask_qty": {
+            "type": "number",
+            "format": "double",
+            "description": "Best ask quantity"
+          },
+          "last": {
+            "type": "number",
+            "format": "double",
+            "description": "Last traded price"
+          },
+          "open": {
+            "type": "number",
+            "format": "double",
+            "description": "Opening price"
+          },
+          "high": {
+            "type": "number",
+            "format": "double",
+            "description": "High price"
+          },
+          "low": {
+            "type": "number",
+            "format": "double",
+            "description": "Low price"
+          },
+          "close": {
+            "type": "number",
+            "format": "double",
+            "description": "Closing price"
+          },
+          "update_id": {
+            "type": "integer",
+            "description": "Sequence update ID"
+          },
+          "source": {
+            "type": "string",
+            "description": "Data source identifier"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          },
+          "ingest_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Ingest timestamp"
+          }
+        }
+      },
+      "GemiTrade": {
+        "type": "object",
+        "description": "A trade record for a Gemini market.",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "venue_market_id": {
+            "type": "string",
+            "description": "Market ID on the Gemini venue"
+          },
+          "trade_id": {
+            "type": "integer",
+            "description": "Unique trade identifier"
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "description": "Trade price"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double",
+            "description": "Trade quantity"
+          },
+          "is_maker": {
+            "type": "integer",
+            "description": "Whether the trade was a maker order (1) or taker order (0)"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          },
+          "ingest_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Ingest timestamp"
+          }
+        }
+      },
+      "ManifoldMarketDetails": {
+        "type": "object",
+        "description": "Market details for a Manifold prediction market.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Unique market identifier"
+          },
+          "question": {
+            "type": "string",
+            "description": "The market question"
+          },
+          "slug": {
+            "type": "string",
+            "description": "URL slug for the market"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current market status"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        }
+      },
+      "ManiOrderbook": {
+        "type": "object",
+        "description": "An orderbook snapshot for a Manifold market.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "yes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Yes side depth levels"
+          },
+          "no": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "No side depth levels"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          }
+        }
+      },
+      "ManiTicker": {
+        "type": "object",
+        "description": "A price/ticker record for a Manifold market.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "prob": {
+            "type": "number",
+            "format": "double",
+            "description": "Current probability"
+          },
+          "volume_24h": {
+            "type": "number",
+            "format": "double",
+            "description": "24-hour trading volume"
+          },
+          "liquidity": {
+            "type": "number",
+            "format": "double",
+            "description": "Market liquidity"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          }
+        }
+      },
+      "ManiTrade": {
+        "type": "object",
+        "description": "A trade record for a Manifold market.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "outcome": {
+            "type": "string",
+            "description": "Trade outcome (YES/NO)"
+          },
+          "side": {
+            "type": "string",
+            "description": "Trade side (buy/sell)"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Trade amount in mana"
+          },
+          "shares": {
+            "type": "number",
+            "format": "double",
+            "description": "Number of shares traded"
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "description": "Trade price"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          },
+          "bet_id": {
+            "type": "string",
+            "description": "Unique bet identifier"
+          }
+        }
+      },
+      "FexMarketDetails": {
+        "type": "object",
+        "description": "Market details for a ForecastEx prediction market.",
+        "properties": {
+          "exchange": { "type": "string", "description": "Exchange name" },
+          "market_id": { "type": "string", "description": "Unique market identifier" },
+          "event_type": { "type": "string", "description": "Type of event" },
+          "status": { "type": "string", "description": "Current market status" },
+          "title": { "type": "string", "description": "Market title" },
+          "ticker_prefix": { "type": "string", "description": "Ticker prefix" },
+          "category": { "type": "string", "description": "Market category" },
+          "expiration_date": { "type": "string", "format": "date", "description": "Contract expiration date" },
+          "threshold": { "type": "string", "description": "Contract threshold" },
+          "spec_url": { "type": "string", "description": "URL to contract specification" },
+          "updated_at": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+        }
+      },
+      "FexTrade": {
+        "type": "object",
+        "description": "A trade record for a ForecastEx market.",
+        "properties": {
+          "exchange": { "type": "string", "description": "Exchange name" },
+          "market_id": { "type": "string", "description": "Market identifier" },
+          "pair_id": { "type": "string", "description": "Trading pair identifier" },
+          "yes_price": { "type": "number", "format": "double", "description": "Yes price at time of trade" },
+          "no_price": { "type": "number", "format": "double", "description": "No price at time of trade" },
+          "count": { "type": "number", "format": "double", "description": "Trade count" },
+          "taker_side": { "type": "string", "description": "Side the taker was on" },
+          "last_update": { "type": "string", "format": "date-time", "description": "Trade timestamp" },
+          "ingest_time": { "type": "string", "format": "date-time", "description": "Ingest timestamp" }
+        }
+      },
+      "PredictItMarketDetails": {
+        "type": "object",
+        "description": "Market details for a PredictIt prediction market contract.",
+        "properties": {
+          "exchange": { "type": "string", "description": "Exchange name" },
+          "market_id": { "type": "string", "description": "Unique market identifier" },
+          "venue_market_id": { "type": "string", "description": "Market ID on the PredictIt venue" },
+          "contract_name": { "type": "string", "description": "Contract name" },
+          "market_name": { "type": "string", "description": "Market name" },
+          "market_ticker": { "type": "string", "description": "Market ticker symbol" },
+          "market_url": { "type": "string", "description": "URL to the market on PredictIt" },
+          "status": { "type": "string", "description": "Current market status" },
+          "last_trade_price": { "type": "number", "format": "double", "description": "Last trade price" },
+          "last_trade_time": { "type": "string", "description": "Last trade time" },
+          "raw_json": { "type": "string", "description": "Raw JSON data from the exchange" },
+          "retrieved_at": { "type": "string", "format": "date-time", "description": "When the data was retrieved" }
+        }
+      },
+      "PrdiTicker": {
+        "type": "object",
+        "description": "A price/ticker record for a PredictIt market.",
+        "properties": {
+          "exchange": { "type": "string", "description": "Exchange name" },
+          "market_id": { "type": "string", "description": "Market identifier" },
+          "venue_market_id": { "type": "string", "description": "Market ID on the PredictIt venue" },
+          "best_bid": { "type": "number", "format": "double", "description": "Best bid price" },
+          "best_bid_qty": { "type": "number", "format": "double", "description": "Best bid quantity" },
+          "best_ask": { "type": "number", "format": "double", "description": "Best ask price" },
+          "best_ask_qty": { "type": "number", "format": "double", "description": "Best ask quantity" },
+          "last": { "type": "number", "format": "double", "description": "Last traded price" },
+          "source": { "type": "string", "description": "Data source identifier" },
+          "server_time": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+          "ingest_time": { "type": "string", "format": "date-time", "description": "Ingest timestamp" }
+        }
+      },
+      "MarketCluster": {
+        "type": "object",
+        "description": "Cluster metadata from the market_clusters table, representing a group of equivalent markets across exchanges.",
+        "properties": {
+          "delphi_id": {
+            "type": "string",
+            "description": "Unique Delphi ID for the cluster"
+          },
+          "title": {
+            "type": "string",
+            "description": "Cluster title describing the shared question"
+          },
+          "canonical_ref": {
+            "type": "string",
+            "description": "Canonical reference for the cluster"
+          },
+          "size": {
+            "type": "integer",
+            "description": "Number of markets in the cluster"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        }
+      },
+      "MatchedMarket": {
+        "type": "object",
+        "description": "A market that shares a Delphi ID with markets on other exchanges.",
+        "properties": {
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier on the exchange"
+          },
+          "title": {
+            "type": "string",
+            "description": "Market title or question"
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "Whether the market is closed"
+          },
+          "category": {
+            "type": "string",
+            "description": "Market category"
+          },
+          "resolution": {
+            "type": "string",
+            "description": "Market resolution status"
+          },
+          "delphi_id": {
+            "type": "string",
+            "description": "Delphi ID for cross-exchange matching"
           }
         }
       },

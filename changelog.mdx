@@ -1,9 +1,65 @@
 ---
-title: "Changelog"
-description: "API and platform updates"
+title: Changelog
+description: API and platform updates
 ---
 
 # Changelog
+
+<Update label="2026-02-17" description="Delphi ID market matching, new exchanges, and test tickers">
+
+**New: Delphi ID Market Matching (Pro+ plans)**
+
+- `GET /api/v1/delphi/{delphi_id}/cluster` -- look up cluster metadata (title, canonical reference, market count)
+- `GET /api/v1/delphi/{delphi_id}/markets` -- find equivalent markets across Kalshi, Polymarket, Limitless, Pfun, and Opinion Labs
+- Both endpoints require Pro, Max, or Admin plan
+- `delphi_id` field added to Limitless, Pfun, and Opinion Labs market details responses
+
+**New: ForecastEx Exchange**
+
+- `GET /api/v1/fex/{market_id}/market` -- market details
+- `GET /api/v1/fex/markets` -- list all markets
+- `GET /api/v1/fex/{market_id}/tradehistory` -- trade history
+
+**New: PredictIt Exchange**
+
+- `GET /api/v1/predictit/{market_id}/market` -- market details
+- `GET /api/v1/predictit/markets` -- list all markets
+- `GET /api/v1/predictit/{market_id}/prices` -- price history
+
+**New: Manifold Exchange**
+
+- `GET /api/v1/manifold/{market_id}/market` -- market details
+- `GET /api/v1/manifold/markets` -- list all markets
+- `GET /api/v1/manifold/{market_id}/orderbook` -- orderbook snapshots
+- `GET /api/v1/manifold/{market_id}/prices` -- price/ticker history
+- `GET /api/v1/manifold/{market_id}/tradehistory` -- trade history
+
+**New: Gemini Exchange**
+
+- `GET /api/v1/gemini/{market_id}/market` -- market details
+- `GET /api/v1/gemini/markets` -- list all markets
+- `GET /api/v1/gemini/{market_id}/orderbook` -- orderbook snapshots
+- `GET /api/v1/gemini/{market_id}/prices` -- price/ticker history
+- `GET /api/v1/gemini/{market_id}/tradehistory` -- trade history
+
+**New: Opinion Labs Exchange**
+
+- `GET /api/v1/opinion/{market_id}/market` -- market details
+- `GET /api/v1/opinion/markets` -- list all markets
+- `GET /api/v1/opinion/{market_id}/orderbook` -- orderbook snapshots
+- `GET /api/v1/opinion/{market_id}/prices` -- price/ticker history
+- `GET /api/v1/opinion/{market_id}/tradehistory` -- trade history
+
+**Docs: Test tickers added for all new exchanges**
+
+- Opinion Labs: `10014`
+- ForecastEx: `ACD_1226_429.0`
+- Gemini: `GEMI-BTC15M2603170230-HI75245D64`
+- Manifold: `0AqEut9qzZ`
+- PredictIt: `34088`
+- Delphi ID: `delphi_0016d5d59aae`
+
+</Update>
 
 <Update label="Initial" description="Starting changelog">
 Initial tracking of API and documentation updates.
