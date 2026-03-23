@@ -101,8 +101,7 @@
       "display": "interactive"
     },
     "examples": {
-      "autogenerate": false,
-      "prefill": true
+      "autogenerate": false
     }
   },
   "contextual": {

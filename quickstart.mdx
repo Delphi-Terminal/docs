@@ -1,26 +1,42 @@
 ---
 title: "Quickstart"
-description: "Start exploring the API immediately — no setup required"
+description: "Get a test API key and make your first request in under a minute"
 ---
 
-## 1. Try it in the playground
+## 1. Get a test API key
 
-A test API key is already pre-filled in the docs. Head to the **API Reference** tab, pick any endpoint, and hit **Try it** — no signup or key setup required.
+Test keys are free and valid for 10 minutes. No signup required.
 
-## 2. Make a request from your terminal
+```bash
+curl -X POST https://api.delphiterminal.co/api/v1/test-key
+```
 
-You can also use the test key directly with `curl`:
+You'll get back a response like:
+
+```json
+{
+  "api_key": "dphi_live_a1b2c3d4...",
+  "expires_at": "2025-01-01T00:10:00Z",
+  "expires_in": "10 minutes"
+}
+```
+
+Copy the `api_key` value — you'll use it in the next step.
+
+## 2. Make your first request
+
+Use your API key in the `X-API-Key` header to fetch a Kalshi market:
 
 ```bash
 curl -X GET 'https://api.delphiterminal.co/api/v1/klsi/markets' \
-  -H 'X-API-Key: YOUR_API_KEY'
+  -H 'X-API-Key: dphi_live_a1b2c3d4...'
 ```
 
 Or search across all markets:
 
 ```bash
 curl -X GET 'https://api.delphiterminal.co/api/v1/events/search?q=bitcoin' \
-  -H 'X-API-Key: YOUR_API_KEY'
+  -H 'X-API-Key: dphi_live_a1b2c3d4...'
 ```
 
 ## 3. Explore the API

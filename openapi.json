@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Delphi Terminal API",
-    "description": "Welcome to Delphi Terminal API\n\nThe Delphi Terminal API provides unified access to prediction market data from **Kalshi (KLSI)** and **Polymarket (POLY)** exchanges.\n\nQuick Start:\n\nA test API key is already pre-filled — start exploring immediately! Click any endpoint and hit **Try it**.\n\nWhat You Can Build:\n\n- **Trading Bots**: Access real-time orderbook data and trade history\n- **Market Analytics**: Analyze market movements, spreads, and liquidity\n- **Research Tools**: Search and filter across thousands of prediction markets\n- **Price Feeds**: Get live pricing data for any market\n\n---\n\nAuthentication:\n\nAll API requests require an API key passed in the `X-API-Key` header:\n\nExample request: GET `/api/v1/klsi/markets`\nHeader: X-API-Key: dphi_live_your_key_here\n\nAPI Key Types:\n\n| Type | Rate Limit | How to Get |\n|------|------------|------------|\n| Test Key (pre-filled) | 60 req/min | Available in docs playground |\n| Production Key | 300 req/min | Contact us |\n\n---\n\nRate Limits:\n\nRequests are rate-limited per API key:\n\n- **Test keys**: 60 requests per minute\n- **Production keys**: 300 requests per minute\n\nWhen you exceed the limit, you'll receive a `429 Too Many Requests` response. Wait and retry.\n\n---\n\nError Codes:\n\n| Code | Meaning |\n|------|---------------|\n| 400 | Bad Request - Invalid parameters |\n| 401 | Unauthorized - Missing or invalid API key |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Server Error - Something went wrong |\n\nAll errors return JSON with an `error` field:\n\n{\"error\": \"invalid api key format\"}\n\n---\n\nSupport:\n\nFor production API keys or support, visit [delphiterminal.co](delphiterminal.co).",
+    "description": "Welcome to Delphi Terminal API\n\nThe Delphi Terminal API provides unified access to prediction market data from **Kalshi (KLSI)** and **Polymarket (POLY)** exchanges.\n\nQuick Start:\n\n1. **Get a test API key** - Click on `POST /api/v1/test-key` below and hit 'Try it'\n2. **Copy your key** - Save the `api_key` from the response\n3. **Authorize** - Click 'Authorize' in the sidebar and paste your key\n4. **Start exploring** - Try any endpoint!\n\nWhat You Can Build:\n\n- **Trading Bots**: Access real-time orderbook data and trade history\n- **Market Analytics**: Analyze market movements, spreads, and liquidity\n- **Research Tools**: Search and filter across thousands of prediction markets\n- **Price Feeds**: Get live pricing data for any market\n\n---\n\nAuthentication:\n\nAll API requests require an API key passed in the `X-API-Key` header:\n\nExample request: GET `/api/v1/klsi/markets`\nHeader: X-API-Key: dphi_live_your_key_here\n\nGetting an API Key:\n\n| Type | Duration | Rate Limit | How to Get |\n|------|----------|------------|------------|\n| Test Key | 10 minutes | 60 req/min | `POST /api/v1/test-key` |\n| Production Key | Permanent | 300 req/min | Contact us |\n\n---\n\nRate Limits:\n\nRequests are rate-limited per API key:\n\n- **Test keys**: 60 requests per minute\n- **Production keys**: 300 requests per minute\n\nWhen you exceed the limit, you'll receive a `429 Too Many Requests` response. Wait and retry.\n\n---\n\nError Codes:\n\n| Code | Meaning |\n|------|---------------|\n| 400 | Bad Request - Invalid parameters |\n| 401 | Unauthorized - Missing or invalid API key |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Server Error - Something went wrong |\n\nAll errors return JSON with an `error` field:\n\n{\"error\": \"invalid api key format\"}\n\n---\n\nSupport:\n\nFor production API keys or support, visit [delphiterminal.co](delphiterminal.co).",
     "version": "1.0.0",
     "contact": {
       "name": "Delphi Terminal",
@@ -116,7 +116,7 @@
           "Getting Started"
         ],
         "summary": "Get a Test API Key",
-        "description": "Create a temporary API key valid for 10 minutes.\n\nA test key is already available for use in the docs playground. Copy it from the Authorization section description and paste it into the `X-API-Key` field to start testing.\n\nTest key: `dphi_live_7750a10a80a766216f71e545be656a277276e47849d9805de303684dde0b0ed2`",
+        "description": "**Start here!** Create a temporary API key valid for 10 minutes. Use this to test the API endpoints.\n\n1. Click 'Try it out' then 'Execute'\n2. Copy the `api_key` from the response\n3. Click the 'Authorize' button at the top of the page\n4. Paste your key in the 'Value' field for ApiKeyAuth\n5. Click 'Authorize' then 'Close'\n\nYou can now test all the protected endpoints!",
         "security": [],
         "responses": {
           "200": {
@@ -4244,7 +4244,7 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key",
-        "description": "Use this test key to try any endpoint: dphi_live_7750a10a80a766216f71e545be656a277276e47849d9805de303684dde0b0ed2"
+        "description": "Your API key (get one from the test-key endpoint above)"
       }
     },
     "parameters": {
