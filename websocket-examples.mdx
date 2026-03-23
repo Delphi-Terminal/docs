@@ -1,52 +1,63 @@
 ---
-title: "WebSocket examples"
-description: "Subscribe to real-time market streams across exchanges"
+title: "Overview"
+description: "Real-time market data streaming across prediction market exchanges"
 ---
 
-Use these examples to connect and subscribe to WebSocket streams.
+The Delphi Markets WebSocket API provides real-time streaming for price updates, orderbook snapshots, and trade executions across all supported exchanges.
 
-## Kalshi WebSocket (JavaScript)
+## Supported streams
+
+<CardGroup cols={2}>
+  <Card title="Kalshi" icon="bolt" href="/ws-kalshi">
+    Subscribe using `klsi_id`. Prices, orderbook (101-level depth), and trades.
+  </Card>
+  <Card title="Polymarket" icon="bolt" href="/ws-polymarket">
+    Subscribe using `condition_id`. Prices, orderbook, and trades.
+  </Card>
+  <Card title="Pfun" icon="bolt" href="/ws-pfun">
+    Subscribe using `market_id`. Prices, orderbook, and trades.
+  </Card>
+  <Card title="Limitless" icon="bolt" href="/ws-limitless">
+    Subscribe using `market_id`. Prices, orderbook, and trades.
+  </Card>
+</CardGroup>
+
+## How it works
+
+1. **Connect** to the WebSocket endpoint for your exchange
+2. **Subscribe** by sending a JSON message with market IDs and message types
+3. **Receive** real-time updates as JSON messages
+4. **Unsubscribe** or disconnect when done
+
+## Common connection details
+
+All WebSocket streams share these properties:
+
+| Property | Value |
+|----------|-------|
+| Protocol | WebSocket (wss://) |
+| Authentication | Not required |
+| Keepalive | Ping every 54 seconds |
+| Timeout | 60 seconds without pong |
+| Default message types | Prices and orderbook |
+
+## Quick start
 
 ```javascript
 const ws = new WebSocket("wss://api.delphiterminal.co/ws/kalshi");
 
 ws.onopen = () => {
-  ws.send(
-    JSON.stringify({
-      action: "subscribe",
-      klsi_ids: ["AMAZONFTC-29DEC31"],
-      message_types: ["prices", "orderbook", "trades"],
-    })
-  );
+  ws.send(JSON.stringify({
+    action: "subscribe",
+    klsi_ids: ["KXBTCD-25FEB14-B55000"],
+    message_types: ["prices", "orderbook", "trades"]
+  }));
 };
 
 ws.onmessage = (event) => {
-  const msg = JSON.parse(event.data);
-  console.log(msg);
+  const data = JSON.parse(event.data);
+  console.log(data);
 };
 ```
 
-## Polymarket WebSocket (JavaScript)
-
-```javascript
-const ws = new WebSocket("wss://api.delphiterminal.co/ws/poly");
-
-ws.onopen = () => {
-  ws.send(
-    JSON.stringify({
-      action: "subscribe",
-      condition_ids: [
-        "0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707",
-      ],
-      message_types: ["prices", "orderbook", "trades"],
-    })
-  );
-};
-```
-
-## Pfun and Limitless
-
-Use the same payload shape with `market_ids` against:
-
-- `wss://api.delphiterminal.co/ws/pfun`
-- `wss://api.delphiterminal.co/ws/limitless`
+See the individual stream pages for complete subscription fields, message schemas, and examples.

@@ -59,7 +59,12 @@
           },
           {
             "group": "Streams",
-            "openapi": "openapi-websockets.json"
+            "pages": [
+              "ws-kalshi",
+              "ws-polymarket",
+              "ws-pfun",
+              "ws-limitless"
+            ]
           }
         ]
       },
