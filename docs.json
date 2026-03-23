@@ -69,6 +69,10 @@
         ]
       },
       {
+        "tab": "Parlays",
+        "openapi": "openapi-parlays.json"
+      },
+      {
         "tab": "Changelog",
         "groups": [
           {
