@@ -313,7 +313,7 @@
           "Search"
         ],
         "summary": "Search All Markets",
-        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database — not just a cached subset — so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database \u2014 not just a cached subset \u2014 so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "q",
@@ -4132,17 +4132,6 @@
         "description": "Event ID",
         "example": "KXBTC-25NOV2717"
       },
-      "rfq_id": {
-        "name": "rfq_id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "description": "Kalshi RFQ ID (UUID)",
-        "example": "822dcdee-e5c1-47da-9ddf-15287fb37c44"
-      },
       "market_id": {
         "name": "market_id",
         "in": "path",
@@ -4197,17 +4186,6 @@
           "type": "string"
         },
         "description": "Pagination cursor for next page"
-      },
-      "date": {
-        "name": "date",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Date in YYYY-MM-DD format",
-        "example": "2026-02-13"
       }
     },
     "schemas": {
@@ -5206,115 +5184,6 @@
           }
         }
       },
-      "RFQRow": {
-        "type": "object",
-        "description": "A Request for Quote (RFQ) event from Kalshi. Each row represents a lifecycle event (e.g., rfq_created, rfq_deleted) for a specific RFQ.",
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "RFQ event type (e.g., rfq_created, rfq_deleted)"
-          },
-          "sid": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Session ID"
-          },
-          "seq": {
-            "type": "integer",
-            "nullable": true,
-            "description": "Sequence number"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "description": "RFQ identifier"
-          },
-          "creator_id": {
-            "type": "string",
-            "description": "Creator identifier (hashed)"
-          },
-          "market_ticker": {
-            "type": "string",
-            "description": "Kalshi market ticker"
-          },
-          "event_ticker": {
-            "type": "string",
-            "description": "Kalshi event ticker"
-          },
-          "quote_creator_id": {
-            "type": "string",
-            "description": "Quote creator identifier"
-          },
-          "msg": {
-            "type": "string",
-            "description": "JSON message containing RFQ details (target_cost, timestamps, etc.)"
-          }
-        }
-      },
-      "MVETrade": {
-        "type": "object",
-        "description": "A Multi-Value Event (MVE) parlay trade from Kalshi. Each row represents a single parlay trade with multiple legs.",
-        "properties": {
-          "trade_ts": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Trade timestamp"
-          },
-          "market_ticker": {
-            "type": "string",
-            "description": "Kalshi market ticker"
-          },
-          "yes_price": {
-            "type": "integer",
-            "description": "YES price in cents"
-          },
-          "no_price": {
-            "type": "integer",
-            "description": "NO price in cents"
-          },
-          "count": {
-            "type": "integer",
-            "description": "Number of contracts traded"
-          },
-          "taker_side": {
-            "type": "string",
-            "description": "Taker side (e.g., yes, no)"
-          },
-          "mve_collection_ticker": {
-            "type": "string",
-            "description": "MVE collection ticker"
-          },
-          "event_ticker": {
-            "type": "string",
-            "description": "Kalshi event ticker"
-          },
-          "leg_market_tickers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Market tickers for each leg of the parlay"
-          },
-          "leg_event_tickers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Event tickers for each leg of the parlay"
-          },
-          "leg_sides": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Side (yes/no) for each leg of the parlay"
-          },
-          "num_legs": {
-            "type": "integer",
-            "description": "Number of legs in the parlay"
-          }
-        }
-      },
       "PriceLevel": {
         "type": "object",
         "description": "A price/size tuple for integer-priced exchanges (Kalshi, Predict.fun)",
@@ -5742,75 +5611,6 @@
               "type": "number"
             },
             "description": "Ask sizes at each price level (for snapshots)"
-          }
-        }
-      },
-      "DataExportResponse": {
-        "type": "object",
-        "description": "Response containing presigned S3 download URLs for a dataset export. The status field indicates whether this is a finalized daily Parquet or live hourly JSONL parts.",
-        "properties": {
-          "dataset": {
-            "type": "string",
-            "description": "Dataset name (rfq or mve_trades)",
-            "example": "rfq"
-          },
-          "date": {
-            "type": "string",
-            "format": "date",
-            "description": "Date of the data (YYYY-MM-DD)",
-            "example": "2026-02-25"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "final",
-              "live"
-            ],
-            "description": "Whether the data is finalized (full daily Parquet) or live (hourly JSONL parts)"
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "parquet",
-              "jsonl.gz"
-            ],
-            "description": "File format of the downloadable parts"
-          },
-          "hour": {
-            "type": "string",
-            "description": "Hour filter applied (only present when filtering live data by hour)",
-            "example": "14"
-          },
-          "parts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DataExportPart"
-            },
-            "description": "List of downloadable file parts with presigned URLs"
-          }
-        }
-      },
-      "DataExportPart": {
-        "type": "object",
-        "description": "A single downloadable file part with a presigned S3 URL.",
-        "properties": {
-          "key": {
-            "type": "string",
-            "description": "S3 object key",
-            "example": "parquet_exports/rfq/dt=2026-02-25/daily.parquet"
-          },
-          "url": {
-            "type": "string",
-            "description": "Presigned download URL (valid for 5 minutes)"
-          },
-          "size_bytes": {
-            "type": "integer",
-            "description": "File size in bytes"
-          },
-          "last_modified": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Last modified timestamp"
           }
         }
       },
@@ -6697,16 +6497,6 @@
       }
     },
     "responses": {
-      "BadRequest": {
-        "description": "Bad request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            }
-          }
-        }
-      },
       "Unauthorized": {
         "description": "Unauthorized",
         "content": {

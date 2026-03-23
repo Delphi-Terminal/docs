@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Delphi Markets Parlays API",
-    "description": "Kalshi RFQ (Request for Quote) and MVE (Multi-Value Event) parlay trade data. Includes individual RFQ lookups, parlay trade history, and bulk data export in Parquet/JSONL format.",
+    "description": "Kalshi RFQ (Request for Quote) and MVE (Multi-Value Event) parlay trade data, plus bulk data export endpoints.",
     "version": "1.0.0",
     "contact": {
       "name": "Delphi Markets",
@@ -51,87 +51,6 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/RFQRow"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/rfq": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Get RFQs by Market",
-        "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n## What you get\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market ticker",
-            "example": "KXATPMATCH-26FEB13FRIKOR-FRI"
-          },
-          {
-            "$ref": "#/components/parameters/limit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "RFQ events for the market",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RFQRow"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/mve_trades": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Get MVE Trades (Parlays)",
-        "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n## What you get\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n## Use cases\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market ticker",
-            "example": "KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "MVE trades for the market",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MVETrade"
                   }
                 }
               }
@@ -310,51 +229,90 @@
           }
         ]
       }
+    },
+    "/api/v1/klsi/{klsi_id}/rfq": {
+      "get": {
+        "tags": [
+          "Parlays"
+        ],
+        "summary": "Get RFQs by Market",
+        "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n## What you get\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market ticker",
+            "example": "KXATPMATCH-26FEB13FRIKOR-FRI"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "RFQ events for the market",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQRow"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/mve_trades": {
+      "get": {
+        "tags": [
+          "Parlays"
+        ],
+        "summary": "Get MVE Trades (Parlays)",
+        "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n## What you get\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n## Use cases\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market ticker",
+            "example": "KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MVE trades for the market",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MVETrade"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
     }
   },
   "components": {
-    "securitySchemes": {
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-API-Key",
-        "description": "Your API key (get one from the test-key endpoint above)"
-      }
-    },
-    "parameters": {
-      "rfq_id": {
-        "name": "rfq_id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "description": "Kalshi RFQ ID (UUID)",
-        "example": "822dcdee-e5c1-47da-9ddf-15287fb37c44"
-      },
-      "limit": {
-        "name": "limit",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "integer",
-          "default": 10
-        },
-        "description": "Maximum number of rows to return (default: 10 in docs, max: 10000). Use a higher limit in your code."
-      },
-      "date": {
-        "name": "date",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "date"
-        },
-        "description": "Date in YYYY-MM-DD format",
-        "example": "2026-02-13"
-      }
-    },
     "schemas": {
       "RFQRow": {
         "type": "object",
@@ -398,6 +356,51 @@
           "msg": {
             "type": "string",
             "description": "JSON message containing RFQ details (target_cost, timestamps, etc.)"
+          }
+        }
+      },
+      "DataExportResponse": {
+        "type": "object",
+        "description": "Response containing presigned S3 download URLs for a dataset export. The status field indicates whether this is a finalized daily Parquet or live hourly JSONL parts.",
+        "properties": {
+          "dataset": {
+            "type": "string",
+            "description": "Dataset name (rfq or mve_trades)",
+            "example": "rfq"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of the data (YYYY-MM-DD)",
+            "example": "2026-02-25"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "final",
+              "live"
+            ],
+            "description": "Whether the data is finalized (full daily Parquet) or live (hourly JSONL parts)"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "parquet",
+              "jsonl.gz"
+            ],
+            "description": "File format of the downloadable parts"
+          },
+          "hour": {
+            "type": "string",
+            "description": "Hour filter applied (only present when filtering live data by hour)",
+            "example": "14"
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataExportPart"
+            },
+            "description": "List of downloadable file parts with presigned URLs"
           }
         }
       },
@@ -465,51 +468,6 @@
           }
         }
       },
-      "DataExportResponse": {
-        "type": "object",
-        "description": "Response containing presigned S3 download URLs for a dataset export. The status field indicates whether this is a finalized daily Parquet or live hourly JSONL parts.",
-        "properties": {
-          "dataset": {
-            "type": "string",
-            "description": "Dataset name (rfq or mve_trades)",
-            "example": "rfq"
-          },
-          "date": {
-            "type": "string",
-            "format": "date",
-            "description": "Date of the data (YYYY-MM-DD)",
-            "example": "2026-02-25"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "final",
-              "live"
-            ],
-            "description": "Whether the data is finalized (full daily Parquet) or live (hourly JSONL parts)"
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "parquet",
-              "jsonl.gz"
-            ],
-            "description": "File format of the downloadable parts"
-          },
-          "hour": {
-            "type": "string",
-            "description": "Hour filter applied (only present when filtering live data by hour)",
-            "example": "14"
-          },
-          "parts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DataExportPart"
-            },
-            "description": "List of downloadable file parts with presigned URLs"
-          }
-        }
-      },
       "DataExportPart": {
         "type": "object",
         "description": "A single downloadable file part with a presigned S3 URL.",
@@ -533,27 +491,43 @@
             "description": "Last modified timestamp"
           }
         }
+      }
+    },
+    "parameters": {
+      "date": {
+        "name": "date",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "Date in YYYY-MM-DD format",
+        "example": "2026-02-13"
       },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          }
-        }
+      "rfq_id": {
+        "name": "rfq_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "description": "Kalshi RFQ ID (UUID)",
+        "example": "822dcdee-e5c1-47da-9ddf-15287fb37c44"
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "default": 10
+        },
+        "description": "Maximum number of rows to return (default: 10 in docs, max: 10000). Use a higher limit in your code."
       }
     },
     "responses": {
-      "NotFound": {
-        "description": "Not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            }
-          }
-        }
-      },
       "BadRequest": {
         "description": "Bad request",
         "content": {
@@ -563,6 +537,24 @@
             }
           }
         }
+      },
+      "NotFound": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "Your API key (get one from the test-key endpoint above)"
       }
     }
   }
