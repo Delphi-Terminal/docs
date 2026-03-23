@@ -61,8 +61,8 @@
       "description": "Access Limitless exchange prediction market data including orderbooks. Limitless is a prediction market platform."
     },
     {
-      "name": "Pfun",
-      "description": "Access Pfun exchange prediction market data including price history."
+      "name": "Predict.fun",
+      "description": "Access Predict.fun exchange prediction market data including price history."
     },
     {
       "name": "Opinion Labs",
@@ -2143,10 +2143,10 @@
     "/api/v1/pfun/{market_id}/exchange_prices": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
-        "summary": "Get Pfun Exchange Prices",
-        "description": "Retrieve price history data for a Pfun market. Each row shows price and bid/ask at a point in time.\n\n## What you get\n- Current price\n- Yes bid and ask prices\n- Timestamps\n\n## Use cases\n- Build price charts\n- Track price movements\n- Calculate spreads over time\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/exchange_prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Predict.fun Exchange Prices",
+        "description": "Retrieve price history data for a Predict.fun market. Each row shows price and bid/ask at a point in time.\n\n## What you get\n- Current price\n- Yes bid and ask prices\n- Timestamps\n\n## Use cases\n- Build price charts\n- Track price movements\n- Calculate spreads over time\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/exchange_prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2155,7 +2155,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Pfun market identifier",
+            "description": "Predict.fun market identifier",
             "example": "6933"
           },
           {
@@ -2193,10 +2193,10 @@
     "/api/v1/pfun/{market_id}/market": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
-        "summary": "Get Pfun Market Details",
-        "description": "Retrieve detailed information about a specific Pfun market.\n\n## What you get\n- Market title, question, and rules\n- Event and category info\n- Strike price and expiration\n- Contract IDs (yes/no)\n- Payout details\n\n## Use cases\n- Display market information\n- Get contract IDs for trading\n- Understand market rules\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Predict.fun Market Details",
+        "description": "Retrieve detailed information about a specific Predict.fun market.\n\n## What you get\n- Market title, question, and rules\n- Event and category info\n- Strike price and expiration\n- Contract IDs (yes/no)\n- Payout details\n\n## Use cases\n- Display market information\n- Get contract IDs for trading\n- Understand market rules\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2205,7 +2205,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Pfun market identifier",
+            "description": "Predict.fun market identifier",
             "example": "6933"
           }
         ],
@@ -2229,10 +2229,10 @@
     "/api/v1/pfun/markets": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
-        "summary": "List All Pfun Markets",
-        "description": "Retrieve a paginated list of all Pfun markets.\n\n## Pagination\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **market_id**: Unique Pfun market identifier\n- **market_title**: Human-readable market title\n- **question**: Market question\n- **category**: Market category\n- **rules**: Resolution criteria\n- **strike/expiration**: Strike price and expiration info\n- **conid_yes/conid_no**: Contract IDs\n\n## Example\n\n- Request: `GET /api/v1/pfun/markets?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "List All Predict.fun Markets",
+        "description": "Retrieve a paginated list of all Predict.fun markets.\n\n## Pagination\n\nUse `limit` and `offset` to paginate through results:\n\nUse the limit and offset query parameters to paginate. Start with offset=0 and increment by your limit value until the response returns an empty list.\n\nResponse Fields:\n\nEach market includes:\n- **market_id**: Unique Predict.fun market identifier\n- **market_title**: Human-readable market title\n- **question**: Market question\n- **category**: Market category\n- **rules**: Resolution criteria\n- **strike/expiration**: Strike price and expiration info\n- **conid_yes/conid_no**: Contract IDs\n\n## Example\n\n- Request: `GET /api/v1/pfun/markets?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "limit",
@@ -2258,7 +2258,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Paginated list of Pfun markets",
+            "description": "Paginated list of Predict.fun markets",
             "content": {
               "application/json": {
                 "schema": {
@@ -2293,10 +2293,10 @@
     "/api/v1/pfun/{market_id}/tradehistory": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
-        "summary": "Get Pfun Trade History",
-        "description": "Retrieve trade history data for a Pfun market. Each row shows trade execution details.\n\n## What you get\n- Yes and No prices\n- Trade count\n- Taker side (buy/sell)\n- Timestamps\n\n## Use cases\n- Analyze trading activity\n- Build trade feeds\n- Calculate VWAP\n- Track market sentiment\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Predict.fun Trade History",
+        "description": "Retrieve trade history data for a Predict.fun market. Each row shows trade execution details.\n\n## What you get\n- Yes and No prices\n- Trade count\n- Taker side (buy/sell)\n- Timestamps\n\n## Use cases\n- Analyze trading activity\n- Build trade feeds\n- Calculate VWAP\n- Track market sentiment\n\n## Note The playground returns 10 results for demo. Use `limit` parameter (up to 10,000) in production.\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2305,7 +2305,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Pfun market identifier",
+            "description": "Predict.fun market identifier",
             "example": "6933"
           },
           {
@@ -2343,10 +2343,10 @@
     "/api/v1/pfun/{market_id}/top_of_book": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
-        "summary": "Get Pfun Top of Book",
-        "description": "Retrieve top-of-book best bid/ask data for a Pfun market, including the top 5 price levels on each side.\n\n## What you get\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Venue market ID\n- Timestamps\n\n## Use cases\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\n## Example\n\n- Request: `GET /api/v1/pfun/9060/top_of_book?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Predict.fun Top of Book",
+        "description": "Retrieve top-of-book best bid/ask data for a Predict.fun market, including the top 5 price levels on each side.\n\n## What you get\n- Best bid and ask prices\n- Top 5 bid and ask price levels with sizes\n- Venue market ID\n- Timestamps\n\n## Use cases\n- Monitor real-time best quotes\n- Track top-of-book depth\n- Build spread analytics\n\n## Example\n\n- Request: `GET /api/v1/pfun/9060/top_of_book?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2355,7 +2355,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Pfun market ID",
+            "description": "Predict.fun market ID",
             "example": "9060"
           },
           {
@@ -2385,10 +2385,10 @@
     "/api/v1/pfun/{market_id}/orderbook": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
-        "summary": "Get Pfun Orderbook",
-        "description": "Retrieve orderbook data for a Pfun market. Each row shows the full orderbook state at a point in time.\n\n## What you get\n- Best yes/no prices and sizes\n- Full yes_side and no_side arrays (price levels)\n- Venue market ID\n- Server timestamp\n\n## Use cases\n- Analyze liquidity\n- Build depth charts\n- Calculate spreads\n- Track orderbook changes over time\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Predict.fun Orderbook",
+        "description": "Retrieve orderbook data for a Predict.fun market. Each row shows the full orderbook state at a point in time.\n\n## What you get\n- Best yes/no prices and sizes\n- Full yes_side and no_side arrays (price levels)\n- Venue market ID\n- Server timestamp\n\n## Use cases\n- Analyze liquidity\n- Build depth charts\n- Calculate spreads\n- Track orderbook changes over time\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/orderbook?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "market_id",
@@ -2397,7 +2397,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Pfun market identifier",
+            "description": "Predict.fun market identifier",
             "example": "6933"
           },
           {
@@ -4098,7 +4098,7 @@
           "Delphi"
         ],
         "summary": "Get Matched Markets Across Exchanges",
-        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Pfun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Predict.fun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "delphi_id",
@@ -4153,7 +4153,7 @@
                       "items": {
                         "$ref": "#/components/schemas/MatchedMarket"
                       },
-                      "description": "Matched Pfun markets"
+                      "description": "Matched Predict.fun markets"
                     },
                     "opinion": {
                       "type": "array",
@@ -4331,7 +4331,7 @@
     "/api/v1/pfun/{market_id}/cluster": {
       "get": {
         "tags": [
-          "Pfun"
+          "Predict.fun"
         ],
         "summary": "Get Cluster for PFun Market",
         "description": "Find all cross-exchange matches for a PFun market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a PFun market is also listed on Kalshi, Polymarket, or Limitless\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -5263,7 +5263,7 @@
       },
       "PfunOrderbook": {
         "type": "object",
-        "description": "Orderbook snapshot from Pfun exchange",
+        "description": "Orderbook snapshot from Predict.fun exchange",
         "properties": {
           "exchange": {
             "type": "string",
@@ -5605,7 +5605,7 @@
       },
       "PriceLevel": {
         "type": "object",
-        "description": "A price/size tuple for integer-priced exchanges (Kalshi, Pfun)",
+        "description": "A price/size tuple for integer-priced exchanges (Kalshi, Predict.fun)",
         "properties": {
           "price": {
             "type": "integer",
@@ -5723,7 +5723,7 @@
       },
       "TopOfBookPfun": {
         "type": "object",
-        "description": "Top-of-book data from the Pfun exchange, including best bid/ask and top 5 price levels.",
+        "description": "Top-of-book data from the Predict.fun exchange, including best bid/ask and top 5 price levels.",
         "properties": {
           "exchange": {
             "type": "string",
