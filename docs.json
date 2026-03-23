@@ -39,8 +39,7 @@
             "group": "Examples",
             "pages": [
               "klsi-examples",
-              "polymarket-examples",
-              "websocket-examples"
+              "polymarket-examples"
             ]
           }
         ]
@@ -48,6 +47,27 @@
       {
         "tab": "API Reference",
         "openapi": "openapi.json"
+      },
+      {
+        "tab": "WebSockets",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "websocket-examples"
+            ]
+          },
+          {
+            "group": "Streams",
+            "openapi": "openapi.json",
+            "pages": [
+              "GET /ws/kalshi",
+              "GET /ws/poly",
+              "GET /ws/pfun",
+              "GET /ws/limitless"
+            ]
+          }
+        ]
       },
       {
         "tab": "Changelog",
