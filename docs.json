@@ -8,10 +8,7 @@
   "colors": {
     "primary": "#1B3A5F",
     "light": "#5B8AC4",
-    "dark": "#0F1F3C",
-    "background": {
-      "dark": "#0B1528"
-    }
+    "dark": "#0F1F3C"
   },
   "styling": {
     "codeblocks": {
