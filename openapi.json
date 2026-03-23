@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Delphi Terminal API",
-    "description": "Welcome to Delphi Terminal API\n\nThe Delphi Terminal API provides unified access to prediction market data from **Kalshi (KLSI)** and **Polymarket (POLY)** exchanges.\n\nQuick Start:\n\n1. **Get a test API key** - Click on `POST /api/v1/test-key` below and hit 'Try it'\n2. **Copy your key** - Save the `api_key` from the response\n3. **Authorize** - Click 'Authorize' in the sidebar and paste your key\n4. **Start exploring** - Try any endpoint!\n\nWhat You Can Build:\n\n- **Trading Bots**: Access real-time orderbook data and trade history\n- **Market Analytics**: Analyze market movements, spreads, and liquidity\n- **Research Tools**: Search and filter across thousands of prediction markets\n- **Price Feeds**: Get live pricing data for any market\n\n---\n\nAuthentication:\n\nAll API requests require an API key passed in the `X-API-Key` header:\n\nExample request: GET `/api/v1/klsi/markets`\nHeader: X-API-Key: dphi_live_your_key_here\n\nGetting an API Key:\n\n| Type | Duration | Rate Limit | How to Get |\n|------|----------|------------|------------|\n| Test Key | 10 minutes | 60 req/min | `POST /api/v1/test-key` |\n| Production Key | Permanent | 300 req/min | Contact us |\n\n---\n\nRate Limits:\n\nRequests are rate-limited per API key:\n\n- **Test keys**: 60 requests per minute\n- **Production keys**: 300 requests per minute\n\nWhen you exceed the limit, you'll receive a `429 Too Many Requests` response. Wait and retry.\n\n---\n\nError Codes:\n\n| Code | Meaning |\n|------|---------------|\n| 400 | Bad Request - Invalid parameters |\n| 401 | Unauthorized - Missing or invalid API key |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Server Error - Something went wrong |\n\nAll errors return JSON with an `error` field:\n\n{\"error\": \"invalid api key format\"}\n\n---\n\nSupport:\n\nFor production API keys or support, visit [delphiterminal.co](delphiterminal.co).",
+    "title": "Delphi Markets API",
+    "description": "Welcome to Delphi Markets API\n\nThe Delphi Markets API provides unified access to prediction market data from **Kalshi (KLSI)** and **Polymarket (POLY)** exchanges.\n\nQuick Start:\n\n1. **Get a test API key** - Click on `POST /api/v1/test-key` below and hit 'Try it'\n2. **Copy your key** - Save the `api_key` from the response\n3. **Authorize** - Click 'Authorize' in the sidebar and paste your key\n4. **Start exploring** - Try any endpoint!\n\nWhat You Can Build:\n\n- **Trading Bots**: Access real-time orderbook data and trade history\n- **Market Analytics**: Analyze market movements, spreads, and liquidity\n- **Research Tools**: Search and filter across thousands of prediction markets\n- **Price Feeds**: Get live pricing data for any market\n\n---\n\nAuthentication:\n\nAll API requests require an API key passed in the `X-API-Key` header:\n\nExample request: GET `/api/v1/klsi/markets`\nHeader: X-API-Key: dphi_live_your_key_here\n\nGetting an API Key:\n\n| Type | Duration | Rate Limit | How to Get |\n|------|----------|------------|------------|\n| Test Key | 10 minutes | 60 req/min | `POST /api/v1/test-key` |\n| Production Key | Permanent | 300 req/min | Contact us |\n\n---\n\nRate Limits:\n\nRequests are rate-limited per API key:\n\n- **Test keys**: 60 requests per minute\n- **Production keys**: 300 requests per minute\n\nWhen you exceed the limit, you'll receive a `429 Too Many Requests` response. Wait and retry.\n\n---\n\nError Codes:\n\n| Code | Meaning |\n|------|---------------|\n| 400 | Bad Request - Invalid parameters |\n| 401 | Unauthorized - Missing or invalid API key |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Server Error - Something went wrong |\n\nAll errors return JSON with an `error` field:\n\n{\"error\": \"invalid api key format\"}\n\n---\n\nSupport:\n\nFor production API keys or support, visit [delphiterminal.co](delphiterminal.co).",
     "version": "1.0.0",
     "contact": {
-      "name": "Delphi Terminal",
+      "name": "Delphi Markets",
       "url": "https://delphiterminal.co"
     },
     "x-logo": {
@@ -15,7 +15,7 @@
   "servers": [
     {
       "url": "https://api.delphiterminal.co",
-      "description": "Delphi Terminal API"
+      "description": "Delphi Markets API"
     }
   ],
   "security": [
@@ -49,10 +49,6 @@
       "description": "Cross-exchange market matching. Markets asking the same question across Kalshi, Polymarket, Limitless, and PFun are grouped into clusters. Use these endpoints to discover equivalent markets for arbitrage, hedging, and cross-exchange analytics."
     },
     {
-      "name": "Advanced Analytics",
-      "description": "Advanced orderbook analytics and price data. These endpoints provide deeper market insights including historical spreads, liquidity metrics, and best quote time series."
-    },
-    {
       "name": "KLSI",
       "description": "Access Kalshi (KLSI) prediction market data including market details, orderbooks, trade history, and analytics. Kalshi is a US-regulated prediction market exchange."
     },
@@ -67,10 +63,6 @@
     {
       "name": "Pfun",
       "description": "Access Pfun exchange prediction market data including price history."
-    },
-    {
-      "name": "Events",
-      "description": "Events group related markets together. Use these endpoints to browse events by category or find all markets within an event."
     },
     {
       "name": "Opinion Labs",
@@ -91,6 +83,22 @@
     {
       "name": "PredictIt",
       "description": "Access PredictIt prediction market data including market details and price history."
+    },
+    {
+      "name": "Events",
+      "description": "Events group related markets together. Use these endpoints to browse events by category or find all markets within an event."
+    },
+    {
+      "name": "Parlays",
+      "description": "Kalshi RFQ (Request for Quote) and MVE (Multi-Value Event) parlay trade data. Includes individual RFQ lookups, parlay trade history, and bulk data export in Parquet/JSONL format."
+    },
+    {
+      "name": "Candles",
+      "description": "OHLCV (Open, High, Low, Close, Volume) candle data across exchanges. Supports multiple time intervals: 1s, 1m, 5m, 10m, 1h, 1d. Currently available for Kalshi (KLSI) with more exchanges coming soon."
+    },
+    {
+      "name": "Advanced Analytics",
+      "description": "Advanced orderbook analytics and price data. These endpoints provide deeper market insights including historical spreads, liquidity metrics, and best quote time series."
     }
   ],
   "paths": {
@@ -558,7 +566,7 @@
     "/api/v1/klsi/{klsi_id}/ohlcv_1s": {
       "get": {
         "tags": [
-          "KLSI"
+          "Candles"
         ],
         "summary": "Get KLSI 1-Second OHLCV Candles",
         "description": "Retrieve 1-second OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-second buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- High-frequency analysis\n- Tick-level trading strategies\n- Microstructure research\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1s?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -608,7 +616,7 @@
     "/api/v1/klsi/{klsi_id}/ohlcv_1m": {
       "get": {
         "tags": [
-          "KLSI"
+          "Candles"
         ],
         "summary": "Get KLSI 1-Minute OHLCV Candles",
         "description": "Retrieve 1-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Intraday trading analysis\n- Short-term price movements\n- Scalping strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -658,7 +666,7 @@
     "/api/v1/klsi/{klsi_id}/ohlcv_5m": {
       "get": {
         "tags": [
-          "KLSI"
+          "Candles"
         ],
         "summary": "Get KLSI 5-Minute OHLCV Candles",
         "description": "Retrieve 5-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 5-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Short-term trading analysis\n- Intraday patterns\n- Technical indicators\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_5m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -708,7 +716,7 @@
     "/api/v1/klsi/{klsi_id}/ohlcv_10m": {
       "get": {
         "tags": [
-          "KLSI"
+          "Candles"
         ],
         "summary": "Get KLSI 10-Minute OHLCV Candles",
         "description": "Retrieve 10-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 10-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Medium-term trading analysis\n- Pattern recognition\n- Volume analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_10m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -758,7 +766,7 @@
     "/api/v1/klsi/{klsi_id}/ohlcv_1h": {
       "get": {
         "tags": [
-          "KLSI"
+          "Candles"
         ],
         "summary": "Get KLSI 1-Hour OHLCV Candles",
         "description": "Retrieve 1-hour OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-hour buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Swing trading analysis\n- Daily pattern recognition\n- Longer-term technical analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1h?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -808,7 +816,7 @@
     "/api/v1/klsi/{klsi_id}/ohlcv_1d": {
       "get": {
         "tags": [
-          "KLSI"
+          "Candles"
         ],
         "summary": "Get KLSI 1-Day OHLCV Candles",
         "description": "Retrieve 1-day OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into daily buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each day\n- Open interest at close of each day\n- Tick count per day\n\n## Use cases\n- Long-term trend analysis\n- Historical price research\n- Position trading strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1d?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -858,7 +866,7 @@
     "/api/v1/klsi/rfq/{rfq_id}": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
         "summary": "Get RFQ by ID",
         "description": "Retrieve all Request for Quote (RFQ) events for a given RFQ UUID. Returns the full lifecycle of an RFQ (created, quoted, deleted, etc.).\n\n## What you get\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- Track the lifecycle of a specific RFQ\n- Analyze RFQ creation and deletion patterns\n- Monitor institutional quoting activity\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/822dcdee-e5c1-47da-9ddf-15287fb37c44`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -893,7 +901,7 @@
     "/api/v1/klsi/{klsi_id}/rfq": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
         "summary": "Get RFQs by Market",
         "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n## What you get\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -935,7 +943,7 @@
     "/api/v1/klsi/{klsi_id}/mve_trades": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
         "summary": "Get MVE Trades (Parlays)",
         "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n## What you get\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n## Use cases\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -1058,7 +1066,7 @@
     "/api/v1/klsi/rfq/date/{date}": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
         "summary": "Get RFQs by Date",
         "description": "Retrieve all Request for Quote (RFQ) events for a specific date. Returns every RFQ that was created on that day across all markets.\n\n## What you get\n- All RFQ lifecycle events for the given date\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details\n\n## Use cases\n- Analyze daily RFQ volume\n- Monitor institutional quoting activity over time\n- Track block trade demand by day\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/date/2026-02-13`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -2727,7 +2735,7 @@
     "/api/v1/data/{dataset}": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
         "summary": "Download Dataset by Date",
         "description": "Download RFQ or MVE trades data for a specific date as presigned S3 URLs. Returns a finalized daily Parquet file if the day is complete, or live hourly JSONL parts if the day is still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Presigned S3 download URLs (valid for 5 minutes)\n- Automatic detection of finalized vs live data\n- Full daily Parquet file for completed days\n- Hourly JSONL parts for the current day\n\n## Use cases\n\n- Bulk download historical data for backtesting\n- Build local analytics pipelines\n- Feed data into Pandas, Polars, or DuckDB\n- Stream today's data hour-by-hour for near-real-time analytics\n\n## Datasets\n\n- rfq: Kalshi Request for Quote events (same schema as the /klsi/{id}/rfq endpoint)\n- mve_trades: Kalshi Multi-Value Event parlay trades (same schema as the /klsi/{id}/mve_trades endpoint)\n\n## Example\n\n- Request: `GET /api/v1/data/rfq?date=2026-02-25`\n- Header: `X-API-Key: YOUR_API_KEY`",
@@ -2799,7 +2807,7 @@
     "/api/v1/data/{dataset}/latest": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
         "summary": "Download Latest Dataset (Today)",
         "description": "Convenience endpoint that returns today's data (UTC). Equivalent to calling the date endpoint with today's date. Returns live hourly JSONL parts since the day is typically still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Today's data as presigned S3 download URLs\n- Hourly JSONL parts accumulated so far today\n- Optional hour filter to get a specific hour's data\n\n## Use cases\n\n- Quick access to today's data without specifying a date\n- Monitor today's RFQ or MVE activity in near-real-time\n- Feed into streaming analytics pipelines\n\n## Example\n\n- Request: `GET /api/v1/data/rfq/latest`\n- Header: `X-API-Key: YOUR_API_KEY`",

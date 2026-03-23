@@ -1,18 +1,18 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Delphi Terminal WebSocket API",
-    "description": "Real-time WebSocket streaming endpoints for Delphi Terminal.",
+    "title": "Delphi Markets WebSocket API",
+    "description": "Real-time WebSocket streaming endpoints for Delphi Markets.",
     "version": "1.0.0",
     "contact": {
-      "name": "Delphi Terminal",
+      "name": "Delphi Markets",
       "url": "https://delphiterminal.co"
     }
   },
   "servers": [
     {
       "url": "https://api.delphiterminal.co",
-      "description": "Delphi Terminal API"
+      "description": "Delphi Markets API"
     }
   ],
   "tags": [
