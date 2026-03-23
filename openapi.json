@@ -33,6 +33,26 @@
       "description": "Health check endpoint to verify the API is operational."
     },
     {
+      "name": "Auth",
+      "description": "User authentication endpoints for creating accounts and managing sessions. Note: These are separate from API key authentication."
+    },
+    {
+      "name": "Search",
+      "description": "Search across all markets and events. Includes autocomplete suggestions for building search interfaces."
+    },
+    {
+      "name": "Delphi",
+      "description": "Cross-exchange market matching via Delphi IDs. Look up cluster metadata and find equivalent markets across all supported exchanges."
+    },
+    {
+      "name": "Clusters",
+      "description": "Cross-exchange market matching. Markets asking the same question across Kalshi, Polymarket, Limitless, and PFun are grouped into clusters. Use these endpoints to discover equivalent markets for arbitrage, hedging, and cross-exchange analytics."
+    },
+    {
+      "name": "Advanced Analytics",
+      "description": "Advanced orderbook analytics and price data. These endpoints provide deeper market insights including historical spreads, liquidity metrics, and best quote time series."
+    },
+    {
       "name": "KLSI",
       "description": "Access Kalshi (KLSI) prediction market data including market details, orderbooks, trade history, and analytics. Kalshi is a US-regulated prediction market exchange."
     },
@@ -51,38 +71,6 @@
     {
       "name": "Events",
       "description": "Events group related markets together. Use these endpoints to browse events by category or find all markets within an event."
-    },
-    {
-      "name": "Search",
-      "description": "Search across all markets and events. Includes autocomplete suggestions for building search interfaces."
-    },
-    {
-      "name": "Advanced Analytics",
-      "description": "Advanced orderbook analytics and price data. These endpoints provide deeper market insights including historical spreads, liquidity metrics, and best quote time series."
-    },
-    {
-      "name": "Auth",
-      "description": "User authentication endpoints for creating accounts and managing sessions. Note: These are separate from API key authentication."
-    },
-    {
-      "name": "Kalshi WebSocket",
-      "description": "Real-time WebSocket streaming for Kalshi market data. Subscribe to ticker and orderbook updates using klsi_id."
-    },
-    {
-      "name": "Polymarket WebSocket",
-      "description": "Real-time WebSocket streaming for Polymarket data. Subscribe to price updates using condition_id or orderbook updates using market_id."
-    },
-    {
-      "name": "Pfun WebSocket",
-      "description": "Real-time WebSocket streaming for Pfun market data."
-    },
-    {
-      "name": "Limitless WebSocket",
-      "description": "Real-time WebSocket streaming for Limitless market data."
-    },
-    {
-      "name": "Clusters",
-      "description": "Cross-exchange market matching. Markets asking the same question across Kalshi, Polymarket, Limitless, and PFun are grouped into clusters. Use these endpoints to discover equivalent markets for arbitrage, hedging, and cross-exchange analytics."
     },
     {
       "name": "Opinion Labs",
@@ -105,8 +93,20 @@
       "description": "Access PredictIt prediction market data including market details and price history."
     },
     {
-      "name": "Delphi",
-      "description": "Cross-exchange market matching via Delphi IDs. Look up cluster metadata and find equivalent markets across all supported exchanges."
+      "name": "Kalshi WebSocket",
+      "description": "Real-time WebSocket streaming for Kalshi market data. Subscribe to ticker and orderbook updates using klsi_id."
+    },
+    {
+      "name": "Polymarket WebSocket",
+      "description": "Real-time WebSocket streaming for Polymarket data. Subscribe to price updates using condition_id or orderbook updates using market_id."
+    },
+    {
+      "name": "Pfun WebSocket",
+      "description": "Real-time WebSocket streaming for Pfun market data."
+    },
+    {
+      "name": "Limitless WebSocket",
+      "description": "Real-time WebSocket streaming for Limitless market data."
     }
   ],
   "paths": {
