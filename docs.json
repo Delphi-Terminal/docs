@@ -43,6 +43,12 @@
               "polymarket-examples",
               "websocket-examples"
             ]
+          },
+          {
+            "group": "Updates",
+            "pages": [
+              "changelog"
+            ]
           }
         ]
       },
