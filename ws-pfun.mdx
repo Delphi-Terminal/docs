@@ -1,11 +1,11 @@
 ---
-title: "Pfun WebSocket"
-description: "Real-time price, orderbook, and trade streaming for Pfun markets"
+title: "Predict.fun WebSocket"
+description: "Real-time price, orderbook, and trade streaming for Predict.fun markets"
 ---
 
 ## Connection
 
-Connect to the Pfun WebSocket endpoint:
+Connect to the Predict.fun WebSocket endpoint:
 
 ```
 wss://api.delphiterminal.co/ws/pfun
@@ -35,7 +35,7 @@ Once connected, send a JSON message to subscribe using `market_id`:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `action` | string | Yes | `subscribe` or `unsubscribe` |
-| `market_ids` | array | Yes | Array of Pfun market identifiers |
+| `market_ids` | array | Yes | Array of Predict.fun market identifiers |
 | `message_types` | array | No | `["prices"]`, `["orderbook"]`, `["trades"]`, or any combination. Defaults to prices and orderbook if omitted |
 
 ## Unsubscribing
@@ -108,7 +108,7 @@ Once connected, send a JSON message to subscribe using `market_id`:
 const ws = new WebSocket("wss://api.delphiterminal.co/ws/pfun");
 
 ws.onopen = () => {
-  console.log("Connected to Pfun WebSocket");
+  console.log("Connected to Predict.fun WebSocket");
 
   ws.send(JSON.stringify({
     action: "subscribe",
@@ -136,7 +136,7 @@ ws.onerror = (error) => console.error("WebSocket error:", error);
 ## Important notes
 
 - **No authentication required** for WebSocket connections
-- Use `market_id` (Pfun market identifier) to subscribe
+- Use `market_id` (Predict.fun market identifier) to subscribe
 - Messages are only sent for markets you have explicitly subscribed to
 - Multiple markets can be subscribed in a single message
 - Trades must be explicitly requested (not included in the default subscription)
