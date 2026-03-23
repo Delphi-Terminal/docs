@@ -311,6 +311,318 @@
         }
       }
     },
+    "/api/v1/events/search": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Search All Markets",
+        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database — not just a cached subset — so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2
+            },
+            "description": "Search query (min 2 characters)",
+            "example": "bitcoin"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by category (e.g., Crypto, Politics, Sports)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of search results from all exchanges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/search/suggest": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Autocomplete Suggestions",
+        "description": "Get autocomplete suggestions for a partial search query. Use this to build search-as-you-type interfaces.\n\n## What you get\n- Array of suggested search terms\n- Ranked by relevance and popularity\n\n## Use cases\n- Power search box autocomplete\n- Help users discover markets\n- Reduce typing errors\n\n## Example\n\n- Request: `GET /api/v1/search/suggest?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Partial search query (what the user has typed so far)",
+            "example": "bit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suggestions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/search/markets": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Search Delphi Markets",
+        "description": "Search across all Delphi market clusters by keyword. Uses fuzzy multi-word matching where each word must appear somewhere in the title, but in any order.\n\nFor example, searching \"british minister\" will match titles like \"Will the British Prime Minister resign?\" even though the exact phrase does not appear.\n\n## What you get\n\n- Delphi market clusters matching your keywords\n- Each result includes the delphi_id, title, canonical exchange reference, cluster size, and last update time\n- Results ranked by cluster size (most cross-exchange coverage first)\n\n## Use cases\n\n- Discover prediction markets across all exchanges by topic\n- Find equivalent markets for arbitrage or hedging\n- Power a market search interface\n- Explore what questions prediction markets are tracking\n\n## Example\n\n- Request: `GET /api/v1/search/markets?q=bitcoin&limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search keywords. Multiple words are matched independently (all must appear in the title, in any order).",
+            "example": "bitcoin"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 25,
+              "maximum": 100
+            },
+            "description": "Maximum number of results to return (default 25, max 100)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of matching market clusters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketCluster"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query (missing or too short)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delphi/{delphi_id}/cluster": {
+      "get": {
+        "tags": [
+          "Delphi"
+        ],
+        "summary": "Get Market Cluster Info",
+        "description": "Retrieve cluster metadata for a given Delphi ID. Returns the cluster title, canonical reference, size (number of matched markets), and last update time.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Look up what question a cluster of markets represents\n- Check how many exchanges carry the same market\n- Get canonical reference for a matched market group\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "delphi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Delphi ID for cross-exchange market matching",
+            "example": "delphi_0016d5d59aae"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketCluster"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/delphi/{delphi_id}/markets": {
+      "get": {
+        "tags": [
+          "Delphi"
+        ],
+        "summary": "Get Matched Markets Across Exchanges",
+        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Predict.fun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "delphi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Delphi ID for cross-exchange market matching",
+            "example": "delphi_0016d5d59aae"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matched markets grouped by exchange",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "delphi_id": {
+                      "type": "string",
+                      "description": "The queried Delphi ID"
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of matched markets across all exchanges"
+                    },
+                    "kalshi": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Kalshi markets"
+                    },
+                    "polymarket": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Polymarket markets"
+                    },
+                    "limitless": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Limitless markets"
+                    },
+                    "pfun": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Predict.fun markets"
+                    },
+                    "opinion": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Opinion Labs markets"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/clusters/{cluster_id}": {
+      "get": {
+        "tags": [
+          "Clusters"
+        ],
+        "summary": "Get Cluster by ID",
+        "description": "Retrieve all markets in a cross-exchange cluster and any siamese-twin relationships to other clusters.\n\nA cluster groups markets from different exchanges that ask essentially the same question. Each member has a `joined_via` label:\n- `exact` -- identical question and resolution criteria\n- `resolution_variant` -- same question but minor resolution difference (e.g. different data source)\n- `seed` -- singleton, no cross-exchange matches found yet\n\nSiamese edges link clusters that cover the same event but ask substantively different questions (e.g. different price thresholds).\n\n## Use cases\n\n- Find the same market on multiple exchanges for arbitrage\n- Compare pricing across Kalshi, Polymarket, Limitless, and PFun\n- Discover related markets via siamese-twin links\n- Build cross-exchange hedging strategies\n\n## Example\n\n- Request: `GET /api/v1/clusters/kalshi:KXTRUMP-28NOV03`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cluster ID (format: exchange:market_id of the lexicographically smallest member)",
+            "example": "kalshi:KXTRUMP-28NOV03"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/klsi/{klsi_id}/market": {
       "get": {
         "tags": [
@@ -563,422 +875,6 @@
         }
       }
     },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1s": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Second OHLCV Candles",
-        "description": "Retrieve 1-second OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-second buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- High-frequency analysis\n- Tick-level trading strategies\n- Microstructure research\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1s?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-second OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1m": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Minute OHLCV Candles",
-        "description": "Retrieve 1-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Intraday trading analysis\n- Short-term price movements\n- Scalping strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-minute OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_5m": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 5-Minute OHLCV Candles",
-        "description": "Retrieve 5-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 5-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Short-term trading analysis\n- Intraday patterns\n- Technical indicators\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_5m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "BEYONCEGENRE-30-TCA"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "5-minute OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_10m": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 10-Minute OHLCV Candles",
-        "description": "Retrieve 10-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 10-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Medium-term trading analysis\n- Pattern recognition\n- Volume analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_10m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "BEYONCEGENRE-30-TCA"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "10-minute OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1h": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Hour OHLCV Candles",
-        "description": "Retrieve 1-hour OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-hour buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Swing trading analysis\n- Daily pattern recognition\n- Longer-term technical analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1h?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-hour OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1d": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Day OHLCV Candles",
-        "description": "Retrieve 1-day OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into daily buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each day\n- Open interest at close of each day\n- Tick count per day\n\n## Use cases\n- Long-term trend analysis\n- Historical price research\n- Position trading strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1d?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-day OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/rfq/{rfq_id}": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Get RFQ by ID",
-        "description": "Retrieve all Request for Quote (RFQ) events for a given RFQ UUID. Returns the full lifecycle of an RFQ (created, quoted, deleted, etc.).\n\n## What you get\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- Track the lifecycle of a specific RFQ\n- Analyze RFQ creation and deletion patterns\n- Monitor institutional quoting activity\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/822dcdee-e5c1-47da-9ddf-15287fb37c44`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/rfq_id"
-          },
-          {
-            "$ref": "#/components/parameters/limit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "RFQ events",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RFQRow"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/rfq": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Get RFQs by Market",
-        "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n## What you get\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market ticker",
-            "example": "KXATPMATCH-26FEB13FRIKOR-FRI"
-          },
-          {
-            "$ref": "#/components/parameters/limit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "RFQ events for the market",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RFQRow"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/mve_trades": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Get MVE Trades (Parlays)",
-        "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n## What you get\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n## Use cases\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market ticker",
-            "example": "KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "MVE trades for the market",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MVETrade"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
     "/api/v1/klsi/{klsi_id}/top_of_book": {
       "get": {
         "tags": [
@@ -1052,41 +948,6 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/RawDeltaKLSI"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/rfq/date/{date}": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Get RFQs by Date",
-        "description": "Retrieve all Request for Quote (RFQ) events for a specific date. Returns every RFQ that was created on that day across all markets.\n\n## What you get\n- All RFQ lifecycle events for the given date\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details\n\n## Use cases\n- Analyze daily RFQ volume\n- Monitor institutional quoting activity over time\n- Track block trade demand by day\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/date/2026-02-13`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/date"
-          },
-          {
-            "$ref": "#/components/parameters/limit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "RFQ events for the date",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RFQRow"
                   }
                 }
               }
@@ -1309,6 +1170,79 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/prices": {
+      "get": {
+        "tags": [
+          "KLSI"
+        ],
+        "summary": "Get KLSI Price History",
+        "description": "Retrieve historical price data for a Kalshi market.\n\n## What you get\n- Price time series with timestamps\n- Yes/No bid and ask prices\n- Trading volume\n- Open interest\n\n## Use cases\n- Build price charts\n- Analyze historical trends\n- Track market sentiment over time\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/klsi_id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of price points to return (default: 10 in docs, no max limit)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Price history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PricePoint"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/cluster": {
+      "get": {
+        "tags": [
+          "KLSI"
+        ],
+        "summary": "Get Cluster for Kalshi Market",
+        "description": "Find all cross-exchange matches for a Kalshi market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Kalshi market is also listed on Polymarket, Limitless, or PFun\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXTRUMP-28NOV03/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/klsi_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/poly/{poly_id}/market": {
@@ -1849,6 +1783,40 @@
         }
       }
     },
+    "/api/v1/poly/{poly_id}/cluster": {
+      "get": {
+        "tags": [
+          "Polymarket"
+        ],
+        "summary": "Get Cluster for Polymarket Market",
+        "description": "Find all cross-exchange matches for a Polymarket market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Polymarket market is also listed on Kalshi, Limitless, or PFun\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/poly/0xabc123/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/poly_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/limitless/{market_id}/top_of_book": {
       "get": {
         "tags": [
@@ -2138,6 +2106,47 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/limitless/{market_id}/cluster": {
+      "get": {
+        "tags": [
+          "Limitless"
+        ],
+        "summary": "Get Cluster for Limitless Market",
+        "description": "Find all cross-exchange matches for a Limitless market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Limitless market is also listed on Kalshi, Polymarket, or PFun\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/limitless/trump-wins-2028/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Limitless market ID",
+            "example": "trump-wins-2028"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/pfun/{market_id}/exchange_prices": {
@@ -2431,490 +2440,35 @@
         }
       }
     },
-    "/api/v1/events/{event_id}": {
+    "/api/v1/pfun/{market_id}/cluster": {
       "get": {
         "tags": [
-          "Events"
+          "Predict.fun"
         ],
-        "summary": "Get Event by ID",
-        "description": "Retrieve details for a specific event by its unique identifier.\n\n## What you get\n- Event title and category/subcategory\n- Exchange-specific IDs (klsi_id, poly_id)\n- Strike date and timing info\n- Cross-exchange availability\n\n## Use cases\n- Look up event metadata\n- Get exchange-specific IDs for market queries\n- Check if event is available on both exchanges\n\n## Example\n\n- Request: `GET /api/v1/events/KXBTC-25NOV2717`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Cluster for PFun Market",
+        "description": "Find all cross-exchange matches for a PFun market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a PFun market is also listed on Kalshi, Polymarket, or Limitless\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
-            "$ref": "#/components/parameters/event_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Event details",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Event"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/events/category/{category}": {
-      "get": {
-        "tags": [
-          "Events"
-        ],
-        "summary": "Get Events by Category",
-        "description": "Retrieve all events in a specific category across all exchanges.\n\n## Available categories\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more (see parameter enum)\n\n## Use cases\n- Build category-based navigation\n- Display markets by topic\n- Power category pages\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/category"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of events",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Event"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/events/category/{category}/klsi": {
-      "get": {
-        "tags": [
-          "Events"
-        ],
-        "summary": "Get Kalshi Events by Category",
-        "description": "Retrieve events available on Kalshi for a specific category. Only returns events that have a `klsi_id` (are tradeable on Kalshi).\n\n## Use cases\n- Show Kalshi-specific markets\n- Filter for US-regulated markets only\n- Build Kalshi-focused interfaces\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto/klsi`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/category"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of KLSI events",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Event"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/events/category/{category}/poly": {
-      "get": {
-        "tags": [
-          "Events"
-        ],
-        "summary": "Get Polymarket Events by Category",
-        "description": "Retrieve events available on Polymarket for a specific category. Only returns events that have a `poly_id` (are tradeable on Polymarket).\n\n## Use cases\n- Show Polymarket-specific markets\n- Filter for crypto-native markets\n- Build Polymarket-focused interfaces\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto/poly`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/category"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of Polymarket events",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Event"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/events/search": {
-      "get": {
-        "tags": [
-          "Search"
-        ],
-        "summary": "Search All Markets",
-        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database \u2014 not just a cached subset \u2014 so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 2
-            },
-            "description": "Search query (min 2 characters)",
-            "example": "bitcoin"
-          },
-          {
-            "name": "category",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter by category (e.g., Crypto, Politics, Sports)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Array of search results from all exchanges",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SearchResult"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/search/suggest": {
-      "get": {
-        "tags": [
-          "Search"
-        ],
-        "summary": "Autocomplete Suggestions",
-        "description": "Get autocomplete suggestions for a partial search query. Use this to build search-as-you-type interfaces.\n\n## What you get\n- Array of suggested search terms\n- Ranked by relevance and popularity\n\n## Use cases\n- Power search box autocomplete\n- Help users discover markets\n- Reduce typing errors\n\n## Example\n\n- Request: `GET /api/v1/search/suggest?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Partial search query (what the user has typed so far)",
-            "example": "bit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Suggestions",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/search/markets": {
-      "get": {
-        "tags": [
-          "Search"
-        ],
-        "summary": "Search Delphi Markets",
-        "description": "Search across all Delphi market clusters by keyword. Uses fuzzy multi-word matching where each word must appear somewhere in the title, but in any order.\n\nFor example, searching \"british minister\" will match titles like \"Will the British Prime Minister resign?\" even though the exact phrase does not appear.\n\n## What you get\n\n- Delphi market clusters matching your keywords\n- Each result includes the delphi_id, title, canonical exchange reference, cluster size, and last update time\n- Results ranked by cluster size (most cross-exchange coverage first)\n\n## Use cases\n\n- Discover prediction markets across all exchanges by topic\n- Find equivalent markets for arbitrage or hedging\n- Power a market search interface\n- Explore what questions prediction markets are tracking\n\n## Example\n\n- Request: `GET /api/v1/search/markets?q=bitcoin&limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Search keywords. Multiple words are matched independently (all must appear in the title, in any order).",
-            "example": "bitcoin"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 25,
-              "maximum": 100
-            },
-            "description": "Maximum number of results to return (default 25, max 100)."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Array of matching market clusters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MarketCluster"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid query (missing or too short)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/prices": {
-      "get": {
-        "tags": [
-          "KLSI"
-        ],
-        "summary": "Get KLSI Price History",
-        "description": "Retrieve historical price data for a Kalshi market.\n\n## What you get\n- Price time series with timestamps\n- Yes/No bid and ask prices\n- Trading volume\n- Open interest\n\n## Use cases\n- Build price charts\n- Analyze historical trends\n- Track market sentiment over time\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXNCAAFTOTAL-25NOV29NDSTAN-41/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/klsi_id"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 10
-            },
-            "description": "Maximum number of price points to return (default: 10 in docs, no max limit)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Price history",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PricePoint"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/markets/{market_id}/orderbook_analytics": {
-      "get": {
-        "tags": [
-          "Advanced Analytics"
-        ],
-        "summary": "Get Orderbook Analytics",
-        "description": "Retrieve pre-computed orderbook analytics for any market. These metrics are derived from orderbook snapshots.\n\n## What you get\n- Time-series orderbook metrics\n- Aggregated depth and liquidity data\n- Spread and imbalance indicators\n\n## Use cases\n- Track liquidity changes over time\n- Identify optimal entry/exit points\n- Build market quality dashboards\n\n## Example\n\n- Request: `GET /api/v1/markets/example-market-id/orderbook_analytics?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/market_id"
-          },
-          {
-            "$ref": "#/components/parameters/limit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Analytics data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/markets/{market_id}/orderbook_analytics/best_quotes": {
-      "get": {
-        "tags": [
-          "Advanced Analytics"
-        ],
-        "summary": "Get Best Bid/Ask Time Series",
-        "description": "Retrieve a time-series of best bid and best ask prices for a market. This is the most efficient way to get price history.\n\n## What you get\n- Best bid price over time\n- Best ask price over time\n- Timestamps for each data point\n\n## Use cases\n- Build price charts\n- Calculate historical spreads\n- Analyze price movements\n- Backtest trading strategies\n\n## Example\n\n- Request: `GET /api/v1/markets/example-market-id/orderbook_analytics/best_quotes?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/market_id"
-          },
-          {
-            "$ref": "#/components/parameters/limit"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Best quotes data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/data/{dataset}": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Download Dataset by Date",
-        "description": "Download RFQ or MVE trades data for a specific date as presigned S3 URLs. Returns a finalized daily Parquet file if the day is complete, or live hourly JSONL parts if the day is still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Presigned S3 download URLs (valid for 5 minutes)\n- Automatic detection of finalized vs live data\n- Full daily Parquet file for completed days\n- Hourly JSONL parts for the current day\n\n## Use cases\n\n- Bulk download historical data for backtesting\n- Build local analytics pipelines\n- Feed data into Pandas, Polars, or DuckDB\n- Stream today's data hour-by-hour for near-real-time analytics\n\n## Datasets\n\n- rfq: Kalshi Request for Quote events (same schema as the /klsi/{id}/rfq endpoint)\n- mve_trades: Kalshi Multi-Value Event parlay trades (same schema as the /klsi/{id}/mve_trades endpoint)\n\n## Example\n\n- Request: `GET /api/v1/data/rfq?date=2026-02-25`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "dataset",
+            "name": "market_id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "rfq",
-                "mve_trades"
-              ]
-            },
-            "description": "Dataset to download",
-            "example": "rfq"
-          },
-          {
-            "name": "date",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
-            "description": "Date in YYYY-MM-DD format. Defaults to today (UTC).",
-            "example": "2026-02-25"
-          },
-          {
-            "name": "hour",
-            "in": "query",
-            "required": false,
-            "schema": {
               "type": "string"
             },
-            "description": "Hour filter (00-23). Only applies to live (non-finalized) days. Returns only parts for that specific hour.",
-            "example": "14"
+            "description": "PFun market ID",
+            "example": "6933"
           }
         ],
         "responses": {
           "200": {
-            "description": "Data export with presigned download URLs",
+            "description": "Cluster members and siamese edges",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DataExportResponse"
+                  "$ref": "#/components/schemas/ClusterResponse"
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "description": "Forbidden - requires Max or Admin plan"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/data/{dataset}/latest": {
-      "get": {
-        "tags": [
-          "Parlays"
-        ],
-        "summary": "Download Latest Dataset (Today)",
-        "description": "Convenience endpoint that returns today's data (UTC). Equivalent to calling the date endpoint with today's date. Returns live hourly JSONL parts since the day is typically still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Today's data as presigned S3 download URLs\n- Hourly JSONL parts accumulated so far today\n- Optional hour filter to get a specific hour's data\n\n## Use cases\n\n- Quick access to today's data without specifying a date\n- Monitor today's RFQ or MVE activity in near-real-time\n- Feed into streaming analytics pipelines\n\n## Example\n\n- Request: `GET /api/v1/data/rfq/latest`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "dataset",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "rfq",
-                "mve_trades"
-              ]
-            },
-            "description": "Dataset to download",
-            "example": "rfq"
-          },
-          {
-            "name": "hour",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Hour filter (00-23). Returns only parts for that specific hour of today.",
-            "example": "14"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Data export with presigned download URLs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataExportResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "description": "Forbidden - requires Max or Admin plan"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -4051,32 +3605,25 @@
         ]
       }
     },
-    "/api/v1/delphi/{delphi_id}/cluster": {
+    "/api/v1/events/{event_id}": {
       "get": {
         "tags": [
-          "Delphi"
+          "Events"
         ],
-        "summary": "Get Market Cluster Info",
-        "description": "Retrieve cluster metadata for a given Delphi ID. Returns the cluster title, canonical reference, size (number of matched markets), and last update time.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Look up what question a cluster of markets represents\n- Check how many exchanges carry the same market\n- Get canonical reference for a matched market group\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Event by ID",
+        "description": "Retrieve details for a specific event by its unique identifier.\n\n## What you get\n- Event title and category/subcategory\n- Exchange-specific IDs (klsi_id, poly_id)\n- Strike date and timing info\n- Cross-exchange availability\n\n## Use cases\n- Look up event metadata\n- Get exchange-specific IDs for market queries\n- Check if event is available on both exchanges\n\n## Example\n\n- Request: `GET /api/v1/events/KXBTC-25NOV2717`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
-            "name": "delphi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Delphi ID for cross-exchange market matching",
-            "example": "delphi_0016d5d59aae"
+            "$ref": "#/components/parameters/event_id"
           }
         ],
         "responses": {
           "200": {
-            "description": "Cluster metadata",
+            "description": "Event details",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MarketCluster"
+                  "$ref": "#/components/schemas/Event"
                 }
               }
             }
@@ -4084,84 +3631,120 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       }
     },
-    "/api/v1/delphi/{delphi_id}/markets": {
+    "/api/v1/events/category/{category}": {
       "get": {
         "tags": [
-          "Delphi"
+          "Events"
         ],
-        "summary": "Get Matched Markets Across Exchanges",
-        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Predict.fun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get Events by Category",
+        "description": "Retrieve all events in a specific category across all exchanges.\n\n## Available categories\n- Crypto, Economics, Elections, Politics\n- Sports, Entertainment, Companies\n- Climate and Weather, Science and Technology\n- And more (see parameter enum)\n\n## Use cases\n- Build category-based navigation\n- Display markets by topic\n- Power category pages\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
-            "name": "delphi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Delphi ID for cross-exchange market matching",
-            "example": "delphi_0016d5d59aae"
+            "$ref": "#/components/parameters/category"
           }
         ],
         "responses": {
           "200": {
-            "description": "Matched markets grouped by exchange",
+            "description": "List of events",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "delphi_id": {
-                      "type": "string",
-                      "description": "The queried Delphi ID"
-                    },
-                    "total": {
-                      "type": "integer",
-                      "description": "Total number of matched markets across all exchanges"
-                    },
-                    "kalshi": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/MatchedMarket"
-                      },
-                      "description": "Matched Kalshi markets"
-                    },
-                    "polymarket": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/MatchedMarket"
-                      },
-                      "description": "Matched Polymarket markets"
-                    },
-                    "limitless": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/MatchedMarket"
-                      },
-                      "description": "Matched Limitless markets"
-                    },
-                    "pfun": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/MatchedMarket"
-                      },
-                      "description": "Matched Predict.fun markets"
-                    },
-                    "opinion": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/MatchedMarket"
-                      },
-                      "description": "Matched Opinion Labs markets"
-                    }
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/category/{category}/klsi": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get Kalshi Events by Category",
+        "description": "Retrieve events available on Kalshi for a specific category. Only returns events that have a `klsi_id` (are tradeable on Kalshi).\n\n## Use cases\n- Show Kalshi-specific markets\n- Filter for US-regulated markets only\n- Build Kalshi-focused interfaces\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto/klsi`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/category"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of KLSI events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/category/{category}/poly": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get Polymarket Events by Category",
+        "description": "Retrieve events available on Polymarket for a specific category. Only returns events that have a `poly_id` (are tradeable on Polymarket).\n\n## Use cases\n- Show Polymarket-specific markets\n- Filter for crypto-native markets\n- Build Polymarket-focused interfaces\n\n## Example\n\n- Request: `GET /api/v1/events/category/Crypto/poly`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/category"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Polymarket events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/rfq/{rfq_id}": {
+      "get": {
+        "tags": [
+          "Parlays"
+        ],
+        "summary": "Get RFQ by ID",
+        "description": "Retrieve all Request for Quote (RFQ) events for a given RFQ UUID. Returns the full lifecycle of an RFQ (created, quoted, deleted, etc.).\n\n## What you get\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- Track the lifecycle of a specific RFQ\n- Analyze RFQ creation and deletion patterns\n- Monitor institutional quoting activity\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/822dcdee-e5c1-47da-9ddf-15287fb37c44`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/rfq_id"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "RFQ events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQRow"
                   }
                 }
               }
@@ -4170,40 +3753,41 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       }
     },
-    "/api/v1/clusters/{cluster_id}": {
+    "/api/v1/klsi/{klsi_id}/rfq": {
       "get": {
         "tags": [
-          "Clusters"
+          "Parlays"
         ],
-        "summary": "Get Cluster by ID",
-        "description": "Retrieve all markets in a cross-exchange cluster and any siamese-twin relationships to other clusters.\n\nA cluster groups markets from different exchanges that ask essentially the same question. Each member has a `joined_via` label:\n- `exact` -- identical question and resolution criteria\n- `resolution_variant` -- same question but minor resolution difference (e.g. different data source)\n- `seed` -- singleton, no cross-exchange matches found yet\n\nSiamese edges link clusters that cover the same event but ask substantively different questions (e.g. different price thresholds).\n\n## Use cases\n\n- Find the same market on multiple exchanges for arbitrage\n- Compare pricing across Kalshi, Polymarket, Limitless, and PFun\n- Discover related markets via siamese-twin links\n- Build cross-exchange hedging strategies\n\n## Example\n\n- Request: `GET /api/v1/clusters/kalshi:KXTRUMP-28NOV03`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get RFQs by Market",
+        "description": "Retrieve all Request for Quote (RFQ) events for a given Kalshi market ticker. Returns every RFQ that was created for this market.\n\n## What you get\n- All RFQ events for the market\n- RFQ lifecycle events (created, deleted, etc.)\n- Creator and quote creator identifiers\n- Full JSON message with RFQ details (target cost, timestamps)\n\n## Use cases\n- See all RFQ activity on a specific market\n- Analyze demand for block trades\n- Monitor institutional interest in a market\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXATPMATCH-26FEB13FRIKOR-FRI/rfq`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
-            "name": "cluster_id",
+            "name": "klsi_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "Cluster ID (format: exchange:market_id of the lexicographically smallest member)",
-            "example": "kalshi:KXTRUMP-28NOV03"
+            "description": "Kalshi market ticker",
+            "example": "KXATPMATCH-26FEB13FRIKOR-FRI"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
           }
         ],
         "responses": {
           "200": {
-            "description": "Cluster members and siamese edges",
+            "description": "RFQ events for the market",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClusterResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQRow"
+                  }
                 }
               }
             }
@@ -4211,111 +3795,143 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       }
     },
-    "/api/v1/klsi/{klsi_id}/cluster": {
+    "/api/v1/klsi/{klsi_id}/mve_trades": {
       "get": {
         "tags": [
-          "KLSI"
+          "Parlays"
         ],
-        "summary": "Get Cluster for Kalshi Market",
-        "description": "Find all cross-exchange matches for a Kalshi market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Kalshi market is also listed on Polymarket, Limitless, or PFun\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXTRUMP-28NOV03/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Get MVE Trades (Parlays)",
+        "description": "Retrieve all Multi-Value Event (MVE) parlay trades for a given Kalshi market ticker. MVE trades are multi-leg bets that combine multiple markets.\n\n## What you get\n- Trade timestamps and prices\n- Taker side and contract count\n- MVE collection and event tickers\n- Individual leg details (market tickers, event tickers, sides)\n- Number of legs in each parlay\n\n## Use cases\n- Track parlay trading activity on a market\n- Analyze multi-leg bet structures\n- Monitor institutional parlay flow\n\n## Example\n\n- Request: `GET /api/v1/klsi/KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E/mve_trades`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
-            "$ref": "#/components/parameters/klsi_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Cluster members and siamese edges",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClusterResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/poly/{poly_id}/cluster": {
-      "get": {
-        "tags": [
-          "Polymarket"
-        ],
-        "summary": "Get Cluster for Polymarket Market",
-        "description": "Find all cross-exchange matches for a Polymarket market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Polymarket market is also listed on Kalshi, Limitless, or PFun\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/poly/0xabc123/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/poly_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Cluster members and siamese edges",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClusterResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/limitless/{market_id}/cluster": {
-      "get": {
-        "tags": [
-          "Limitless"
-        ],
-        "summary": "Get Cluster for Limitless Market",
-        "description": "Find all cross-exchange matches for a Limitless market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Limitless market is also listed on Kalshi, Polymarket, or PFun\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/limitless/trump-wins-2028/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "market_id",
+            "name": "klsi_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "Limitless market ID",
-            "example": "trump-wins-2028"
+            "description": "Kalshi market ticker",
+            "example": "KXMVESPORTSMULTIGAMEEXTENDED-S202613EAE13A377-ED7156B203E"
           }
         ],
         "responses": {
           "200": {
-            "description": "Cluster members and siamese edges",
+            "description": "MVE trades for the market",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClusterResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MVETrade"
+                  }
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/rfq/date/{date}": {
+      "get": {
+        "tags": [
+          "Parlays"
+        ],
+        "summary": "Get RFQs by Date",
+        "description": "Retrieve all Request for Quote (RFQ) events for a specific date. Returns every RFQ that was created on that day across all markets.\n\n## What you get\n- All RFQ lifecycle events for the given date\n- Creator and quote creator identifiers\n- Associated market and event tickers\n- Full JSON message with RFQ details\n\n## Use cases\n- Analyze daily RFQ volume\n- Monitor institutional quoting activity over time\n- Track block trade demand by day\n\n## Example\n\n- Request: `GET /api/v1/klsi/rfq/date/2026-02-13`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/date"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "RFQ events for the date",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQRow"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/data/{dataset}": {
+      "get": {
+        "tags": [
+          "Parlays"
+        ],
+        "summary": "Download Dataset by Date",
+        "description": "Download RFQ or MVE trades data for a specific date as presigned S3 URLs. Returns a finalized daily Parquet file if the day is complete, or live hourly JSONL parts if the day is still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Presigned S3 download URLs (valid for 5 minutes)\n- Automatic detection of finalized vs live data\n- Full daily Parquet file for completed days\n- Hourly JSONL parts for the current day\n\n## Use cases\n\n- Bulk download historical data for backtesting\n- Build local analytics pipelines\n- Feed data into Pandas, Polars, or DuckDB\n- Stream today's data hour-by-hour for near-real-time analytics\n\n## Datasets\n\n- rfq: Kalshi Request for Quote events (same schema as the /klsi/{id}/rfq endpoint)\n- mve_trades: Kalshi Multi-Value Event parlay trades (same schema as the /klsi/{id}/mve_trades endpoint)\n\n## Example\n\n- Request: `GET /api/v1/data/rfq?date=2026-02-25`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "dataset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rfq",
+                "mve_trades"
+              ]
+            },
+            "description": "Dataset to download",
+            "example": "rfq"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Date in YYYY-MM-DD format. Defaults to today (UTC).",
+            "example": "2026-02-25"
+          },
+          {
+            "name": "hour",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Hour filter (00-23). Only applies to live (non-finalized) days. Returns only parts for that specific hour.",
+            "example": "14"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data export with presigned download URLs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataExportResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "description": "Forbidden - requires Max or Admin plan"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -4328,35 +3944,55 @@
         ]
       }
     },
-    "/api/v1/pfun/{market_id}/cluster": {
+    "/api/v1/data/{dataset}/latest": {
       "get": {
         "tags": [
-          "Predict.fun"
+          "Parlays"
         ],
-        "summary": "Get Cluster for PFun Market",
-        "description": "Find all cross-exchange matches for a PFun market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a PFun market is also listed on Kalshi, Polymarket, or Limitless\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/pfun/6933/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "summary": "Download Latest Dataset (Today)",
+        "description": "Convenience endpoint that returns today's data (UTC). Equivalent to calling the date endpoint with today's date. Returns live hourly JSONL parts since the day is typically still in progress.\n\nRequires a Max or Admin plan.\n\n## What you get\n\n- Today's data as presigned S3 download URLs\n- Hourly JSONL parts accumulated so far today\n- Optional hour filter to get a specific hour's data\n\n## Use cases\n\n- Quick access to today's data without specifying a date\n- Monitor today's RFQ or MVE activity in near-real-time\n- Feed into streaming analytics pipelines\n\n## Example\n\n- Request: `GET /api/v1/data/rfq/latest`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
-            "name": "market_id",
+            "name": "dataset",
             "in": "path",
             "required": true,
             "schema": {
+              "type": "string",
+              "enum": [
+                "rfq",
+                "mve_trades"
+              ]
+            },
+            "description": "Dataset to download",
+            "example": "rfq"
+          },
+          {
+            "name": "hour",
+            "in": "query",
+            "required": false,
+            "schema": {
               "type": "string"
             },
-            "description": "PFun market ID",
-            "example": "6933"
+            "description": "Hour filter (00-23). Returns only parts for that specific hour of today.",
+            "example": "14"
           }
         ],
         "responses": {
           "200": {
-            "description": "Cluster members and siamese edges",
+            "description": "Data export with presigned download URLs",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClusterResponse"
+                  "$ref": "#/components/schemas/DataExportResponse"
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "description": "Forbidden - requires Max or Admin plan"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -4367,6 +4003,370 @@
             "ApiKeyAuth": []
           }
         ]
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/ohlcv_1s": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get KLSI 1-Second OHLCV Candles",
+        "description": "Retrieve 1-second OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-second buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- High-frequency analysis\n- Tick-level trading strategies\n- Microstructure research\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1s?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market identifier",
+            "example": "APPLEPORT-25DEC31"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "1-second OHLCV candle data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/ohlcv_1m": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get KLSI 1-Minute OHLCV Candles",
+        "description": "Retrieve 1-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Intraday trading analysis\n- Short-term price movements\n- Scalping strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market identifier",
+            "example": "APPLEPORT-25DEC31"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "1-minute OHLCV candle data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/ohlcv_5m": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get KLSI 5-Minute OHLCV Candles",
+        "description": "Retrieve 5-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 5-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Short-term trading analysis\n- Intraday patterns\n- Technical indicators\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_5m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market identifier",
+            "example": "BEYONCEGENRE-30-TCA"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "5-minute OHLCV candle data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/ohlcv_10m": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get KLSI 10-Minute OHLCV Candles",
+        "description": "Retrieve 10-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 10-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Medium-term trading analysis\n- Pattern recognition\n- Volume analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_10m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market identifier",
+            "example": "BEYONCEGENRE-30-TCA"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "10-minute OHLCV candle data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/ohlcv_1h": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get KLSI 1-Hour OHLCV Candles",
+        "description": "Retrieve 1-hour OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-hour buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Swing trading analysis\n- Daily pattern recognition\n- Longer-term technical analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1h?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market identifier",
+            "example": "APPLEPORT-25DEC31"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "1-hour OHLCV candle data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/klsi/{klsi_id}/ohlcv_1d": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get KLSI 1-Day OHLCV Candles",
+        "description": "Retrieve 1-day OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into daily buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each day\n- Open interest at close of each day\n- Tick count per day\n\n## Use cases\n- Long-term trend analysis\n- Historical price research\n- Position trading strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1d?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "klsi_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Kalshi market identifier",
+            "example": "APPLEPORT-25DEC31"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "1-day OHLCV candle data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/api/v1/markets/{market_id}/orderbook_analytics": {
+      "get": {
+        "tags": [
+          "Advanced Analytics"
+        ],
+        "summary": "Get Orderbook Analytics",
+        "description": "Retrieve pre-computed orderbook analytics for any market. These metrics are derived from orderbook snapshots.\n\n## What you get\n- Time-series orderbook metrics\n- Aggregated depth and liquidity data\n- Spread and imbalance indicators\n\n## Use cases\n- Track liquidity changes over time\n- Identify optimal entry/exit points\n- Build market quality dashboards\n\n## Example\n\n- Request: `GET /api/v1/markets/example-market-id/orderbook_analytics?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/market_id"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analytics data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/markets/{market_id}/orderbook_analytics/best_quotes": {
+      "get": {
+        "tags": [
+          "Advanced Analytics"
+        ],
+        "summary": "Get Best Bid/Ask Time Series",
+        "description": "Retrieve a time-series of best bid and best ask prices for a market. This is the most efficient way to get price history.\n\n## What you get\n- Best bid price over time\n- Best ask price over time\n- Timestamps for each data point\n\n## Use cases\n- Build price charts\n- Calculate historical spreads\n- Analyze price movements\n- Backtest trading strategies\n\n## Example\n\n- Request: `GET /api/v1/markets/example-market-id/orderbook_analytics/best_quotes?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/market_id"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Best quotes data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
