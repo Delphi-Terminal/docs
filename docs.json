@@ -43,18 +43,23 @@
               "polymarket-examples",
               "websocket-examples"
             ]
-          },
-          {
-            "group": "Updates",
-            "pages": [
-              "changelog"
-            ]
           }
         ]
       },
       {
         "tab": "API Reference",
         "openapi": "openapi.json"
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": [
+              "changelog"
+            ]
+          }
+        ]
       }
     ],
     "global": {
