@@ -91,22 +91,6 @@
     {
       "name": "PredictIt",
       "description": "Access PredictIt prediction market data including market details and price history."
-    },
-    {
-      "name": "Kalshi WebSocket",
-      "description": "Real-time WebSocket streaming for Kalshi market data. Subscribe to ticker and orderbook updates using klsi_id."
-    },
-    {
-      "name": "Polymarket WebSocket",
-      "description": "Real-time WebSocket streaming for Polymarket data. Subscribe to price updates using condition_id or orderbook updates using market_id."
-    },
-    {
-      "name": "Pfun WebSocket",
-      "description": "Real-time WebSocket streaming for Pfun market data."
-    },
-    {
-      "name": "Limitless WebSocket",
-      "description": "Real-time WebSocket streaming for Limitless market data."
     }
   ],
   "paths": {
@@ -2561,7 +2545,7 @@
           "Search"
         ],
         "summary": "Search All Markets",
-        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database — not just a cached subset — so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "description": "Search across **all markets from all four exchanges** (Kalshi, Polymarket, Limitless, Predict.fun) by title or question. Returns up to 250 results per exchange (1,000 total), ranked by relevance.\n\nThe search queries the full market database \u2014 not just a cached subset \u2014 so every market across all exchanges is searchable.\n\nExample Queries:\n\n- `bitcoin` - Find Bitcoin-related markets across all exchanges\n- `election 2026` - Find election markets\n- `fed rate` - Find Federal Reserve interest rate markets\n- `super bowl` - Find sports markets\n\nFiltering:\n\nCombine search with category filter:\n\n- Request: `GET /api/v1/events/search?q=bitcoin&category=Crypto`\n- Header: `X-API-Key: YOUR_API_KEY`\n\nResponse:\n\nEach result includes:\n- **type**: Which exchange the market belongs to (`kalshi`, `poly`, `limitless`, `pfun`)\n- **market_id**: The market identifier (also available as `klsi_id` or `poly_id` for their respective exchanges)\n- **title**: The market title or question\n- **category**: The market category\n\nAvailable Categories:\n\nClimate and Weather, Companies, Crypto, Economics, Elections, Entertainment, Financials, Politics, Science and Technology, Sports, and more.\n\n## Example\n\n- Request: `GET /api/v1/events/search?q=bitcoin`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "q",
@@ -2736,66 +2720,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/ws/kalshi": {
-      "get": {
-        "tags": [
-          "Kalshi WebSocket"
-        ],
-        "summary": "Kalshi Real-Time WebSocket",
-        "description": "Connect to the Kalshi WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/kalshi\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Kalshi markets using their `klsi_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"klsi_ids\": [\"KXBTCD-25FEB14-B55000\", \"KXETHD-25FEB14-B3100\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| klsi_ids | array | Yes | Array of Kalshi market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"klsi_ids\": [\"KXBTCD-25FEB14-B55000\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"price\": 0.65,\n  \"yes_bid\": 0.64,\n  \"yes_ask\": 0.66,\n  \"volume\": 15000,\n  \"open_interest\": 8500,\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"bid_side\": [0, 0, 0, ..., 150, 200, 100],\n  \"ask_side\": [100, 150, 200, ..., 0, 0, 0],\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"id\": \"trade123\",\n  \"klsi_id\": \"KXBTCD-25FEB14-B55000\",\n  \"exchange\": \"klsi\",\n  \"yes_price\": 0.65,\n  \"no_price\": 0.35,\n  \"count\": 10,\n  \"taker_side\": \"buy\",\n  \"last_update\": \"2026-02-03T14:30:00Z\"\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/kalshi\n\nws.onopen = () => {\n  console.log('Connected to Kalshi WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    klsi_ids: ['KXBTCD-25FEB14-B55000'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  console.log('Received:', data);\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 512 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `klsi_id` (Kalshi market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n\n## Example\n\n- Request: `GET /ws/kalshi`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "security": [],
-        "responses": {
-          "101": {
-            "description": "WebSocket connection upgraded successfully"
-          }
-        }
-      }
-    },
-    "/ws/poly": {
-      "get": {
-        "tags": [
-          "Polymarket WebSocket"
-        ],
-        "summary": "Polymarket Real-Time WebSocket",
-        "description": "Connect to the Polymarket WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/poly\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Polymarket data using their `condition_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"condition_ids\": [\"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| condition_ids | array | Yes | Array of Polymarket condition identifiers (hex strings starting with 0x) |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"condition_ids\": [\"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"poly\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"price\": 0.992,\n    \"last_update\": \"2026-02-04T15:30:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"snapshot_time\": \"2026-02-04T15:30:00Z\",\n    \"exchange\": \"poly\",\n    \"market_id\": \"0x1234abcd5678efgh\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"bid_side\": [0.55, 0.54, 0.53, 0.52, 0.51],\n    \"ask_side\": [0.56, 0.57, 0.58, 0.59, 0.60],\n    \"original_last_update\": \"2026-02-04T15:29:59Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"poly\",\n    \"condition_id\": \"0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707\",\n    \"token_id\": \"0x123...\",\n    \"market_id\": \"0xabc...\",\n    \"price\": 0.65,\n    \"size\": 100.5,\n    \"side\": \"buy\",\n    \"last_update\": \"2026-02-04T15:30:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/poly\n\nws.onopen = () => {\n  console.log('Connected to Polymarket WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    condition_ids: ['0x00000977017fa72fb6b1908ae694000d3b51f442c2552656b10bdbbfd16ff707'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 512 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `condition_id` (Polymarket condition identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n- Orderbook updates are high-frequency - consider filtering client-side if needed\n\n## Example\n\n- Request: `GET /ws/poly`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "security": [],
-        "responses": {
-          "101": {
-            "description": "WebSocket connection upgraded successfully"
-          }
-        }
-      }
-    },
-    "/ws/pfun": {
-      "get": {
-        "tags": [
-          "Pfun WebSocket"
-        ],
-        "summary": "Pfun Real-Time WebSocket",
-        "description": "Connect to the Pfun WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/pfun\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Pfun data using their `market_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"market_ids\": [\"market123\", \"market456\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| market_ids | array | Yes | Array of Pfun market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"market_ids\": [\"market123\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"price\": 0.65,\n    \"yes_bid\": 0.64,\n    \"yes_ask\": 0.66,\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"venue_market_id\": \"venue123\",\n    \"best_yes_price\": 65,\n    \"best_yes_size\": 100,\n    \"best_no_price\": 35,\n    \"best_no_size\": 50,\n    \"yes_side\": [100, 200, 300],\n    \"no_side\": [50, 100, 150],\n    \"server_time\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"pfun\",\n    \"market_id\": \"market123\",\n    \"yes_price\": 0.65,\n    \"no_price\": 0.35,\n    \"count\": 10,\n    \"taker_side\": \"buy\",\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/pfun\n\nws.onopen = () => {\n  console.log('Connected to Pfun WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    market_ids: ['market123'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 16 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `market_id` (Pfun market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n\n## Example\n\n- Request: `GET /ws/pfun`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "security": [],
-        "responses": {
-          "101": {
-            "description": "WebSocket connection upgraded successfully"
-          }
-        }
-      }
-    },
-    "/ws/limitless": {
-      "get": {
-        "tags": [
-          "Limitless WebSocket"
-        ],
-        "summary": "Limitless Real-Time WebSocket",
-        "description": "Connect to the Limitless WebSocket for real-time price, orderbook, and trade updates.\n\n---\n\nConnection:\n\nConnect to the WebSocket endpoint:\n\nConnect to: wss://api.delphiterminal.co/ws/limitless\n\n---\n\nSubscribing to Markets:\n\nOnce connected, send a JSON message to subscribe to Limitless data using their `market_id`:\n\n{\n  \"action\": \"subscribe\",\n  \"market_ids\": [\"market123\", \"market456\"],\n  \"message_types\": [\"prices\", \"orderbook\", \"trades\"]\n}\n\nSubscription Fields:\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| action | string | Yes | `subscribe` or `unsubscribe` |\n| market_ids | array | Yes | Array of Limitless market identifiers |\n| message_types | array | No | `[\"prices\"]`, `[\"orderbook\"]`, `[\"trades\"]`, or any combination. Defaults to prices and orderbook if omitted |\n\n---\n\nUnsubscribing:\n\n{\n  \"action\": \"unsubscribe\",\n  \"market_ids\": [\"market123\"]\n}\n\n---\n\nMessage Types:\n\nPrice Messages:\n\nReal-time price updates for subscribed markets:\n\n{\n  \"type\": \"prices\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"market_id\": \"market123\",\n    \"price\": 0.65,\n    \"yes_bid\": 0.64,\n    \"yes_ask\": 0.66,\n    \"volume\": 15000,\n    \"open_interest\": 8500,\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nOrderbook Messages:\n\nReal-time orderbook snapshots for subscribed markets:\n\n{\n  \"type\": \"orderbook\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"token_id\": \"token123\",\n    \"market_id\": \"market123\",\n    \"bid_side\": [0.55, 0.54, 0.53, 0.52, 0.51],\n    \"ask_side\": [0.56, 0.57, 0.58, 0.59, 0.60],\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\nTrade Messages:\n\nReal-time trade executions for subscribed markets:\n\n{\n  \"type\": \"trades\",\n  \"data\": {\n    \"exchange\": \"limitless\",\n    \"market_id\": \"market123\",\n    \"yes_price\": 0.65,\n    \"no_price\": 0.35,\n    \"count\": 10,\n    \"taker_side\": \"buy\",\n    \"last_update\": \"2026-02-06T12:00:00Z\"\n  }\n}\n\n---\n\nFull JavaScript Example:\n\nConnect to: wss://api.delphiterminal.co/ws/limitless\n\nws.onopen = () => {\n  console.log('Connected to Limitless WebSocket\n  \n  // Subscribe to markets\n  ws.send(JSON.stringify({\n    action: 'subscribe',\n    market_ids: ['market123'],\n    message_types: ['prices', 'orderbook', 'trades']\n  }));\n};\n\nws.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  \n  if (data.type === 'prices') {\n    console.log('Price update:', data.data);\n  } else if (data.type === 'orderbook') {\n    console.log('Orderbook update:', data.data);\n  } else if (data.type === 'trades') {\n    console.log('Trade:', data.data);\n  }\n};\n\nws.onclose = () => {\n  console.log('Disconnected from WebSocket\n};\n\nws.onerror = (error) => {\n  console.error('WebSocket error:', error);\n};\n\n---\n\nConnection Details:\n\n| Property | Value |\n|----------|-------|\n| Protocol | WebSocket (wss://) |\n| Keepalive | Ping every 54 seconds |\n| Timeout | 60 seconds without pong |\n| Max Message Size | 16 KB |\n\n---\n\nNotes:\n\n- **No authentication required** for WebSocket connection\n- You must use `market_id` (Limitless market identifier) to subscribe\n- Messages are only sent for markets you have explicitly subscribed to\n- Multiple markets can be subscribed in a single message\n- Subscribe to specific message types to reduce message volume\n- Trades must be explicitly requested (not included in default subscription)\n\n## Example\n\n- Request: `GET /ws/limitless`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "security": [],
-        "responses": {
-          "101": {
-            "description": "WebSocket connection upgraded successfully"
           }
         }
       }
@@ -3739,7 +3663,9 @@
     },
     "/api/v1/fex/{market_id}/market": {
       "get": {
-        "tags": ["ForecastEx"],
+        "tags": [
+          "ForecastEx"
+        ],
         "summary": "Get ForecastEx Market Details",
         "description": "Retrieve full market details for a specific ForecastEx market by market ID.\n\n## Use cases\n\n- Look up market metadata (title, category, status, expiration)\n- Check contract specifications and threshold\n- Get ticker prefix and spec URL\n\n## Example\n\n- Request: `GET /api/v1/fex/ACD_1226_429.0/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3747,7 +3673,9 @@
             "name": "market_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "ForecastEx market ID",
             "example": "ACD_1226_429.0"
           }
@@ -3757,18 +3685,28 @@
             "description": "Market details",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/FexMarketDetails" }
+                "schema": {
+                  "$ref": "#/components/schemas/FexMarketDetails"
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/fex/markets": {
       "get": {
-        "tags": ["ForecastEx"],
+        "tags": [
+          "ForecastEx"
+        ],
         "summary": "List All ForecastEx Markets",
         "description": "Retrieve a paginated list of all ForecastEx markets sorted by most recently updated.\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/fex/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3776,14 +3714,20 @@
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 10 },
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
             "description": "Maximum number of markets to return"
           },
           {
             "name": "offset",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 0 },
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
             "description": "Number of markets to skip for pagination"
           }
         ],
@@ -3795,22 +3739,39 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "markets": { "type": "array", "items": { "$ref": "#/components/schemas/FexMarketDetails" } },
-                    "count": { "type": "integer" },
-                    "limit": { "type": "integer" },
-                    "offset": { "type": "integer" }
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FexMarketDetails"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "offset": {
+                      "type": "integer"
+                    }
                   }
                 }
               }
             }
           }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/fex/{market_id}/tradehistory": {
       "get": {
-        "tags": ["ForecastEx"],
+        "tags": [
+          "ForecastEx"
+        ],
         "summary": "Get ForecastEx Trade History",
         "description": "Retrieve trade history for a specific ForecastEx market. Each record includes yes/no prices, trade count, and taker side.\n\n## Use cases\n\n- Analyze trade flow and volume\n- Build trading signals from historical trades\n- Study market microstructure\n\n## Example\n\n- Request: `GET /api/v1/fex/ACD_1226_429.0/tradehistory?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3818,7 +3779,9 @@
             "name": "market_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "ForecastEx market ID",
             "example": "ACD_1226_429.0"
           },
@@ -3826,7 +3789,10 @@
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 10 },
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
             "description": "Maximum number of trades to return"
           }
         ],
@@ -3835,18 +3801,31 @@
             "description": "Array of trade records",
             "content": {
               "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/FexTrade" } }
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FexTrade"
+                  }
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/predictit/{market_id}/market": {
       "get": {
-        "tags": ["PredictIt"],
+        "tags": [
+          "PredictIt"
+        ],
         "summary": "Get PredictIt Market Details",
         "description": "Retrieve full market details for a specific PredictIt market by market ID.\n\n## Use cases\n\n- Look up contract and market metadata\n- Check market status and last trade price\n- Access raw JSON data from the exchange\n\n## Example\n\n- Request: `GET /api/v1/predictit/34088/market`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3854,7 +3833,9 @@
             "name": "market_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "PredictIt market ID",
             "example": "34088"
           }
@@ -3864,18 +3845,28 @@
             "description": "Market details",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/PredictItMarketDetails" }
+                "schema": {
+                  "$ref": "#/components/schemas/PredictItMarketDetails"
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/predictit/markets": {
       "get": {
-        "tags": ["PredictIt"],
+        "tags": [
+          "PredictIt"
+        ],
         "summary": "List All PredictIt Markets",
         "description": "Retrieve a paginated list of all PredictIt markets sorted by most recently retrieved.\n\n## Pagination\n\n- Use `limit` and `offset` query parameters\n- Default limit is 10\n\n## Example\n\n- Request: `GET /api/v1/predictit/markets?limit=50&offset=0`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3883,14 +3874,20 @@
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 10 },
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
             "description": "Maximum number of markets to return"
           },
           {
             "name": "offset",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 0 },
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
             "description": "Number of markets to skip for pagination"
           }
         ],
@@ -3902,22 +3899,39 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "markets": { "type": "array", "items": { "$ref": "#/components/schemas/PredictItMarketDetails" } },
-                    "count": { "type": "integer" },
-                    "limit": { "type": "integer" },
-                    "offset": { "type": "integer" }
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PredictItMarketDetails"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "offset": {
+                      "type": "integer"
+                    }
                   }
                 }
               }
             }
           }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/predictit/{market_id}/prices": {
       "get": {
-        "tags": ["PredictIt"],
+        "tags": [
+          "PredictIt"
+        ],
         "summary": "Get PredictIt Price History",
         "description": "Retrieve price and ticker history for a specific PredictIt market. Includes best bid/ask with quantities and last price.\n\n## Use cases\n\n- Chart price history over time\n- Monitor bid/ask spread dynamics\n- Track market activity\n\n## Example\n\n- Request: `GET /api/v1/predictit/34088/prices?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3925,7 +3939,9 @@
             "name": "market_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "PredictIt market ID",
             "example": "34088"
           },
@@ -3933,7 +3949,10 @@
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 10 },
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
             "description": "Maximum number of ticker records to return"
           }
         ],
@@ -3942,18 +3961,31 @@
             "description": "Array of ticker records",
             "content": {
               "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PrdiTicker" } }
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrdiTicker"
+                  }
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/delphi/{delphi_id}/cluster": {
       "get": {
-        "tags": ["Delphi"],
+        "tags": [
+          "Delphi"
+        ],
         "summary": "Get Market Cluster Info",
         "description": "Retrieve cluster metadata for a given Delphi ID. Returns the cluster title, canonical reference, size (number of matched markets), and last update time.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Look up what question a cluster of markets represents\n- Check how many exchanges carry the same market\n- Get canonical reference for a matched market group\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3961,7 +3993,9 @@
             "name": "delphi_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Delphi ID for cross-exchange market matching",
             "example": "delphi_0016d5d59aae"
           }
@@ -3971,18 +4005,28 @@
             "description": "Cluster metadata",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/MarketCluster" }
+                "schema": {
+                  "$ref": "#/components/schemas/MarketCluster"
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/delphi/{delphi_id}/markets": {
       "get": {
-        "tags": ["Delphi"],
+        "tags": [
+          "Delphi"
+        ],
         "summary": "Get Matched Markets Across Exchanges",
         "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Pfun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
@@ -3990,7 +4034,9 @@
             "name": "delphi_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Delphi ID for cross-exchange market matching",
             "example": "delphi_0016d5d59aae"
           }
@@ -4013,27 +4059,37 @@
                     },
                     "kalshi": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
                       "description": "Matched Kalshi markets"
                     },
                     "polymarket": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
                       "description": "Matched Polymarket markets"
                     },
                     "limitless": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
                       "description": "Matched Limitless markets"
                     },
                     "pfun": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
                       "description": "Matched Pfun markets"
                     },
                     "opinion": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/MatchedMarket" },
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
                       "description": "Matched Opinion Labs markets"
                     }
                   }
@@ -4041,9 +4097,15 @@
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         },
-        "security": [{ "ApiKeyAuth": [] }]
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/api/v1/clusters/{cluster_id}": {
@@ -6507,67 +6569,212 @@
         "type": "object",
         "description": "Market details for a ForecastEx prediction market.",
         "properties": {
-          "exchange": { "type": "string", "description": "Exchange name" },
-          "market_id": { "type": "string", "description": "Unique market identifier" },
-          "event_type": { "type": "string", "description": "Type of event" },
-          "status": { "type": "string", "description": "Current market status" },
-          "title": { "type": "string", "description": "Market title" },
-          "ticker_prefix": { "type": "string", "description": "Ticker prefix" },
-          "category": { "type": "string", "description": "Market category" },
-          "expiration_date": { "type": "string", "format": "date", "description": "Contract expiration date" },
-          "threshold": { "type": "string", "description": "Contract threshold" },
-          "spec_url": { "type": "string", "description": "URL to contract specification" },
-          "updated_at": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Unique market identifier"
+          },
+          "event_type": {
+            "type": "string",
+            "description": "Type of event"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current market status"
+          },
+          "title": {
+            "type": "string",
+            "description": "Market title"
+          },
+          "ticker_prefix": {
+            "type": "string",
+            "description": "Ticker prefix"
+          },
+          "category": {
+            "type": "string",
+            "description": "Market category"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Contract expiration date"
+          },
+          "threshold": {
+            "type": "string",
+            "description": "Contract threshold"
+          },
+          "spec_url": {
+            "type": "string",
+            "description": "URL to contract specification"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
         }
       },
       "FexTrade": {
         "type": "object",
         "description": "A trade record for a ForecastEx market.",
         "properties": {
-          "exchange": { "type": "string", "description": "Exchange name" },
-          "market_id": { "type": "string", "description": "Market identifier" },
-          "pair_id": { "type": "string", "description": "Trading pair identifier" },
-          "yes_price": { "type": "number", "format": "double", "description": "Yes price at time of trade" },
-          "no_price": { "type": "number", "format": "double", "description": "No price at time of trade" },
-          "count": { "type": "number", "format": "double", "description": "Trade count" },
-          "taker_side": { "type": "string", "description": "Side the taker was on" },
-          "last_update": { "type": "string", "format": "date-time", "description": "Trade timestamp" },
-          "ingest_time": { "type": "string", "format": "date-time", "description": "Ingest timestamp" }
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "pair_id": {
+            "type": "string",
+            "description": "Trading pair identifier"
+          },
+          "yes_price": {
+            "type": "number",
+            "format": "double",
+            "description": "Yes price at time of trade"
+          },
+          "no_price": {
+            "type": "number",
+            "format": "double",
+            "description": "No price at time of trade"
+          },
+          "count": {
+            "type": "number",
+            "format": "double",
+            "description": "Trade count"
+          },
+          "taker_side": {
+            "type": "string",
+            "description": "Side the taker was on"
+          },
+          "last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Trade timestamp"
+          },
+          "ingest_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Ingest timestamp"
+          }
         }
       },
       "PredictItMarketDetails": {
         "type": "object",
         "description": "Market details for a PredictIt prediction market contract.",
         "properties": {
-          "exchange": { "type": "string", "description": "Exchange name" },
-          "market_id": { "type": "string", "description": "Unique market identifier" },
-          "venue_market_id": { "type": "string", "description": "Market ID on the PredictIt venue" },
-          "contract_name": { "type": "string", "description": "Contract name" },
-          "market_name": { "type": "string", "description": "Market name" },
-          "market_ticker": { "type": "string", "description": "Market ticker symbol" },
-          "market_url": { "type": "string", "description": "URL to the market on PredictIt" },
-          "status": { "type": "string", "description": "Current market status" },
-          "last_trade_price": { "type": "number", "format": "double", "description": "Last trade price" },
-          "last_trade_time": { "type": "string", "description": "Last trade time" },
-          "raw_json": { "type": "string", "description": "Raw JSON data from the exchange" },
-          "retrieved_at": { "type": "string", "format": "date-time", "description": "When the data was retrieved" }
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Unique market identifier"
+          },
+          "venue_market_id": {
+            "type": "string",
+            "description": "Market ID on the PredictIt venue"
+          },
+          "contract_name": {
+            "type": "string",
+            "description": "Contract name"
+          },
+          "market_name": {
+            "type": "string",
+            "description": "Market name"
+          },
+          "market_ticker": {
+            "type": "string",
+            "description": "Market ticker symbol"
+          },
+          "market_url": {
+            "type": "string",
+            "description": "URL to the market on PredictIt"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current market status"
+          },
+          "last_trade_price": {
+            "type": "number",
+            "format": "double",
+            "description": "Last trade price"
+          },
+          "last_trade_time": {
+            "type": "string",
+            "description": "Last trade time"
+          },
+          "raw_json": {
+            "type": "string",
+            "description": "Raw JSON data from the exchange"
+          },
+          "retrieved_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the data was retrieved"
+          }
         }
       },
       "PrdiTicker": {
         "type": "object",
         "description": "A price/ticker record for a PredictIt market.",
         "properties": {
-          "exchange": { "type": "string", "description": "Exchange name" },
-          "market_id": { "type": "string", "description": "Market identifier" },
-          "venue_market_id": { "type": "string", "description": "Market ID on the PredictIt venue" },
-          "best_bid": { "type": "number", "format": "double", "description": "Best bid price" },
-          "best_bid_qty": { "type": "number", "format": "double", "description": "Best bid quantity" },
-          "best_ask": { "type": "number", "format": "double", "description": "Best ask price" },
-          "best_ask_qty": { "type": "number", "format": "double", "description": "Best ask quantity" },
-          "last": { "type": "number", "format": "double", "description": "Last traded price" },
-          "source": { "type": "string", "description": "Data source identifier" },
-          "server_time": { "type": "string", "format": "date-time", "description": "Server timestamp" },
-          "ingest_time": { "type": "string", "format": "date-time", "description": "Ingest timestamp" }
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier"
+          },
+          "venue_market_id": {
+            "type": "string",
+            "description": "Market ID on the PredictIt venue"
+          },
+          "best_bid": {
+            "type": "number",
+            "format": "double",
+            "description": "Best bid price"
+          },
+          "best_bid_qty": {
+            "type": "number",
+            "format": "double",
+            "description": "Best bid quantity"
+          },
+          "best_ask": {
+            "type": "number",
+            "format": "double",
+            "description": "Best ask price"
+          },
+          "best_ask_qty": {
+            "type": "number",
+            "format": "double",
+            "description": "Best ask quantity"
+          },
+          "last": {
+            "type": "number",
+            "format": "double",
+            "description": "Last traded price"
+          },
+          "source": {
+            "type": "string",
+            "description": "Data source identifier"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Server timestamp"
+          },
+          "ingest_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Ingest timestamp"
+          }
         }
       },
       "MarketCluster": {
@@ -6668,7 +6875,11 @@
           },
           "joined_via": {
             "type": "string",
-            "enum": ["exact", "resolution_variant", "seed"],
+            "enum": [
+              "exact",
+              "resolution_variant",
+              "seed"
+            ],
             "description": "How this market joined the cluster: exact (identical question), resolution_variant (same question, minor resolution difference), seed (singleton, no matches)"
           }
         }
