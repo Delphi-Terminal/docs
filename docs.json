@@ -100,12 +100,9 @@
     "playground": {
       "display": "interactive"
     },
-    "auth": {
-      "name": "X-API-Key",
-      "default": "dphi_live_7750a10a80a766216f71e545be656a277276e47849d9805de303684dde0b0ed2"
-    },
     "examples": {
-      "autogenerate": false
+      "autogenerate": false,
+      "prefill": true
     }
   },
   "contextual": {

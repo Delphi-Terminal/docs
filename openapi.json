@@ -116,7 +116,7 @@
           "Getting Started"
         ],
         "summary": "Get a Test API Key",
-        "description": "**Start here!** Create a temporary API key valid for 10 minutes. Use this to test the API endpoints.\n\n1. Click 'Try it out' then 'Execute'\n2. Copy the `api_key` from the response\n3. Click the 'Authorize' button at the top of the page\n4. Paste your key in the 'Value' field for ApiKeyAuth\n5. Click 'Authorize' then 'Close'\n\nYou can now test all the protected endpoints!",
+        "description": "Create a temporary API key valid for 10 minutes.\n\nA test key is already available for use in the docs playground. Copy it from the Authorization section description and paste it into the `X-API-Key` field to start testing.\n\nTest key: `dphi_live_7750a10a80a766216f71e545be656a277276e47849d9805de303684dde0b0ed2`",
         "security": [],
         "responses": {
           "200": {
@@ -4244,7 +4244,7 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key",
-        "description": "Your API key (get one from the test-key endpoint above)"
+        "description": "Use this test key to try any endpoint: dphi_live_7750a10a80a766216f71e545be656a277276e47849d9805de303684dde0b0ed2"
       }
     },
     "parameters": {
