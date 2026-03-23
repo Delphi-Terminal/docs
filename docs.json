@@ -2,14 +2,16 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "appearance": {
-    "default": "dark",
-    "strict": true
+    "default": "dark"
   },
   "name": "Delphi Terminal API",
   "colors": {
-    "primary": "#4F46E5",
-    "light": "#818CF8",
-    "dark": "#3730A3"
+    "primary": "#1B3A5F",
+    "light": "#5B8AC4",
+    "dark": "#0F1F3C",
+    "background": {
+      "dark": "#0B1528"
+    }
   },
   "styling": {
     "codeblocks": {
