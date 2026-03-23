@@ -59,13 +59,7 @@
           },
           {
             "group": "Streams",
-            "openapi": "openapi.json",
-            "pages": [
-              "GET /ws/kalshi",
-              "GET /ws/poly",
-              "GET /ws/pfun",
-              "GET /ws/limitless"
-            ]
+            "openapi": "openapi-websockets.json"
           }
         ]
       },
