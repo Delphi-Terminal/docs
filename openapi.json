@@ -3601,6 +3601,82 @@
         ]
       }
     },
+    "/api/v1/klsi/{klsi_id}/candles": {
+      "get": {
+        "tags": [
+          "Candles"
+        ],
+        "summary": "Get Kalshi Candles",
+        "description": "Retrieve OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market at a selectable time interval.\n\n## Intervals\n\n- 1s -- 1-second buckets (tick-level, microstructure research)\n- 1m -- 1-minute buckets (intraday, scalping)\n- 5m -- 5-minute buckets (short-term trading, technical indicators)\n- 10m -- 10-minute buckets (medium-term, pattern recognition)\n- 1h -- 1-hour buckets (swing trading, daily patterns)\n- 1d -- 1-day buckets (long-term trends, historical research)\n\n## What you get\n\n- OHLCV price data aggregated into time buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n\n- Build candlestick charts at any resolution\n- Run technical analysis (RSI, MACD, Bollinger Bands)\n- Backtest trading strategies\n- Analyze volume patterns and liquidity\n\nData is ordered by bucket_time ascending. Use the `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/candles?interval=1m&limit=100`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/klsi_id"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1s",
+                "1m",
+                "5m",
+                "10m",
+                "1h",
+                "1d"
+              ],
+              "default": "1m"
+            },
+            "description": "Candle time interval. Determines the bucket size for OHLCV aggregation."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "maximum": 100000
+            },
+            "description": "Maximum number of candles to return (default 1000, max 100,000)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of OHLCV candles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KLSIOHLCV"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid interval parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
     "/api/v1/events/{event_id}": {
       "get": {
         "tags": [
@@ -3713,306 +3789,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1s": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Second OHLCV Candles",
-        "description": "Retrieve 1-second OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-second buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- High-frequency analysis\n- Tick-level trading strategies\n- Microstructure research\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1s?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-second OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1m": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Minute OHLCV Candles",
-        "description": "Retrieve 1-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Intraday trading analysis\n- Short-term price movements\n- Scalping strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-minute OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_5m": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 5-Minute OHLCV Candles",
-        "description": "Retrieve 5-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 5-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Short-term trading analysis\n- Intraday patterns\n- Technical indicators\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_5m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "BEYONCEGENRE-30-TCA"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "5-minute OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_10m": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 10-Minute OHLCV Candles",
-        "description": "Retrieve 10-minute OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 10-minute buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Medium-term trading analysis\n- Pattern recognition\n- Volume analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/BEYONCEGENRE-30-TCA/ohlcv_10m?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "BEYONCEGENRE-30-TCA"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "10-minute OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1h": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Hour OHLCV Candles",
-        "description": "Retrieve 1-hour OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into 1-hour buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each bucket\n- Open interest at close of each bucket\n- Tick count per bucket\n\n## Use cases\n- Swing trading analysis\n- Daily pattern recognition\n- Longer-term technical analysis\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1h?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-hour OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    },
-    "/api/v1/klsi/{klsi_id}/ohlcv_1d": {
-      "get": {
-        "tags": [
-          "Candles"
-        ],
-        "summary": "Get KLSI 1-Day OHLCV Candles",
-        "description": "Retrieve 1-day OHLCV (Open, High, Low, Close, Volume) candle data for a Kalshi market.\n\n## What you get\n- OHLCV price data aggregated into daily buckets\n- Volume metrics (bucket volume, cumulative volume)\n- Best bid/ask at close of each day\n- Open interest at close of each day\n- Tick count per day\n\n## Use cases\n- Long-term trend analysis\n- Historical price research\n- Position trading strategies\n\n## Note Data is ordered by bucket_time ascending. Use `limit` parameter (up to 100,000) to control the number of candles returned.\n\n## Example\n\n- Request: `GET /api/v1/klsi/APPLEPORT-25DEC31/ohlcv_1d?limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
-        "parameters": [
-          {
-            "name": "klsi_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Kalshi market identifier",
-            "example": "APPLEPORT-25DEC31"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1000,
-              "maximum": 100000
-            },
-            "description": "Maximum number of candles to return (default: 1000, max: 100,000)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "1-day OHLCV candle data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/KLSIOHLCV"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
           }
         }
       }
