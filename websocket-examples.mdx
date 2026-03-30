@@ -7,7 +7,7 @@ The Delphi Markets WebSocket API provides real-time streaming for price updates,
 
 ## Supported streams
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card title="Kalshi" icon="bolt" href="/ws-kalshi">
     Subscribe using `klsi_id`. Prices, orderbook (101-level depth), and trades.
   </Card>
@@ -19,6 +19,21 @@ The Delphi Markets WebSocket API provides real-time streaming for price updates,
   </Card>
   <Card title="Limitless" icon="bolt" href="/ws-limitless">
     Subscribe using `market_id`. Prices, orderbook, and trades.
+  </Card>
+  <Card title="Gemini" icon="bolt" href="/ws-gemi">
+    Subscribe using `market_id`. Prices, orderbook, and trades.
+  </Card>
+  <Card title="Manifold" icon="bolt" href="/ws-mani">
+    Subscribe using `market_id`. Prices, orderbook, and trades.
+  </Card>
+  <Card title="Opinion" icon="bolt" href="/ws-opnm">
+    Subscribe using `market_id`. Prices, orderbook, and trades.
+  </Card>
+  <Card title="ForecastEx" icon="bolt" href="/ws-fex">
+    Subscribe using `market_id`. Prices and trades (no orderbook).
+  </Card>
+  <Card title="PredictIt" icon="bolt" href="/ws-prdi">
+    Subscribe using `market_id`. Prices only.
   </Card>
 </CardGroup>
 
@@ -36,15 +51,29 @@ All WebSocket streams share these properties:
 | Property | Value |
 |----------|-------|
 | Protocol | WebSocket (wss://) |
-| Authentication | Not required |
+| Authentication | API key via `api_key` query parameter |
 | Keepalive | Ping every 54 seconds |
 | Timeout | 60 seconds without pong |
 | Default message types | Prices and orderbook |
 
+## Subscription key reference
+
+| Exchange | Endpoint | Subscription key | Message types |
+|----------|----------|-----------------|---------------|
+| Kalshi | `/ws/kalshi` | `klsi_ids` | prices, orderbook, trades |
+| Polymarket | `/ws/poly` | `condition_ids` | prices, orderbook, trades |
+| Predict.fun | `/ws/pfun` | `market_ids` | prices, orderbook, trades |
+| Limitless | `/ws/limitless` | `market_ids` | prices, orderbook, trades |
+| Gemini | `/ws/gemi` | `market_ids` | prices, orderbook, trades |
+| Manifold | `/ws/mani` | `market_ids` | prices, orderbook, trades |
+| Opinion | `/ws/opnm` | `market_ids` | prices, orderbook, trades |
+| ForecastEx | `/ws/fex` | `market_ids` | prices, trades |
+| PredictIt | `/ws/prdi` | `market_ids` | prices |
+
 ## Quick start
 
 ```javascript
-const ws = new WebSocket("wss://api.delphiterminal.co/ws/kalshi");
+const ws = new WebSocket("wss://api.delphimarkets.com/ws/kalshi?api_key=YOUR_API_KEY");
 
 ws.onopen = () => {
   ws.send(JSON.stringify({
