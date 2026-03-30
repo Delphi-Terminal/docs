@@ -63,7 +63,12 @@
               "ws-kalshi",
               "ws-polymarket",
               "ws-pfun",
-              "ws-limitless"
+              "ws-limitless",
+              "ws-gemi",
+              "ws-mani",
+              "ws-opnm",
+              "ws-fex",
+              "ws-prdi"
             ]
           }
         ]
