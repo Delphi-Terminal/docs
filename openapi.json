@@ -395,7 +395,7 @@
           "Search"
         ],
         "summary": "Search Delphi Markets",
-        "description": "Search across all Delphi market clusters by keyword. Uses fuzzy multi-word matching where each word must appear somewhere in the title, but in any order.\n\nFor example, searching \"british minister\" will match titles like \"Will the British Prime Minister resign?\" even though the exact phrase does not appear.\n\n## What you get\n\n- Delphi market clusters matching your keywords\n- Each result includes the delphi_id, title, canonical exchange reference, cluster size, and last update time\n- Results ranked by cluster size (most cross-exchange coverage first)\n\n## Use cases\n\n- Discover prediction markets across all exchanges by topic\n- Find equivalent markets for arbitrage or hedging\n- Power a market search interface\n- Explore what questions prediction markets are tracking\n\n## Example\n\n- Request: `GET /api/v1/search/markets?q=bitcoin&limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "description": "Search across all Delphi market clusters by keyword. Uses fuzzy multi-word matching where each word must appear somewhere in the title, but in any order.\n\nFor example, searching \"british minister\" will match titles like \"Will the British Prime Minister resign?\" even though the exact phrase does not appear.\n\n## What you get\n\n- Delphi market clusters matching your keywords\n- Each result includes the delphi_id, title, canonical exchange reference, cluster size, and last update time\n- Each result also includes a `markets` array listing the individual exchange markets (exchange name, market_id, title) so you can navigate directly to each market's detail endpoint\n- Results ranked by cluster size (most cross-exchange coverage first)\n\n## Exchange market references\n\nThe `markets` array in each result contains entries like:\n- `{ \"exchange\": \"kalshi\", \"market_id\": \"AMAZONFTC-29DEC31\", \"title\": \"...\" }`\n- `{ \"exchange\": \"polymarket\", \"market_id\": \"0xabc...\", \"title\": \"...\" }`\n\nUse these to construct detail endpoint URLs, e.g. `/api/v1/klsi/AMAZONFTC-29DEC31/market`\n\n## Use cases\n\n- Discover prediction markets across all exchanges by topic\n- Find equivalent markets for arbitrage or hedging\n- Power a market search interface with direct exchange links\n- Explore what questions prediction markets are tracking\n\n## Example\n\n- Request: `GET /api/v1/search/markets?q=bitcoin&limit=10`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "q",
@@ -427,7 +427,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MarketCluster"
+                    "$ref": "#/components/schemas/EnrichedMarketCluster"
                   }
                 }
               }
@@ -6268,6 +6268,61 @@
         "properties": {
           "error": {
             "type": "string"
+          }
+        }
+      },
+      "ExchangeMarketRef": {
+        "type": "object",
+        "description": "A lightweight reference to a market on a specific exchange. Use the exchange and market_id to construct the full market detail endpoint URL.",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "Exchange name (kalshi, polymarket, limitless, predictfun, opinionlabs)",
+            "example": "kalshi"
+          },
+          "market_id": {
+            "type": "string",
+            "description": "Market identifier on the exchange",
+            "example": "AMAZONFTC-29DEC31"
+          },
+          "title": {
+            "type": "string",
+            "description": "Market title on the exchange",
+            "example": "Will Amazon lose the FTC case by Dec 31?"
+          }
+        }
+      },
+      "EnrichedMarketCluster": {
+        "type": "object",
+        "description": "Market cluster with inline exchange market listings. Extends MarketCluster with a markets array showing which exchanges carry this market.",
+        "properties": {
+          "delphi_id": {
+            "type": "string",
+            "description": "Unique Delphi ID for the cluster"
+          },
+          "title": {
+            "type": "string",
+            "description": "Cluster title describing the shared question"
+          },
+          "canonical_ref": {
+            "type": "string",
+            "description": "Canonical reference for the cluster"
+          },
+          "size": {
+            "type": "integer",
+            "description": "Number of markets in the cluster"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          },
+          "markets": {
+            "type": "array",
+            "description": "Individual exchange markets belonging to this cluster",
+            "items": {
+              "$ref": "#/components/schemas/ExchangeMarketRef"
+            }
           }
         }
       }
