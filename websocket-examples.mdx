@@ -35,6 +35,9 @@ The Delphi Markets WebSocket API provides real-time streaming for price updates,
   <Card title="PredictIt" icon="bolt" href="/ws-prdi">
     Subscribe using `market_id`. Prices only.
   </Card>
+  <Card title="Parlays" icon="bolt" href="/ws-parlays">
+    Subscribe using `market_ids`. RFQ events and MVE trades. Requires Pro+ plan.
+  </Card>
 </CardGroup>
 
 ## How it works
@@ -69,6 +72,7 @@ All WebSocket streams share these properties:
 | Opinion | `/ws/opnm` | `market_ids` | prices, orderbook, trades |
 | ForecastEx | `/ws/fex` | `market_ids` | prices, trades |
 | PredictIt | `/ws/prdi` | `market_ids` | prices |
+| Parlays | `/ws/parlays` | `market_ids` | rfq, mve_trades |
 
 ## Quick start
 
