@@ -451,6 +451,144 @@
         }
       }
     },
+    "/api/v1/search/semantic": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Semantic Market Search",
+        "description": "Search markets by meaning using AI-powered semantic search. Unlike keyword search, this understands natural language queries like \"will interest rates go down\" and finds relevant markets even if they use different wording.\n\nUses hybrid scoring that combines:\n- **Semantic similarity** — matches meaning using embeddings across both market titles and rules\n- **Keyword boost** — exact keyword matches in titles get a relevance boost\n\nSearches across all supported exchanges: Kalshi, Polymarket, Limitless, Predict.fun, Opinion Labs, Gemini, Manifold, ForecastEx, and PredictIt.\n\nRequires Max, Admin, or Enterprise plan.\n\n## Use cases\n\n- Find markets using natural language descriptions\n- Discover markets you wouldn't find with keyword search\n- Search by concept rather than exact market titles\n- Cross-exchange market discovery by topic\n\n## Example\n\n- Request: `POST /api/v1/search/semantic`\n- Header: `X-API-Key: YOUR_API_KEY`\n- Body: `{\"query\": \"fed rate cuts by summer\", \"active_only\": true, \"limit\": 10}`",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["query"],
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Natural language search query.",
+                    "example": "fed rate cuts by summer"
+                  },
+                  "exchange": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["kalshi", "polymarket", "limitless", "predictfun", "opinion", "gemini", "manifold", "forecastex", "predictit"]
+                    },
+                    "description": "Filter to specific exchanges. If omitted, searches all exchanges."
+                  },
+                  "active_only": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If true, only returns markets that are not closed."
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Filter to a specific category (e.g., Politics, Crypto, Sports)."
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "default": 20,
+                    "maximum": 100,
+                    "description": "Maximum number of results to return."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ranked search results with similarity scores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "string",
+                      "description": "The original search query."
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of results returned."
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "market_id": {
+                            "type": "string",
+                            "description": "Exchange-specific market identifier."
+                          },
+                          "exchange": {
+                            "type": "string",
+                            "description": "Exchange name."
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Market title."
+                          },
+                          "category": {
+                            "type": "string",
+                            "description": "Market category."
+                          },
+                          "closed": {
+                            "type": "boolean",
+                            "description": "Whether the market is closed."
+                          },
+                          "score": {
+                            "type": "number",
+                            "description": "Similarity score (lower is more relevant). Combines semantic similarity and keyword match boost."
+                          },
+                          "delphi_id": {
+                            "type": "string",
+                            "description": "Delphi cross-exchange cluster ID, if available."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request (missing query)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Plan does not have access (requires Max or above)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/delphi/{delphi_id}/cluster": {
       "get": {
         "tags": [
