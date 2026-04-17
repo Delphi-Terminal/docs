@@ -5,6 +5,30 @@ description: API and platform updates
 
 # Changelog
 
+<Update label="2026-04-16" description="Semantic search, market matching for all exchanges">
+
+**New: Semantic Market Search (Max+ plans)**
+
+- `POST /api/v1/search/semantic` — AI-powered hybrid search using natural language queries
+- Combines semantic similarity (embeddings) with keyword matching for best-of-both-worlds results
+- Searches across all 9 exchanges: Kalshi, Polymarket, Limitless, Predict.fun, Opinion Labs, Gemini, Manifold, ForecastEx, and PredictIt
+- Supports filters: `exchange`, `category`, `active_only`, `limit`
+- Returns ranked results with similarity scores and delphi_id cross-references
+
+**New: Market Matching expanded to all exchanges**
+
+- Delphi ID matching and cluster lookups now include Gemini, Manifold, ForecastEx, and PredictIt (previously only Kalshi, Polymarket, Limitless, Pfun, Opinion Labs)
+- `GET /api/v1/delphi/{delphi_id}/markets` now returns matched markets across all 9 exchanges
+- New cluster lookup endpoints:
+  - `GET /api/v1/gemini/{market_id}/cluster`
+  - `GET /api/v1/manifold/{market_id}/cluster`
+  - `GET /api/v1/fex/{market_id}/cluster`
+  - `GET /api/v1/predictit/{market_id}/cluster`
+- `delphi_id` and `cluster_id` fields added to Gemini, Manifold, ForecastEx, and PredictIt market details
+- `GET /api/v1/search/markets` now returns market references from all 9 exchanges
+
+</Update>
+
 <Update label="2026-02-17" description="Delphi ID market matching, new exchanges, and test tickers">
 
 **New: Delphi ID Market Matching (Pro+ plans)**

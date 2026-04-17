@@ -636,7 +636,7 @@
           "Delphi"
         ],
         "summary": "Get Matched Markets Across Exchanges",
-        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Predict.fun, and Opinion Labs that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "description": "Given a Delphi ID, returns all markets across Kalshi, Polymarket, Limitless, Predict.fun, Opinion Labs, Gemini, Manifold, ForecastEx, and PredictIt that share the same Delphi ID. Use this to discover equivalent markets on different exchanges for arbitrage, hedging, and cross-exchange analysis.\n\nRequires Pro, Max, or Admin plan.\n\n## Use cases\n\n- Find the same market question across all supported exchanges\n- Compare pricing and liquidity for the same event on different platforms\n- Build cross-exchange trading strategies\n\n## Example\n\n- Request: `GET /api/v1/delphi/delphi_0016d5d59aae/markets`\n- Header: `X-API-Key: YOUR_API_KEY`",
         "parameters": [
           {
             "name": "delphi_id",
@@ -699,6 +699,34 @@
                         "$ref": "#/components/schemas/MatchedMarket"
                       },
                       "description": "Matched Opinion Labs markets"
+                    },
+                    "gemini": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Gemini markets"
+                    },
+                    "manifold": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched Manifold markets"
+                    },
+                    "forecastex": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched ForecastEx markets"
+                    },
+                    "predictit": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MatchedMarket"
+                      },
+                      "description": "Matched PredictIt markets"
                     }
                   }
                 }
@@ -2591,6 +2619,170 @@
             },
             "description": "PFun market ID",
             "example": "6933"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/gemini/{market_id}/cluster": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "Get Cluster for Gemini Market",
+        "description": "Find all cross-exchange matches for a Gemini market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Gemini market is also listed on Kalshi, Polymarket, or other exchanges\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/gemini/GEMI-BTC15M2603170230-HI75245D64/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Gemini market ID",
+            "example": "GEMI-BTC15M2603170230-HI75245D64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/manifold/{market_id}/cluster": {
+      "get": {
+        "tags": [
+          "Manifold"
+        ],
+        "summary": "Get Cluster for Manifold Market",
+        "description": "Find all cross-exchange matches for a Manifold market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a Manifold market is also listed on Kalshi, Polymarket, or other exchanges\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/manifold/0AqEut9qzZ/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Manifold market ID",
+            "example": "0AqEut9qzZ"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/fex/{market_id}/cluster": {
+      "get": {
+        "tags": [
+          "ForecastEx"
+        ],
+        "summary": "Get Cluster for ForecastEx Market",
+        "description": "Find all cross-exchange matches for a ForecastEx market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a ForecastEx market is also listed on Kalshi, Polymarket, or other exchanges\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/fex/ACD_1226_429.0/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ForecastEx market ID",
+            "example": "ACD_1226_429.0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster members and siamese edges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/predictit/{market_id}/cluster": {
+      "get": {
+        "tags": [
+          "PredictIt"
+        ],
+        "summary": "Get Cluster for PredictIt Market",
+        "description": "Find all cross-exchange matches for a PredictIt market. Looks up which cluster this market belongs to and returns all members plus siamese-twin links.\n\n## Use cases\n\n- See if a PredictIt market is also listed on Kalshi, Polymarket, or other exchanges\n- Compare prices across exchanges for the same event\n- Identify arbitrage opportunities\n\n## Example\n\n- Request: `GET /api/v1/predictit/34088/cluster`\n- Header: `X-API-Key: YOUR_API_KEY`",
+        "parameters": [
+          {
+            "name": "market_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "PredictIt market ID",
+            "example": "34088"
           }
         ],
         "responses": {
