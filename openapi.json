@@ -4205,6 +4205,7 @@
         "summary": "Place an order",
         "description": "Submit a new order to an exchange. The shape of `signed_order` depends on `exchange`:\n\n- **polymarket** — `SignedPolymarketOrder` produced by `buildPolymarketOrder()`\n- **kalshi** — `KalshiLimitOrder` (server signs)\n- **opinionlabs** — `SignedOpinionLabsOrder` produced by `buildOpinionLabsOrder()`\n- **gemini** — `GeminiPredictionOrder` produced by `buildGeminiOrder()` (server signs)\n- **limitless** — `SignedLimitlessOrder` produced by `buildLimitlessOrder()`\n- **predictfun** — `PredictFunOrderPayload` produced by `buildPredictFunOrder()`\n\nReturns the order ID and current status. Use `GET /orders/{id}` to poll for fills.",
         "operationId": "placeOrder",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "requestBody": {
           "required": true,
@@ -4378,6 +4379,7 @@
         "summary": "List tracked orders",
         "description": "Returns all orders the server has tracked for your account. Optionally filter by exchange.",
         "operationId": "listOrders",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "parameters": [
           {
@@ -4407,6 +4409,7 @@
         "summary": "Get order status",
         "description": "Look up a specific tracked order by its ID. If `exchange` is omitted, the server resolves it from the order store.",
         "operationId": "getOrder",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "parameters": [
           {
@@ -4441,6 +4444,7 @@
         "summary": "Cancel an order",
         "description": "Cancel a resting order. Already-filled or already-cancelled orders return an exchange-specific error.",
         "operationId": "cancelOrder",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "parameters": [
           {
@@ -4477,6 +4481,7 @@
         "summary": "Register exchange credentials",
         "description": "Store your exchange API credentials with the Delphi server. The server uses these when signing requests to centralized exchanges (Kalshi RSA, Gemini HMAC) or for credential-derivation flows.\n\n**The `{userID}` path segment is ignored.** The server always uses the authenticated user from your `X-API-Key` header. Pass `_` as a placeholder.\n\nFor Polymarket, prefer `POST /api/v1/polymarket/derive-credentials` which derives and stores CLOB credentials in one call.",
         "operationId": "registerCredentials",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "parameters": [
           {
@@ -4514,6 +4519,7 @@
         "summary": "List connected exchanges",
         "description": "Returns the exchanges for which you have stored credentials. Does not return the credential values themselves.\n\n**The `{userID}` path segment is ignored.** Pass `_`.",
         "operationId": "listCredentials",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "parameters": [
           {
@@ -4543,6 +4549,7 @@
         "summary": "Derive Polymarket CLOB credentials",
         "description": "Given your EOA private key, the server hits Polymarket's auth endpoints to derive (or fetch) your CLOB HMAC credentials, stores them, and returns the public-safe metadata. Run this once per user before your first Polymarket order.\n\nYour private key is used in-memory by the server only to perform the derivation and is not persisted. For maximum trust, you can call `derivePolymarketCredentials()` from the SDK which is equivalent.",
         "operationId": "derivePolymarketCredentials",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "requestBody": {
           "required": true,
@@ -4572,6 +4579,7 @@
         "summary": "Verify Polymarket credentials",
         "description": "Confirms your stored Polymarket credentials still work against the live CLOB. Optionally pass inline credentials in the body to test those instead of the stored set.",
         "operationId": "verifyPolymarketCredentials",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "requestBody": {
           "required": false,
@@ -4600,6 +4608,7 @@
         "summary": "Derive Polymarket Safe address",
         "description": "Computes the deterministic Gnosis Safe (proxy wallet) address for a given EOA address. This is the address that holds your Polymarket positions and the address Polymarket displays in its UI.\n\nThis is a pure CREATE2 derivation — no on-chain state is read. The same computation is available client-side via `deriveSafeAddress()` from the SDK.",
         "operationId": "getPolymarketSafeAddress",
+        "x-hidden": true,
         "security": [{ "ApiKeyAuth": [] }],
         "requestBody": {
           "required": true,

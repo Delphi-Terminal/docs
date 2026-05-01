@@ -79,6 +79,52 @@
         "openapi": "openapi-parlays.json"
       },
       {
+        "tab": "Trading",
+        "groups": [
+          {
+            "group": "Trading SDK",
+            "pages": [
+              "trading/index",
+              {
+                "group": "Exchanges",
+                "pages": [
+                  "trading/polymarket",
+                  "trading/kalshi",
+                  "trading/opinion-labs",
+                  "trading/gemini",
+                  "trading/limitless",
+                  "trading/predict-fun"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Trading API",
+            "pages": [
+              "trading/api/place-order",
+              "trading/api/list-orders",
+              "trading/api/get-order",
+              "trading/api/cancel-order"
+            ]
+          },
+          {
+            "group": "Credentials",
+            "pages": [
+              "trading/api/register-credentials",
+              "trading/api/list-credentials"
+            ]
+          },
+          {
+            "group": "Polymarket Onboarding",
+            "pages": [
+              "trading/api/derive-polymarket-credentials",
+              "trading/api/verify-polymarket-credentials",
+              "trading/api/safe-address"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Changelog",
         "groups": [
           {

@@ -8,3 +8,6 @@ drafts/
 
 # Non-documentation files
 AGENTS.md
+
+# Delivery artifacts (not for publishing)
+mintlify-package/
